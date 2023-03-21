@@ -1,19 +1,24 @@
+import  React from 'react';
 import Header from "../../components/header/Header";
-import React  from 'react';
 import Leftsidecard from "../../components/sidecard/leftsidecard";
+import MainLayout from "../../components/mainlayout/mainlayout.jsx"
+import { Grid } from '@mui/material';
+
 import './home.scss'
 const Home =()=>{
 
-
     return (
-        <body>
+        <body  >
             <Header/>
-            <div className='main'>
-                
-            <h1>hello</h1>
-
+            <Grid container spacing={3} className='main'>
+            <Grid xs>
             <Leftsidecard/>
-            </div>
+            </Grid>
+            <Grid xs={6}>
+            <MainLayout/>
+            </Grid>
+            
+            </Grid>
             
         </body>
     )
