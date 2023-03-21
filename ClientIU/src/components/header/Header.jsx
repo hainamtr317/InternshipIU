@@ -19,18 +19,21 @@ const Search = styled('div')(({ theme }) => ({
   },
   marginRight: theme.spacing(2),
   marginLeft: 0,
+  height:40,
+
   width: '100%',
   [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing(3),
     width: 'auto',
   },
+
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 2),
-  height: '100%',
   position: 'absolute',
   pointerEvents: 'none',
+  marginTop:"13px",
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -44,6 +47,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
+    marginTop:"-18px",
     [theme.breakpoints.up('md')]: {
       width: '20ch',
     },
@@ -146,8 +150,8 @@ export default function Header()
       </Menu>
     )
     return (  
-      <Box  sx={{flexGlow:1}}>
-          <AppBar position='fixed'>
+
+          <AppBar sx={{marginTop:-5}}>
           <Toolbar>
           <div className="icon">
                 <img src="/logo-favicon-50x50.png" alt="" />
@@ -157,7 +161,7 @@ export default function Header()
             noWrap
             alignItems={'center'}
             component="div"
-            sx={{ display: { xs: 'none', sm: 'flex' }, }}
+            // sx={{ display: { xs: 'none', sm: 'flex' }, }}
           > IntershipIU
           </Typography>
           </div>
@@ -213,10 +217,11 @@ export default function Header()
           </Box>
 
           </Toolbar>
-        </AppBar>
           {renderMobileMenu}
           {renderMenu}
-      </Box>
+        </AppBar>
+         
+   
     )
   }
 

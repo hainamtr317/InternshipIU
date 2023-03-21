@@ -11,7 +11,7 @@ function Leftsidecard() {
         sx={{backgroundColor:'white'
         ,height:'500px',width:'225px'
         ,marginTop:'50px'
-        ,display: {xs:'none',md:'flex'}
+        ,display: {xs:'none',sm:'none',md:'flex'}
         }}>
             <Container >
             <div className="bgtag"></div>
