@@ -161,7 +161,7 @@ export default function Header()
             noWrap
             alignItems={'center'}
             component="div"
-            // sx={{ display: { xs: 'none', sm: 'flex' }, }}
+            sx={{ display: { xs: 'none', sm: 'flex' }, }}
           > IntershipIU
           </Typography>
           </div>

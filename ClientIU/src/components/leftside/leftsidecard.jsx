@@ -9,9 +9,10 @@ function Leftsidecard() {
         <Box
         className ='boxleft'  
         sx={{backgroundColor:'white'
+        ,position:'fixed'
         ,height:'500px',width:'225px'
-        ,marginTop:'50px'
-        ,display: {xs:'none',sm:'none',md:'flex'}
+        ,float:'left'
+        ,display: {xs:'none',md:'flex'}
         }}>
             <Container >
             <div className="bgtag"></div>
