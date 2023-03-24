@@ -6,7 +6,6 @@ import "./rightside.scss"
 function Rightside() {
     return (
     <div className="righside">
-        
     </div> 
     );
 }

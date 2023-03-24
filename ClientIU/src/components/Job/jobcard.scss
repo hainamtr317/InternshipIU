@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+.content{
+    display:flex;
+    flex-direction:row;
+    justify-content:start;
+    align-items:start;
+    color:black;
+}
+/* Ripple effect */
+// .actioncard {
+//     background-position: center;
+//     transition: background 0.8s;
+//   }
+//   .actioncard:hover {
+//     background: #EAECEF radial-gradient(circle, transparent 1%, #EAECEF 1%) center/15000%;
+//   }
+//   .actioncard:active {
+//     background-color: #999BA0;
+//     background-size: 100%;
+//     transition: background 0s;
+//   }

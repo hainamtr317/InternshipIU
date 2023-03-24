@@ -33,7 +33,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 2),
   position: 'absolute',
   pointerEvents: 'none',
-  marginTop:"13px",
+  marginTop:"10px",
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -47,7 +47,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
-    marginTop:"-18px",
+   
     [theme.breakpoints.up('md')]: {
       width: '20ch',
     },
@@ -77,6 +77,7 @@ export default function Header()
     const handleMobileMenuOpen = (event) => {
       setMobileMoreAnchorEl(event.currentTarget);
     };
+    
     const renderMenu = (
       <Menu
         anchorEl={anchorEl}
@@ -97,6 +98,69 @@ export default function Header()
         <MenuItem onClick={handleMenuClose}>My account</MenuItem>
       </Menu>
     )
+    const menuFunctionForStudent = (
+    <Menu
+      anchorEl={mobileMoreAnchorEl}
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      id='Student Role'
+      keepMounted
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      open={isMobileMenuOpen}
+      onClose={handleMobileMenuClose}
+
+    >
+      <MenuItem>
+        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+          <Badge badgeContent={0} color="error">
+            <MailIcon />
+          </Badge>
+        </IconButton>
+        <p>Messages</p>
+      </MenuItem>
+      <MenuItem>
+        <IconButton
+          size="large"
+          aria-label="show 17 new notifications"
+          color="inherit"
+        >
+          <Badge badgeContent={17} color="error">
+            <NotificationsIcon />
+          </Badge>
+        </IconButton>
+        <p>Notifications</p>
+      </MenuItem>
+      {/* add fucntion */}
+      <MenuItem>
+        <p>Recruitment Cv</p>
+      </MenuItem>
+      <MenuItem>
+        <p>My Job List</p>
+      </MenuItem>
+      <MenuItem>
+        <p>Report</p>
+      </MenuItem>
+      <MenuItem onClick={handleProfileMenuOpen}>
+        <IconButton
+          size="large"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <AccountCircle />
+        </IconButton>
+        <p>Profile</p>
+      </MenuItem>
+    </Menu>
+    ) 
+
+    //display mobile menu
     const mobileMenuId = 'primary-search-account-menu-mobile';
     const renderMobileMenu = (
       <Menu
@@ -149,9 +213,21 @@ export default function Header()
         </MenuItem>
       </Menu>
     )
+    //check role to display 
+    const roleuser = "student"
+    
+    const checkRoleuser = (role) => {
+      if(role==="student"){
+         return menuFunctionForStudent
+      }
+      else{
+         return renderMobileMenu
+      }
+    }
+    const DisplayMobiMenu = checkRoleuser(roleuser)
     return (  
 
-          <AppBar sx={{marginTop:-5}}>
+          <AppBar sx={{}}>
           <Toolbar>
           <div className="icon">
                 <img src="/logo-favicon-50x50.png" alt="" />
@@ -162,7 +238,7 @@ export default function Header()
             alignItems={'center'}
             component="div"
             sx={{ display: { xs: 'none', sm: 'flex' }, }}
-          > IntershipIU
+          > InternshipIU
           </Typography>
           </div>
 
@@ -217,7 +293,7 @@ export default function Header()
           </Box>
 
           </Toolbar>
-          {renderMobileMenu}
+          {DisplayMobiMenu}
           {renderMenu}
         </AppBar>
          
