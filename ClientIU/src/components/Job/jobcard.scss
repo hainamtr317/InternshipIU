@@ -6,6 +6,20 @@
     align-items:start;
     color:black;
 }
+#box-header-job
+{
+    position: -webkit-sticky;
+    position: sticky;
+    background-color:white;
+    top: 0;
+   
+}
+.JobPage
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 /* Ripple effect */
 // .actioncard {
 //     background-position: center;

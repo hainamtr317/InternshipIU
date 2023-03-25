@@ -1,18 +1,24 @@
 import { CardContent, CardMedia, Typography, Button, CardActionArea, Checkbox,Box, Card } from '@mui/material';
 import './jobcard.scss';
+import React,{useState} from 'react'
+import JobModal from "./Viewjob"
 
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 
 function JobCard() {
-    
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+  
     return (
+    <div className='Jobcardshow'>
     <Card className="jobcard" sx={{height:150,width:300
         ,borderStyle: 'groove'
         ,border: '2px whitesmoke solid'
-       ,boxShadow:'8'
-    ,overflow:'hidden',margin:'5px 5px 5px 0px'}}>
-        <CardActionArea sx={{}} className="actioncard">
+        ,boxShadow:'8'
+        ,overflow:'hidden',margin:'5px 5px 5px 0px'}}>
+        <CardActionArea  onClick={handleOpen} sx={{}} className="actioncard">
             <div className="content">
             <CardMedia
             sx={{height:'70px',width:'70px',
@@ -23,26 +29,26 @@ function JobCard() {
         />
 
             <CardContent sx={{
-            height:'20px'
-            ,display:'flex'
-            
-            ,flexDirection:'column'
-            ,justifyContent:'start'
-            ,alignItems:'start'
+                height:'20px'
+                ,display:'flex'
+                
+                ,flexDirection:'column'
+                ,justifyContent:'start'
+                ,alignItems:'start'
             ,marginTop:'-10px'
             
-            }}>
+        }}>
                 <Typography variant='p' sx={{marginLeft:'-12px'
                 ,fontFamily:'Arial, Helvetica, sans-serif'
                 ,fontSize:'medium'
                 ,fontWeight:'bold'
                 ,color:'#1976d2'
-                }}>Job Name is lenght asfdkjsaodfkjsaodifjt</Typography>
+            }}>Job Name is lenght asfdkjsaodfkjsaodifjt</Typography>
                 <Typography variant='caption'  sx={{marginLeft:'-12px'
                 
                 ,fontWeight:'bold'
                 ,fontFamily:'Arial, Helvetica, sans-serif'
-                }}>Company Name</Typography>     
+            }}>Company Name</Typography>     
             </CardContent>
           
         </div> 
@@ -64,9 +70,10 @@ function JobCard() {
         icon={<BookmarkBorderIcon />}
         checkedIcon={<BookmarkIcon />}
         />
-        </Box>
-              
+        </Box>           
     </Card>
+    <JobModal Open={open} Close={handleClose}></JobModal>
+    </div>
     );
 }
 
