@@ -1,7 +1,7 @@
 import { CardContent, CardMedia, Typography, Button, CardActionArea, Checkbox,Box, Card } from '@mui/material';
 import './jobcard.scss';
 import React,{useState} from 'react'
-import JobModal from "./Viewjob"
+import JobModal from "./ModalJob"
 
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';

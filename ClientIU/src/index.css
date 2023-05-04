@@ -10,12 +10,11 @@
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
+  color: #000000;
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: #000000;
 }
 @media (prefers-color-scheme: light) {
   :root {
@@ -23,7 +22,7 @@ a:hover {
     background-color: #ffffff;
   }
   a:hover {
-    color: #747bff;
+    color: #000000;
   }
   
 }
