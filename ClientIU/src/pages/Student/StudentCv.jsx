@@ -1,36 +1,72 @@
-import { Box, Typography } from "@mui/material";
-import React, { useState } from "react";
-import { Document, Page} from "react-pdf/dist/esm/entry.vite";
+import {
+  Box,
+  Divider,
+  FormControl,
+  Input,
+  Typography,
+  Grid,
+} from "@mui/material";
+import React from "react";
+
+import Cvcard from "../../components/Cv/Cvcard";
+import FileUploadCv from "../../components/Fileupload/FileuploadCV";
 
 const StudentCv = () => {
-   
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
-
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages);
-  }
   return (
     <>
       <Typography
-      sx={{
-        color: '#1976d2'
-        ,marginLeft:'20px'
-        ,marginTop:'20px'
-      }}
-      variant="h3">
-       <b>
-        Your Cv
-        </b> 
+        sx={{
+          color: "#1976d2",
+          marginLeft: "20px",
+          marginTop: "20px",
+        }}
+        variant="h3"
+      >
+        <b>Your Cv</b>
       </Typography>
-      <hr></hr>
-      <Document file="./MyCv.pdf" onLoadSuccess={onDocumentLoadSuccess}>
-        <Page pageNumber={pageNumber} />
-      </Document>
-      
-      </>
-    
-  
+      <Divider></Divider>
+      <Typography
+        variant="h5"
+        sx={{
+          color: "#1976d2",
+          marginLeft: "20px",
+          marginTop: "20px",
+        }}
+      >
+        {" "}
+        Add your Cv here
+      </Typography>
+      <br></br>
+      <FileUploadCv></FileUploadCv>
+      <Divider></Divider>
+      <Box sx={{
+        marginTop:'20px'
+      }}>
+        <Grid
+          container
+          sx={{
+            marginLeft: "10px",
+            width: "auto",
+          }}
+        >
+          {Array.from(Array(4)).map((_, index) => (
+            <Grid
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "start",
+              }}
+              xs={12}
+              md={6}
+              xl={4}
+              key={index}
+            >
+              <Cvcard></Cvcard>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    </>
   );
 };
 

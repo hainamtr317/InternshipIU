@@ -16,9 +16,9 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { styled, alpha } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
+
 import store from "../../redux/store";
 import ShowAnnounceList from "../announment/ShowAnnouList";
 
@@ -74,7 +74,7 @@ export default function Header() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const isAnnounceMenuOpen = Boolean(AnnounceAnchorEl);
 
-  // const navigation = useNavigation();
+  const navigation = useNavigate();
   // function to set action of menu is open or not
   const menuId = "primary-search-account-menu";
   const handleProfileMenuOpen = (event) => {
@@ -101,6 +101,9 @@ export default function Header() {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
+  const handleLogout = () => {
+    navigation("/")
+  }
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
@@ -141,7 +144,7 @@ export default function Header() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      <MenuItem onClick={handleLogout}>Logout</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );

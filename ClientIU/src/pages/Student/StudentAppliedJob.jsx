@@ -20,14 +20,17 @@ function StudentAppliedJob() {
         <Divider></Divider>
         
         <Grid container sx={{
-            
-        }}>
-        {Array.from(Array(3)).map((_, index) => (
+            marginLeft:"20px"
+            ,width:"auto"
+        }}
+        >
+        {Array.from(Array(10)).map((_, index) => (
           <Grid
             sx={{
               display: "flex",
               justifyContent: "center",
               alignItems: "start",
+              
             }}
             xs={12}
             md={6}

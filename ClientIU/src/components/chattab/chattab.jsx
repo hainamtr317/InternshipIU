@@ -8,6 +8,7 @@ import './chattab.scss';
 import ConnectCard from './connectcard';
 function ChatTab() {
   return (
+    <>
     <Accordion
       disableGutters='true' 
      sx={{width: '280px',
@@ -50,6 +51,7 @@ function ChatTab() {
           ))}
       </AccordionDetails>
     </Accordion>
+    </>
   );
 }
 
