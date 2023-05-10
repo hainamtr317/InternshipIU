@@ -34,7 +34,7 @@ function StudentAppliedJob() {
             }}
             xs={12}
             md={6}
-            xl={3}
+            xl={4}
             key={index}
           >
             <JobCard />

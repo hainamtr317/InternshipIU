@@ -4,3 +4,9 @@ export const choseJob=(data)=>{
         payload:data,
     }
 }
+export const changeRole = (data) => {
+  return {
+    type: "user",
+    payload: data,
+  };
+};

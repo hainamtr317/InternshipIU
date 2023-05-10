@@ -9,7 +9,7 @@ import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
-
+import { useNavigate } from "react-router-dom";
 import {
   Modal,
   Box,
@@ -31,7 +31,10 @@ function Jobpage() {
     maxWidth: "1000px",
     marginLeft: { md: "25%" },
   };
-
+  const navigate = useNavigate();
+  const handleApplybtn = ()=>{
+    navigate("/Student/job/Apply")
+  }
   return (
     <Box sx={styles}>
       <Box
@@ -68,11 +71,13 @@ function Jobpage() {
           </CardContent>
         </Container>
         <Container>
+
           <Button
             variant="outlined"
             sx={{
               width: "80%",
             }}
+            onClick={handleApplybtn}
           >
             Apply Now
           </Button>
@@ -82,6 +87,7 @@ function Jobpage() {
             checkedIcon={<BookmarkIcon />}
           />
         </Container>
+       
       </Box>
       <Divider />
       <CardContent>

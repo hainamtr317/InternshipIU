@@ -2,6 +2,7 @@
 
 import rootReducer from './reducer'
 import {createStore} from 'redux'
+
 // const store = configureStore({reducer: rootReducer});
 
 // console.log(store.getState())

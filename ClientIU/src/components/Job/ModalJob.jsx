@@ -7,10 +7,14 @@ import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {Modal,Box,Typography, CardContent, Button ,Checkbox, Divider, Paper  } from '@mui/material';
 
 function JobModal (props) {
+  const navigate = useNavigate();
+    const handleApplybtn = ()=>{
+      navigate("/Student/job/Apply")
+    }
     const listSkill=['reactjs','nodejs','cloud'];
     const style = {
         position: 'absolute',
@@ -45,7 +49,7 @@ function JobModal (props) {
           <Typography id="Jos-Title" variant="caption" component="p">
             Company name
           </Typography>
-          <Button variant="outlined">
+          <Button variant="outlined" onClick={handleApplybtn}>
             Apply Now
           </Button>
           <Checkbox

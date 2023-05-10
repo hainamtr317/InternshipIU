@@ -10,12 +10,47 @@ import {
   Grid,
 } from "@mui/material";
 import "./login.scss";
+
+import * as React from "react";
+
 import logo from "../../assets/logo-small_logo.png";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Navigate, useNavigate } from "react-router-dom";
+import store from "../../redux/store";
+
+//set role display
 
 function Loginpage() {
   const navigate = useNavigate();
+  const [isInstructor, setIsInstructor] = React.useState(false);
+  const [storeState, SetStoreState] = React.useState();
+  const [isStudent, SetIsStudent] = React.useState(true);
+  const [isTeacher, SetIsTeacher] = React.useState(false);
+  const CheckRoleUser = (role) => {
+    if (role === "student") {
+      SetIsStudent(true);
+      SetIsTeacher(false);
+      setIsInstructor(false);
+      console.log("displayStudent");
+    } else if (role === "teacher") {
+      SetIsStudent(false);
+      SetIsTeacher(true);
+      setIsInstructor(false);
+      console.log("display Teacher");
+    } else if (role === "instructor") {
+      SetIsStudent(false);
+      SetIsTeacher(false);
+      setIsInstructor(true);
+      console.log("display Instructor");
+    }
+  };
+
+  React.useEffect(() => {
+    SetStoreState(store.getState().User.role);
+    // console.log(storeState);
+    CheckRoleUser(storeState);
+  }, [storeState]);
+  // const dispatch = useDispatch();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -23,7 +58,13 @@ function Loginpage() {
       email: data.get("email"),
       password: data.get("password"),
     });
-    navigate('/Student')
+
+    {
+      isStudent && navigate("/Student");
+    }
+    {
+      isTeacher && navigate("/Teacher");
+    }
   };
 
   return (
@@ -33,9 +74,11 @@ function Loginpage() {
           <img className="logo-img" src={logo} alt="" />
           <div className="logo-text">
             <span className="logo-text-top">
-              Vietnam National University HCMC
+              <b>Vietnam National University HCMC</b>
             </span>
-            <span className="logo-text-bottom">International University</span>
+            <span className="logo-text-bottom">
+              <b>International University</b>
+            </span>
           </div>
         </a>
       </div>
@@ -101,7 +144,6 @@ function Loginpage() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                
               >
                 Sign In
               </Button>

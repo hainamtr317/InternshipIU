@@ -6,12 +6,12 @@ import { Box, Grid } from "@mui/material";
 import Rightside from "../../Routes/rightside/rightside";
 import ChatTab from "../../components/chattab/chattab";
 
-const StudentPage = () => {
+const TeacherPage = () => {
   return (
     <Box sx={{ padding: "0", margin: "0", height: "950px" }}>
       <Header />
 
-      <Grid container  className="main" sx={{ marginTop: "120px" }}>
+      <Grid container className="main" sx={{ marginTop: "120px" }}>
         <Grid sm>
           <Leftside />
         </Grid>
@@ -26,4 +26,4 @@ const StudentPage = () => {
     </Box>
   );
 };
-export default StudentPage;
+export default TeacherPage;

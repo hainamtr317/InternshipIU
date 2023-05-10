@@ -14,31 +14,44 @@ import Avatar from "@mui/material/Avatar";
 import "./styleleft.scss";
 import { Box } from "@mui/material";
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
-import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
+import store from "../../redux/store";
 import { Link } from "react-router-dom";
+import MenuLeftStudent from "../../components/Student/MenuLeftStudent";
+import MenuLeftTeacher from "../../components/Teacher/MenuLeftTeacher";
 
 function Leftsidecard() {
   const [checked, setChecked] = React.useState(false);
   const [display, setDisplay] = React.useState(true);
-  const ListMenu = (
-    <MenuList>
-      <MenuItem>
-        <Link to="MyCv">
-          <p>Recruitment Cv</p>
-        </Link>
-      </MenuItem>
-      <MenuItem>
-        <Link to="ListJobApplied">
-          <p>ListJobApplied</p>
-        </Link>
-      </MenuItem>
-      <MenuItem>
-        <Link to="Report">
-          <p>Report forms</p>
-        </Link>
-      </MenuItem>
-    </MenuList>
-  );
+  //set role display
+  const [isInstructor, setIsInstructor] = React.useState(false);
+  const [storeState, SetStoreState] = React.useState();
+  const [isStudent, SetIsStudent] = React.useState(true);
+  const [isTeacher, SetIsTeacher] = React.useState(false);
+  const CheckRoleUser = (role) => {
+    if (role === "student") {
+      SetIsStudent(true);
+      SetIsTeacher(false);
+      setIsInstructor(false);
+      console.log("displayStudent");
+    } else if (role === "teacher") {
+      SetIsStudent(false);
+      SetIsTeacher(true);
+      setIsInstructor(false);
+      console.log("display Teacher");
+    } else if (role === "instructor") {
+      SetIsStudent(false);
+      SetIsTeacher(false);
+      setIsInstructor(true);
+      console.log("display Instructor");
+    }
+  };
+
+  React.useEffect(() => {
+    SetStoreState(store.getState().User.role);
+    // console.log(storeState);
+    CheckRoleUser(storeState);
+  }, [storeState]);
+
   const DisplayBtn = () => {
     setChecked((prev) => !prev);
   };
@@ -50,10 +63,12 @@ function Leftsidecard() {
       <Collapse orientation="horizontal" in={!display}>
         <Button
           variant="outlined"
-          sx={{ 
-            marginLeft:"-10px",
-            marginTop:"40px",
-            transform: "rotate(90deg)" }}
+          sx={{
+            position: { xs: "relative", md: "fixed" },
+            marginLeft: "-10px",
+            marginTop: "40px",
+            transform: "rotate(90deg)",
+          }}
           startIcon={
             <ExpandCircleDownOutlinedIcon
               sx={{ transform: "rotate(180deg)" }}
@@ -80,9 +95,6 @@ function Leftsidecard() {
             width: "225px",
             display: { xs: "none", md: "flex" },
             zIndex: "6",
-            // , height: { md: 'auto', xs: '250px' }
-            // , width: { md: '225px', xs: '448px' }
-            // , display: { xs: 'flex', md: 'flex' }
           }}
         >
           <Grow
@@ -130,38 +142,9 @@ function Leftsidecard() {
               }}
             >
               <Divider />
-              {ListMenu}
+              {isStudent && <MenuLeftStudent />}
+              {isTeacher && <MenuLeftTeacher />}
             </Container>
-            {/* <Accordion
-          sx={{
-            display: { xs: "flex", md: "none" },
-            position: "relative",
-            marginTop: "0px",
-            border: "1px solid whitesmoke",
-            borderRadius: "5%",
-            height: "auto",
-            zIndex: "1",
-            flexDirection: "column",
-            justifyContent: "center",
-            textAlign: "center",
-          }}
-          >
-          <AccordionSummary
-          sx={{
-            width: "40%",
-            height: "40px",
-            justifySelf: "center",
-            alignSelf: "center",
-            marginLeft: "10px",
-          }}
-          expandIcon={<ExpandMoreIcon />}
-          >
-          Show more
-          </AccordionSummary>
-          <AccordionDetails sx={{ height: "auto" }}>
-          {ListMenu}
-          </AccordionDetails>
-        </Accordion> */}
           </Container>
         </Box>
       </Collapse>

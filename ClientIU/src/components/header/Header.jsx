@@ -1,5 +1,4 @@
 import * as React from "react";
-import "./style.scss";
 import {
   AppBar,
   Box,
@@ -21,6 +20,8 @@ import { styled, alpha } from "@mui/material/styles";
 
 import store from "../../redux/store";
 import ShowAnnounceList from "../announment/ShowAnnouList";
+import HeaderStudent from "../Student/HeaderStudent";
+import HeaderTeacher from "../Teacher/HeaderTeacher";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -65,7 +66,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 export default function Header() {
-  // set
+  //
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [AnnounceAnchorEl, SetAnnounceAnchorEl] = React.useState(null);
@@ -73,20 +74,47 @@ export default function Header() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const isAnnounceMenuOpen = Boolean(AnnounceAnchorEl);
+  //set role display
+  const [isInstructor, setIsInstructor] = React.useState(false);
+  const [storeState, SetStoreState] = React.useState();
+  const [isStudent, SetIsStudent] = React.useState(true);
+  const [isTeacher, SetIsTeacher] = React.useState(false);
+  const CheckRoleUser = (role) => {
+    if (role === "student") {
+      SetIsStudent(true);
+      SetIsTeacher(false);
+      setIsInstructor(false);
+      console.log("displayStudent");
+    } else if (role === "teacher") {
+      SetIsStudent(false);
+      SetIsTeacher(true);
+      setIsInstructor(false);
+      console.log("display Teacher");
+    } else if (role === "instructor") {
+      SetIsStudent(false);
+      SetIsTeacher(false);
+      setIsInstructor(true);
+      console.log("display Instructor");
+    }
+  };
 
+  React.useEffect(() => {
+    SetStoreState(store.getState().User.role);
+    // console.log(storeState);
+    CheckRoleUser(storeState);
+  }, [storeState]);
+  // set function navigate
   const navigation = useNavigate();
   // function to set action of menu is open or not
   const menuId = "primary-search-account-menu";
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
-    
   };
 
   //handle Announce
   const handleAnnounceMenuOpen = (event) => {
-    setMobileMoreAnchorEl(null)
+    setMobileMoreAnchorEl(null);
     SetAnnounceAnchorEl(event.currentTarget);
-
   };
   const handleAnnounceMenuClose = () => {
     SetAnnounceAnchorEl(null);
@@ -102,15 +130,14 @@ export default function Header() {
     handleMobileMenuClose();
   };
   const handleLogout = () => {
-    navigation("/")
-  }
+    navigation("/");
+  };
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
   const renderAlertMenu = (
     <Menu
-    
       anchorEl={AnnounceAnchorEl}
       anchorOrigin={{
         vertical: "top",
@@ -148,75 +175,6 @@ export default function Header() {
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
-  const menuFunctionForStudent = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id="Student Role"
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      {/* <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={0} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem> */}
-      <MenuItem onClick={handleAnnounceMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-
-      <MenuItem>
-        <Link to="MyCv">
-          <p>Recruitment Cv</p>
-        </Link>
-      </MenuItem>
-      <MenuItem>
-        <Link to="ListJobApplied">
-          <p>ListJobApplied</p>
-        </Link>
-      </MenuItem>
-      <MenuItem>
-        <Link to="Report">
-          <p>Report forms</p>
-        </Link>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
-  );
-
   //display mobile menu
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
@@ -235,20 +193,13 @@ export default function Header() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {/* <MenuItem>
-          <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-            <Badge badgeContent={0} color="error">
-              <MailIcon />
-            </Badge>
-          </IconButton>
-          <p>Messages</p>
-        </MenuItem> */}
-      <MenuItem onClick={handleAnnounceMenuOpen} >
+      <MenuItem onClick={handleAnnounceMenuOpen}>
         <IconButton
           size="large"
           aria-label="show 17 new notifications"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
           color="inherit"
-          
         >
           <Badge badgeContent={17} color="error">
             <NotificationsIcon />
@@ -256,6 +207,10 @@ export default function Header() {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
+      {/* display follow user role */}
+      {isStudent && <HeaderStudent />}
+      {isTeacher && <HeaderTeacher />}
+      {isInstructor && <HeaderInstructor />}
 
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
@@ -271,26 +226,25 @@ export default function Header() {
       </MenuItem>
     </Menu>
   );
-  //check role to display
-  const roleuser = "student";
 
-  const checkRoleuser = (role) => {
-    if (role === "student") {
-      return menuFunctionForStudent;
-    } else {
-      return renderMobileMenu;
-    }
-  };
-  const DisplayMobiMenu = checkRoleuser(roleuser);
   const navigate = useNavigate();
 
   const HandleClickbtn = (e) => {
-    navigate("/Student");
+    {
+      isStudent && navigate("/Student");
+    }
+    {
+      isTeacher && navigate("/Teacher");
+    }
   };
   return (
     <AppBar sx={{}}>
       <Toolbar>
-        <div className="icon">
+        <Box className="icon" sx={{
+          display:'flex',
+          flexDirection: 'row',
+          alignItems: 'center'
+        }}>
           <img src="/logo-favicon-50x50.png" alt="" />
           <Typography
             marginLeft={"10px"}
@@ -304,7 +258,7 @@ export default function Header() {
             {" "}
             InternshipIU
           </Typography>
-        </div>
+        </Box>
 
         <Search>
           <SearchIconWrapper>
@@ -317,13 +271,6 @@ export default function Header() {
         </Search>
         <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ display: { xs: "none", md: "flex" } }}>
-          {/* <IconButton 
-            onClick={handleMessageMenuOpen}
-            size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton> */}
           <IconButton
             size="large"
             aria-label="show 17 new notifications"
@@ -360,7 +307,7 @@ export default function Header() {
           </IconButton>
         </Box>
       </Toolbar>
-      {DisplayMobiMenu}
+      {renderMobileMenu}
       {renderMenu}
     </AppBar>
   );

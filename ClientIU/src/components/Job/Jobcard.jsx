@@ -17,7 +17,9 @@ function JobCard() {
         ,borderStyle: 'groove'
         ,border: '2px whitesmoke solid'
         ,boxShadow:'8'
-        ,overflow:'hidden',margin:'5px 5px 5px 0px'}}>
+        ,overflow:'hidden',
+        margin:'5px 5px 5px 0px'
+        }}>
         <CardActionArea  onClick={handleOpen} sx={{}} className="actioncard">
             <div className="content">
             <CardMedia

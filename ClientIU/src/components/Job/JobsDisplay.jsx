@@ -1,8 +1,8 @@
 import { Grid } from "@mui/material";
 import * as React from "react";
-import JobCard from "../Job/Jobcard";
+import JobCard from "./Jobcard";
 
-function Jobdisplay() {
+function JobsDisplay() {
   return (
     <>
       <Grid container>
@@ -13,9 +13,9 @@ function Jobdisplay() {
               justifyContent: "center",
               alignItems: "start",
             }}
-            xs={12}
+            xs={11}
             md={6}
-            xl={3}
+            xl={4}
             key={index}
           >
             <JobCard />
@@ -26,4 +26,4 @@ function Jobdisplay() {
   );
 }
 
-export default Jobdisplay;
+export default JobsDisplay;
