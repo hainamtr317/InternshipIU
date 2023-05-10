@@ -1,20 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  state: false,
+  value: "student",
 };
 
-export const openSlice = createSlice({
-  name: "counter",
+export const userSlice = createSlice({
+  name: "user",
   initialState,
   reducers: {
-    changeState: (state, action) => {
+    changeRole: (state, action) => {
       state.value = action.payload;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { changeState } = openSlice.actions;
-
-export default openSlice.reducer;
+export const { changeRole } = userSlice.actions;
+export const Selector = (state) => state.user.value;
+export default userSlice.reducer;

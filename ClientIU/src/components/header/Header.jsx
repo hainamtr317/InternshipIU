@@ -17,12 +17,11 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { Link, useNavigate } from "react-router-dom";
 import { styled, alpha } from "@mui/material/styles";
-
-import store from "../../redux/store";
 import ShowAnnounceList from "../announment/ShowAnnouList";
 import HeaderStudent from "../Student/HeaderStudent";
 import HeaderTeacher from "../Teacher/HeaderTeacher";
-
+import { useSelector, useDispatch } from 'react-redux'
+import { Selector } from "../../redux/userSlice";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -75,7 +74,7 @@ export default function Header() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const isAnnounceMenuOpen = Boolean(AnnounceAnchorEl);
   //set role display
-  const [isInstructor, setIsInstructor] = React.useState(false);
+  const role = useSelector(Selector)
   const [storeState, SetStoreState] = React.useState();
   const [isStudent, SetIsStudent] = React.useState(true);
   const [isTeacher, SetIsTeacher] = React.useState(false);
@@ -83,26 +82,24 @@ export default function Header() {
     if (role === "student") {
       SetIsStudent(true);
       SetIsTeacher(false);
-      setIsInstructor(false);
       console.log("displayStudent");
     } else if (role === "teacher") {
       SetIsStudent(false);
       SetIsTeacher(true);
-      setIsInstructor(false);
       console.log("display Teacher");
-    } else if (role === "instructor") {
-      SetIsStudent(false);
-      SetIsTeacher(false);
-      setIsInstructor(true);
-      console.log("display Instructor");
-    }
+    } 
+    // else if (role === "instructor") {
+    //   SetIsStudent(false);
+    //   SetIsTeacher(false);
+    //   console.log("display Instructor");
+    // }
   };
 
   React.useEffect(() => {
-    SetStoreState(store.getState().User.role);
-    // console.log(storeState);
-    CheckRoleUser(storeState);
-  }, [storeState]);
+    console.log(role)
+    // SetStoreState(role);
+    CheckRoleUser(role);
+  }, [role]);
   // set function navigate
   const navigation = useNavigate();
   // function to set action of menu is open or not
@@ -210,7 +207,6 @@ export default function Header() {
       {/* display follow user role */}
       {isStudent && <HeaderStudent />}
       {isTeacher && <HeaderTeacher />}
-      {isInstructor && <HeaderInstructor />}
 
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton

@@ -14,16 +14,16 @@ import Avatar from "@mui/material/Avatar";
 import "./styleleft.scss";
 import { Box } from "@mui/material";
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
-import store from "../../redux/store";
 import { Link } from "react-router-dom";
 import MenuLeftStudent from "../../components/Student/MenuLeftStudent";
 import MenuLeftTeacher from "../../components/Teacher/MenuLeftTeacher";
-
+import { useSelector, useDispatch } from 'react-redux'
+import { Selector } from "../../redux/userSlice";
 function Leftsidecard() {
   const [checked, setChecked] = React.useState(false);
   const [display, setDisplay] = React.useState(true);
   //set role display
-  const [isInstructor, setIsInstructor] = React.useState(false);
+  const role = useSelector(Selector)
   const [storeState, SetStoreState] = React.useState();
   const [isStudent, SetIsStudent] = React.useState(true);
   const [isTeacher, SetIsTeacher] = React.useState(false);
@@ -31,26 +31,24 @@ function Leftsidecard() {
     if (role === "student") {
       SetIsStudent(true);
       SetIsTeacher(false);
-      setIsInstructor(false);
       console.log("displayStudent");
     } else if (role === "teacher") {
       SetIsStudent(false);
       SetIsTeacher(true);
-      setIsInstructor(false);
       console.log("display Teacher");
-    } else if (role === "instructor") {
-      SetIsStudent(false);
-      SetIsTeacher(false);
-      setIsInstructor(true);
-      console.log("display Instructor");
-    }
+    } 
+    // else if (role === "instructor") {
+    //   SetIsStudent(false);
+    //   SetIsTeacher(false);
+    //   console.log("display Instructor");
+    // }
   };
 
   React.useEffect(() => {
-    SetStoreState(store.getState().User.role);
-    // console.log(storeState);
-    CheckRoleUser(storeState);
-  }, [storeState]);
+    console.log(role)
+    // SetStoreState(role);
+    CheckRoleUser(role);
+  }, [role]);
 
   const DisplayBtn = () => {
     setChecked((prev) => !prev);

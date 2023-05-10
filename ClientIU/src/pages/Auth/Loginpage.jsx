@@ -16,49 +16,44 @@ import * as React from "react";
 import logo from "../../assets/logo-small_logo.png";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Navigate, useNavigate } from "react-router-dom";
-import store from "../../redux/store";
+import { useSelector, useDispatch } from 'react-redux'
+import { Selector,changeRole } from "../../redux/userSlice"
 
-//set role display
 
 function Loginpage() {
   const navigate = useNavigate();
-  const [isInstructor, setIsInstructor] = React.useState(false);
-  const [storeState, SetStoreState] = React.useState();
-  const [isStudent, SetIsStudent] = React.useState(true);
-  const [isTeacher, SetIsTeacher] = React.useState(false);
-  const CheckRoleUser = (role) => {
-    if (role === "student") {
-      SetIsStudent(true);
-      SetIsTeacher(false);
-      setIsInstructor(false);
-      console.log("displayStudent");
-    } else if (role === "teacher") {
-      SetIsStudent(false);
-      SetIsTeacher(true);
-      setIsInstructor(false);
-      console.log("display Teacher");
-    } else if (role === "instructor") {
-      SetIsStudent(false);
-      SetIsTeacher(false);
-      setIsInstructor(true);
-      console.log("display Instructor");
-    }
-  };
+ //set role display
+ const role = useSelector(Selector)
+ const [storeState, SetStoreState] = React.useState();
+ const [isStudent, SetIsStudent] = React.useState(true);
+ const [isTeacher, SetIsTeacher] = React.useState(false);
+ const dispatch = useDispatch()
+ const CheckRoleUser = (role) => {
+   if (role === "student") {
+     SetIsStudent(true);
+     SetIsTeacher(false);
+     console.log("displayStudent");
+   } else if (role === "teacher") {
+     SetIsStudent(false);
+     SetIsTeacher(true);
+     console.log("display Teacher");
+   } 
+ };
 
-  React.useEffect(() => {
-    SetStoreState(store.getState().User.role);
-    // console.log(storeState);
-    CheckRoleUser(storeState);
-  }, [storeState]);
-  // const dispatch = useDispatch();
+ React.useEffect(() => {
+  CheckRoleUser(role)
+ }, [role]);
+ 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-
+    const password = data.get("password");
+    if (password=='student'|| password=='teacher'){
+      dispatch(changeRole(data.get("password")))
+      
+    }
+    
+    
     {
       isStudent && navigate("/Student");
     }

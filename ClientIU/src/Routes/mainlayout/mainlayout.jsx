@@ -10,42 +10,41 @@ import StudentInfoDisplay from "../../pages/Student/StudentInfordisplay";
 import StudentAppliedJob from "../../pages/Student/StudentAppliedJob";
 import StudentReport from "../../pages/Student/StudentReport";
 import TeacherListStudents from "../../pages/Teacher/TeacherViewStudentList";
-import store from "../../redux/store";
 import { Box } from "@mui/material";
 import StudentDisplay from "../../components/Student/StudentDisplay";
 import GradingStudent from "../../components/Teacher/GradingStudent";
 import TeacherGradeView from "../../pages/Teacher/TeacherGradeview";
-import ApplyJob from '../../components/Job/ApplyFrom'
+import ApplyJob from "../../components/Job/ApplyFrom";
+import { useSelector, useDispatch } from 'react-redux'
+import { Selector } from "../../redux/userSlice";
 function MainLayout() {
   //set role display
-  const [isInstructor, setIsInstructor] = React.useState(false);
+  const role = useSelector(Selector)
   const [storeState, SetStoreState] = React.useState();
-  const [isStudent, SetIsStudent] = React.useState(false);
+  const [isStudent, SetIsStudent] = React.useState(true);
   const [isTeacher, SetIsTeacher] = React.useState(false);
   const CheckRoleUser = (role) => {
     if (role === "student") {
       SetIsStudent(true);
       SetIsTeacher(false);
-      setIsInstructor(false);
       console.log("displayStudent");
     } else if (role === "teacher") {
       SetIsStudent(false);
       SetIsTeacher(true);
-      setIsInstructor(false);
       console.log("display Teacher");
-    } else if (role === "instructor") {
-      SetIsStudent(false);
-      SetIsTeacher(false);
-      setIsInstructor(true);
-      console.log("display Instructor");
-    }
+    } 
+    // else if (role === "instructor") {
+    //   SetIsStudent(false);
+    //   SetIsTeacher(false);
+    //   console.log("display Instructor");
+    // }
   };
 
   React.useEffect(() => {
-    SetStoreState(store.getState().User.role);
-    // console.log(storeState);
-    CheckRoleUser(storeState);
-  }, [storeState]);
+    console.log(role)
+    // SetStoreState(role);
+    CheckRoleUser(role);
+  }, [role]);
   return (
     <Box
       className="MainLayout"
@@ -57,12 +56,12 @@ function MainLayout() {
       }}
     >
       <Routes>
-         {/* Route for Student */}
+        {/* Route for Student */}
         {isStudent && <Route index element={<JobsDisplay />} />}
 
         {/* Route for Teacher */}
         {isTeacher && <Route index element={<TeacherListStudents />} />}
-       
+
         <Route path="/job" element={<Jobpage />} />
         <Route path="/UserInformation" element={<StudentInfoDisplay />} />
         <Route path="/ListJobApplied/*" element={<StudentAppliedJob />} />
@@ -71,10 +70,8 @@ function MainLayout() {
         <Route path="/Report" element={<StudentReport />} />
         <Route path="/MyCv" element={<StudentCv />} />
         <Route path="/StudentId" element={<StudentDisplay />} />
-        <Route path="/StudentId/Grading" element={<GradingStudent/>} />
-        <Route path="/GradeList" element={<TeacherGradeView/>}/>
-
-        
+        <Route path="/StudentId/Grading" element={<GradingStudent />} />
+        <Route path="/GradeList" element={<TeacherGradeView />} />
       </Routes>
     </Box>
   );
