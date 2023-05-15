@@ -7,10 +7,13 @@ import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import UpdateIcon from "@mui/icons-material/Update";
 import { Link, useNavigate } from "react-router-dom";
 import {Modal,Box,Typography, CardContent, Button ,Checkbox, Divider, Paper  } from '@mui/material';
 
 function JobModal (props) {
+  const Job= props.Job;
+  const direction = "job/"+Job.id;
   const navigate = useNavigate();
     const handleApplybtn = ()=>{
       navigate("/Student/job/Apply")
@@ -41,13 +44,13 @@ function JobModal (props) {
     >
     <Box sx={style}>
         <CardContent id='header-modal-job' sx={headerModal}>
-          <Link to="job">
+          <Link to={direction}>
           <Typography id="Jos-Title" variant="h4" component="h">
-            Job Name
+          {Job.nameJob}
           </Typography>
           </Link>
           <Typography id="Jos-Title" variant="caption" component="p">
-            Company name
+          {Job.company}
           </Typography>
           <Button variant="outlined" onClick={handleApplybtn}>
             Apply Now
@@ -68,14 +71,14 @@ function JobModal (props) {
         )}
         <Paper sx={{display:'flex',flexDirection:'row',justifyContent: 'start',alignItems:'center',height:'auto'}}>
             <PaidOutlinedIcon fontSize="small"/>
-            <Typography sx={{marginLeft:'10px'}} component="p">2000 $</Typography>
+            <Typography sx={{marginLeft:'10px'}} component="p">{Job.salary}</Typography>
             
         </Paper>
      
         <Paper sx={{display:'flex',flexDirection:'row',justifyContent: 'start',alignItems:'center',height:'auto'}}>
             <LocationOnOutlinedIcon fontSize="small"/>
-            <Typography sx={{marginLeft:'10px'}} component="p">2nd Floor, Ricco Building, No. 363 Nguyen Huu Tho Str., Khue Trung Ward, Cam Le, Da Nang
-            <Link sx={{marginLeft:'5px'}}>Map</Link>
+            <Typography sx={{marginLeft:'10px'}} component="p">{Job.Address}
+            <Link sx={{marginLeft:'5px'}}><Typography sx={{color:'blue'}}>Map</Typography></Link>
             </Typography>
             
         </Paper>
@@ -85,8 +88,8 @@ function JobModal (props) {
             <Typography sx={{marginLeft:'10px'}} component="p">at Company </Typography>  
         </Paper>
         <Paper sx={{display:'flex',flexDirection:'row',justifyContent: 'start',alignItems:'center',height:'auto'}}>
-            <CalendarMonthOutlinedIcon fontSize="small"/>
-            <Typography sx={{marginLeft:'10px'}} component="p"> 2 day ago</Typography>  
+            <UpdateIcon fontSize="small"/>
+            <Typography sx={{marginLeft:'10px'}} component="p"> {Job.update}</Typography>  
         </Paper>
 
         </CardContent>

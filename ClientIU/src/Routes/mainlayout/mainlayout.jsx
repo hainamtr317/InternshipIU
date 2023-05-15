@@ -62,11 +62,11 @@ function MainLayout() {
         {/* Route for Teacher */}
         {isTeacher && <Route index element={<TeacherListStudents />} />}
 
-        <Route path="/job" element={<Jobpage />} />
+        <Route path="/job/:job_id" element={<Jobpage />} />
         <Route path="/UserInformation" element={<StudentInfoDisplay />} />
         <Route path="/ListJobApplied/*" element={<StudentAppliedJob />} />
-        <Route path="/ListJobApplied/Job" element={<Jobpage />} />
-        <Route path="/job/Apply" element={<ApplyJob />} />
+        <Route path="/ListJobApplied/job/:job_id" element={<Jobpage />} />
+        <Route path="/job/:job_id/Apply" element={<ApplyJob />} />
         <Route path="/Report" element={<StudentReport />} />
         <Route path="/MyCv" element={<StudentCv />} />
         <Route path="/StudentId" element={<StudentDisplay />} />

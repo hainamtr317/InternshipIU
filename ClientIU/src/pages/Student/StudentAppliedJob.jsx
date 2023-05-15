@@ -1,6 +1,6 @@
 import { Container, Box, Typography, Divider,Grid } from "@mui/material";
 import JobCard from "../../components/Job/Jobcard";
-
+import { JobData } from "../../components/Job/Data/jobData";
 function StudentAppliedJob() {
   return (
     <>
@@ -24,20 +24,18 @@ function StudentAppliedJob() {
             ,width:"auto"
         }}
         >
-        {Array.from(Array(10)).map((_, index) => (
-          <Grid
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "start",
-              
-            }}
-            xs={12}
-            md={6}
-            xl={4}
-            key={index}
+        {JobData.map((job) =>(
+          <Grid  sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "start",
+          }}
+          xs={11}
+          md={6}
+          xl={4}
+          key={job.id}
           >
-            <JobCard />
+             <JobCard Job={job} />
           </Grid>
         ))}
         </Grid>

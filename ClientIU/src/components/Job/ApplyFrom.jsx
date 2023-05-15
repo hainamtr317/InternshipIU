@@ -36,7 +36,7 @@ function ApplyJob() {
               marginLeft: "70px",
             }}
           >
-            <JobCard />
+            {/* <JobCard /> */}
           </Box>
         </Box>
         <Box>

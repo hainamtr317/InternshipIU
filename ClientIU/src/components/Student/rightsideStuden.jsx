@@ -1,6 +1,5 @@
 import { Box, Button } from "@mui/material";
-import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
-import GradingOutlinedIcon from "@mui/icons-material/GradingOutlined";
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import { Link } from "react-router-dom";
 function StudentDisplayRightSide() {
   return (
@@ -22,21 +21,21 @@ function StudentDisplayRightSide() {
         <Button
           variant="outlined"
           sx={{
-            width: "200px",
+            width: "300px",
           }}
-          startIcon={<ChatOutlinedIcon />}
+          startIcon={<DriveFileRenameOutlineIcon />}
         >
-          Chat
+          Register Your Job
         </Button>
         <Link to="Grading">
           <Button
             variant="outlined"
             sx={{
-              width: "200px",
+              width: "300px ",
             }}
-            startIcon={<GradingOutlinedIcon />}
+            startIcon={<DriveFileRenameOutlineIcon   />}
           >
-            Grading
+            Register Instructor information
           </Button>
         </Link>
       </Box>

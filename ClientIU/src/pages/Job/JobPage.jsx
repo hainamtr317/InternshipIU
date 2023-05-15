@@ -1,7 +1,5 @@
 import React from "react";
-// import Header from "../../components/header/Header";
-// import './jobcard.scss';
-
+import { JobData } from "../../components/Job/Data/jobData";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 
@@ -9,7 +7,7 @@ import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Modal,
   Box,
@@ -23,18 +21,32 @@ import {
   CardMedia,
   Container,
 } from "@mui/material";
+import UpdateIcon from "@mui/icons-material/Update";
 
 function Jobpage() {
   const listSkill = ["reactjs", "nodejs", "cloud"];
+  const { job_id } = useParams();
+
   const styles = {
     bgcolor: "white",
     maxWidth: "1000px",
-    marginLeft: { md: "25%" },
+    marginLeft:'auto',
+    marginRight: 'auto'
   };
+  const Job = JobData.find((job) => {
+    if (job.id === job_id){
+      return job
+    }
+    else {
+      return "Unfine"
+    }
+  });
+ 
   const navigate = useNavigate();
-  const handleApplybtn = ()=>{
-    navigate("/Student/job/Apply")
-  }
+  const direction = "/Student/job/"+job_id+"/Apply"
+  const handleApplybtn = () => {
+    navigate(direction);
+  };
   return (
     <Box sx={styles}>
       <Box
@@ -58,20 +70,19 @@ function Jobpage() {
               width: "100px",
             }}
             component="img"
-            image="/images/photo.svg"
+            image={Job.image}
             alt="green iguana"
           />
           <CardContent id="header-job">
             <Typography id="Job-Title" variant="h4" component="h">
-              Job Name
+            {Job.nameJob}
             </Typography>
             <Typography id="company-Title" variant="caption" component="p">
-              Company name
+            {Job.company}
             </Typography>
           </CardContent>
         </Container>
         <Container>
-
           <Button
             variant="outlined"
             sx={{
@@ -87,7 +98,6 @@ function Jobpage() {
             checkedIcon={<BookmarkIcon />}
           />
         </Container>
-       
       </Box>
       <Divider />
       <CardContent>
@@ -105,7 +115,7 @@ function Jobpage() {
         >
           <PaidOutlinedIcon fontSize="small" />
           <Typography sx={{ marginLeft: "10px" }} component="p">
-            2000 $
+          {Job.salary}
           </Typography>
         </Paper>
 
@@ -120,8 +130,7 @@ function Jobpage() {
         >
           <LocationOnOutlinedIcon fontSize="small" />
           <Typography sx={{ marginLeft: "10px" }} component="p">
-            2nd Floor, Ricco Building, No. 363 Nguyen Huu Tho Str., Khue Trung
-            Ward, Cam Le, Da Nang
+          {Job.Address}
             <Link sx={{ marginLeft: "5px" }}>Map</Link>
           </Typography>
         </Paper>
@@ -149,10 +158,10 @@ function Jobpage() {
             height: "auto",
           }}
         >
-          <CalendarMonthOutlinedIcon fontSize="small" />
+          <UpdateIcon fontSize="small" />
           <Typography sx={{ marginLeft: "10px" }} component="p">
             {" "}
-            2 day ago
+            {Job.update}
           </Typography>
         </Paper>
       </CardContent>
