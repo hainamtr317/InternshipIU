@@ -17,9 +17,10 @@ import TeacherGradeView from "../../pages/Teacher/TeacherGradeview";
 import ApplyJob from "../../components/Job/ApplyFrom";
 import { useSelector, useDispatch } from 'react-redux'
 import { Selector } from "../../redux/userSlice";
+import CompanyPage from "../../pages/Companies/CompanyPage";
 function MainLayout() {
   //set role display
-  const role = useSelector(Selector)
+  const role = useSelector(Selector);
   const [storeState, SetStoreState] = React.useState();
   const [isStudent, SetIsStudent] = React.useState(true);
   const [isTeacher, SetIsTeacher] = React.useState(false);
@@ -32,7 +33,7 @@ function MainLayout() {
       SetIsStudent(false);
       SetIsTeacher(true);
       console.log("display Teacher");
-    } 
+    }
     // else if (role === "instructor") {
     //   SetIsStudent(false);
     //   SetIsTeacher(false);
@@ -41,7 +42,7 @@ function MainLayout() {
   };
 
   React.useEffect(() => {
-    console.log(role)
+    console.log(role);
     // SetStoreState(role);
     CheckRoleUser(role);
   }, [role]);
@@ -58,10 +59,8 @@ function MainLayout() {
       <Routes>
         {/* Route for Student */}
         {isStudent && <Route index element={<JobsDisplay />} />}
-
         {/* Route for Teacher */}
         {isTeacher && <Route index element={<TeacherListStudents />} />}
-
         <Route path="/job/:job_id" element={<Jobpage />} />
         <Route path="/UserInformation" element={<StudentInfoDisplay />} />
         <Route path="/ListJobApplied/*" element={<StudentAppliedJob />} />
@@ -72,6 +71,8 @@ function MainLayout() {
         <Route path="/StudentId" element={<StudentDisplay />} />
         <Route path="/StudentId/Grading" element={<GradingStudent />} />
         <Route path="/GradeList" element={<TeacherGradeView />} />
+        // company
+        <Route path="/Company" element={<CompanyPage />} />
       </Routes>
     </Box>
   );

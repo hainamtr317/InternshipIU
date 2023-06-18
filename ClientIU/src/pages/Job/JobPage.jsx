@@ -2,7 +2,7 @@ import React from "react";
 import { JobData } from "../../components/Job/Data/jobData";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-
+import CompanyCard from "../../components/Company/CompanyCard";
 import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
@@ -30,29 +30,30 @@ function Jobpage() {
   const styles = {
     bgcolor: "white",
     maxWidth: "1000px",
-    marginLeft:'auto',
-    marginRight: 'auto'
+    marginLeft: "auto",
+    marginRight: "auto",
   };
   const Job = JobData.find((job) => {
-    if (job.id === job_id){
-      return job
-    }
-    else {
-      return "Unfine"
+    if (job.id === job_id) {
+      return job;
+    } else {
+      return "Unfine";
     }
   });
- 
+
   const navigate = useNavigate();
-  const direction = "/Student/job/"+job_id+"/Apply"
+  const direction = "/Student/job/" + job_id + "/Apply";
   const handleApplybtn = () => {
     navigate(direction);
   };
   return (
     <Box sx={styles}>
       <Box
-        id="box-header-job"
         sx={{
-          position: "-webkit-sticky",
+          position: "sticky",
+          top: 50,
+          bgcolor: "white",
+          zIndex: 4,
         }}
       >
         <Container
@@ -75,10 +76,10 @@ function Jobpage() {
           />
           <CardContent id="header-job">
             <Typography id="Job-Title" variant="h4" component="h">
-            {Job.nameJob}
+              {Job.nameJob}
             </Typography>
             <Typography id="company-Title" variant="caption" component="p">
-            {Job.company}
+              {Job.company}
             </Typography>
           </CardContent>
         </Container>
@@ -115,7 +116,7 @@ function Jobpage() {
         >
           <PaidOutlinedIcon fontSize="small" />
           <Typography sx={{ marginLeft: "10px" }} component="p">
-          {Job.salary}
+            {Job.salary}
           </Typography>
         </Paper>
 
@@ -130,7 +131,7 @@ function Jobpage() {
         >
           <LocationOnOutlinedIcon fontSize="small" />
           <Typography sx={{ marginLeft: "10px" }} component="p">
-          {Job.Address}
+            {Job.Address}
             <Link sx={{ marginLeft: "5px" }}>Map</Link>
           </Typography>
         </Paper>
@@ -303,7 +304,7 @@ function Jobpage() {
           </ul>
         </div>
       </CardContent>
-      <Box>Display Company Card</Box>
+      <CompanyCard jobid={job_id} />
     </Box>
   );
 }
