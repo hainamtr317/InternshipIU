@@ -12,7 +12,7 @@ import {
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
 import React from "react";
-function GradingStudent(props) {
+function ModalAnnouncementToStudent(props) {
   const style = {
     position: "absolute",
     top: "50%",
@@ -38,30 +38,13 @@ function GradingStudent(props) {
             }}
             variant="h3"
           >
-            <b>Grading</b>
+            <b>Announment</b>
           </Typography>
           <Divider></Divider>
           <Container>
-            <Typography variant="h5"> Student id : </Typography>
+            <Typography variant="h5"> To Student id : </Typography>
           </Container>
-          <Box
-            sx={{
-              marginLeft: "20px",
-              marginTop: "20px",
-            }}
-            className="StudentReport"
-          >
-            <Typography
-              variant="h5"
-              sx={{
-                color: "#1976d2",
-              }}
-            >
-              Student Report:
-            </Typography>
-            <Divider></Divider>
-            Here to display Student Report
-          </Box>
+
           <Box
             sx={{
               marginLeft: "20px",
@@ -69,14 +52,14 @@ function GradingStudent(props) {
             }}
             className="gradingForm "
           >
-            <FormGroup>
+            {/* <FormGroup>
               <FormControlLabel
                 control={<Checkbox defaultChecked />}
                 label="Good"
               />
               <FormControlLabel required control={<Checkbox />} label="Ok" />
               <FormControlLabel disabled control={<Checkbox />} label="Bad" />
-            </FormGroup>
+            </FormGroup> */}
             <Typography>Comment:</Typography>
             <TextareaAutosize
               aria-label="minimum height"
@@ -98,7 +81,7 @@ function GradingStudent(props) {
                 Reset
               </Button>
               <Button variant="contained" size="large">
-                Grading
+                announce
               </Button>
             </Box>
           </Box>
@@ -108,4 +91,4 @@ function GradingStudent(props) {
   );
 }
 
-export default GradingStudent;
+export default ModalAnnouncementToStudent;

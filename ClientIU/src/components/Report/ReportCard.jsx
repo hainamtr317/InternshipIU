@@ -14,41 +14,41 @@ import {
   
   import React, { useState } from "react";
   function ReportCard() {
-    return ( <>
-     <Card
-        className="Cvcard"
-        sx={{
-          height: 250,
-          width: 400,
-          borderStyle: "groove",
-          border: "2px whitesmoke solid",
-          boxShadow: "8",
-          overflow: "hidden",
-          margin: "5px 5px 5px 0px",
-        }}
-      >
-        <CardActionArea height="90%" >
-          <CardMedia
-            sx={{
-              marginTop: "20px",
-            }}
-            component="iframe"
-            src="/Assets/testdoc.docx"
-            height="80%"
-            width="100%"
-            allowfullscreen="true"
-          ></CardMedia>
-        </CardActionArea>
-        <CardContent>
-          <Typography
-            variant="h6"
-            sx={{
-              marginTop: "10px",
-            }}
-          >
-            Name of file
-          </Typography>
-          {/* <Box
+    return (
+      <>
+        <Card
+          className="Cvcard"
+          sx={{
+            height: 250,
+            width: 400,
+            borderStyle: "groove",
+            border: "2px whitesmoke solid",
+            boxShadow: "8",
+            overflow: "hidden",
+            margin: "5px 5px 5px 0px",
+          }}
+        >
+          <CardActionArea height="90%">
+            <CardMedia
+              sx={{
+                marginTop: "20px",
+              }}
+              component="iframe"
+              src="https://docs.google.com/document/d/1l9ZLKXkLJTCnjAu72fgjq4b_786z8shxHQ3_onh7vo8/edit?usp=sharing"
+              height="80%"
+              width="100%"
+            ></CardMedia>
+          </CardActionArea>
+          <CardContent>
+            <Typography
+              variant="h6"
+              sx={{
+                marginTop: "10px",
+              }}
+            >
+              Name of file
+            </Typography>
+            {/* <Box
             sx={{
               display: "flex",
               flexDirection: "row",
@@ -67,9 +67,10 @@ import {
               MainCv
             </Button>
           </Box> */}
-        </CardContent>
-      </Card>
-    </> );
+          </CardContent>
+        </Card>
+      </>
+    );
   }
   
   export default ReportCard;

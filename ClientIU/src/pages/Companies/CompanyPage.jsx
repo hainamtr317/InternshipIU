@@ -14,8 +14,9 @@ import {
   Grid,
 } from "@mui/material";
 import JobCard from "../../components/Job/Jobcard";
-import React from "react";
+import React, { useEffect } from "react";
 import { JobData } from "../../components/Job/Data/jobData";
+import { companyData } from "../../components/Job/Data/CompanyData";
 const textstylebox = {
   display: "flex",
   flexDirection: "column",
@@ -32,6 +33,23 @@ const textbottomstyle = {
   fontfamily: "Poppins, Helvetica Neue, Arial, Helvetica, sans-serif",
   fontWeight: 450,
 };
+const companyid = "1";
+const Company = companyData.find((company) => {
+  if (company.id === companyid) {
+    return company;
+  } else {
+    return "Undefine";
+  }
+});
+let Joblists = [];
+Company.Joblist.forEach((job) => {
+  JobData.forEach((jobdata) => {
+    if (jobdata.id == job) {
+      Joblists.push(jobdata);
+    }
+  });
+});
+
 function CompanyPage() {
   return (
     <>
@@ -63,27 +81,30 @@ function CompanyPage() {
               mt: "-30px",
             }}
             component="img"
-            image="https://images.glints.com/unsafe/160x0/glints-dashboard.s3.amazonaws.com/company-logo/5a98a3f6322f6a5fdf0d55d182f3d683.png"
+            image={Company.image}
             alt="green iguana"
           />
-          <Typography variant="h4">Company Name</Typography>
-          <Typography variant="subtitle1">website URL</Typography>
+          <Typography variant="h4">{Company.company}</Typography>
+          <Typography variant="subtitle1">cong ty cp</Typography>
 
           <Box sx={textstylebox}>
             <Typography sx={textstyle}>Address</Typography>
-            <Typography sx={textbottomstyle}> Viet Nam</Typography>
+            <Typography sx={textbottomstyle}>{Company.Address}</Typography>
           </Box>
           <Box sx={textstylebox}>
             <Typography sx={textstyle}>website</Typography>
-            <Typography sx={textbottomstyle}> company website url</Typography>
+            <Typography sx={textbottomstyle}>{Company.Website}l</Typography>
           </Box>
           <Box sx={textstylebox}>
             <Typography sx={textstyle}>Business areas</Typography>
-            <Typography sx={textbottomstyle}> Technology</Typography>
+            <Typography sx={textbottomstyle}>
+              {" "}
+              {Company.BussinessAreas}
+            </Typography>
           </Box>
           <Box sx={textstylebox}>
             <Typography sx={textstyle}>Company Size</Typography>
-            <Typography sx={textbottomstyle}> 100 Employee</Typography>
+            <Typography sx={textbottomstyle}>{Company.CompanySize}</Typography>
           </Box>
           <Button
             variant="outlined"
@@ -194,7 +215,7 @@ function CompanyPage() {
             width: "auto",
           }}
         >
-          {JobData.map((job) => (
+          {Joblists.map((job) => (
             <Grid
               sx={{
                 display: "flex",

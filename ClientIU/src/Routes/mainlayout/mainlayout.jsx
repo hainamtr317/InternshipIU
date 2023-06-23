@@ -12,10 +12,10 @@ import StudentReport from "../../pages/Student/StudentReport";
 import TeacherListStudents from "../../pages/Teacher/TeacherViewStudentList";
 import { Box } from "@mui/material";
 import StudentDisplay from "../../components/Student/StudentDisplay";
-import GradingStudent from "../../components/Teacher/GradingStudent";
+
 import TeacherGradeView from "../../pages/Teacher/TeacherGradeview";
 import ApplyJob from "../../components/Job/ApplyFrom";
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from "react-redux";
 import { Selector } from "../../redux/userSlice";
 import CompanyPage from "../../pages/Companies/CompanyPage";
 function MainLayout() {
@@ -61,6 +61,7 @@ function MainLayout() {
         {isStudent && <Route index element={<JobsDisplay />} />}
         {/* Route for Teacher */}
         {isTeacher && <Route index element={<TeacherListStudents />} />}
+
         <Route path="/job/:job_id" element={<Jobpage />} />
         <Route path="/UserInformation" element={<StudentInfoDisplay />} />
         <Route path="/ListJobApplied/*" element={<StudentAppliedJob />} />
@@ -69,9 +70,8 @@ function MainLayout() {
         <Route path="/Report" element={<StudentReport />} />
         <Route path="/MyCv" element={<StudentCv />} />
         <Route path="/StudentId" element={<StudentDisplay />} />
-        <Route path="/StudentId/Grading" element={<GradingStudent />} />
+        {/* <Route path="/StudentId/Grading" element={<GradingStudent />} /> */}
         <Route path="/GradeList" element={<TeacherGradeView />} />
-        // company
         <Route path="/Company" element={<CompanyPage />} />
       </Routes>
     </Box>

@@ -26,21 +26,19 @@ import UpdateIcon from "@mui/icons-material/Update";
 function Jobpage() {
   const listSkill = ["reactjs", "nodejs", "cloud"];
   const { job_id } = useParams();
-
+  
   const styles = {
     bgcolor: "white",
     maxWidth: "1000px",
     marginLeft: "auto",
     marginRight: "auto",
   };
-  const Job = JobData.find((job) => {
-    if (job.id === job_id) {
-      return job;
-    } else {
-      return "Unfine";
-    }
-  });
 
+  const Job = JobData.find((job) => {
+    if (job.id === job_id) return job;
+  });
+  console.log(Job);
+ 
   const navigate = useNavigate();
   const direction = "/Student/job/" + job_id + "/Apply";
   const handleApplybtn = () => {

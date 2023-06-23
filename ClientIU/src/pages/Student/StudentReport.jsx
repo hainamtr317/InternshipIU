@@ -16,14 +16,7 @@ function StudentReport() {
         <b>Report</b>
       </Typography>
       <Divider></Divider>
-      <Container
-      //  sx={{
-      //     borderStyle: "groove",
-      //     border: "2px whitesmoke solid",
-      //     boxShadow: "8",
-      //     marginTop: "10px",
-      //   }}
-      >
+      <Container>
         <Typography
           variant="h5"
           sx={{
@@ -49,30 +42,29 @@ function StudentReport() {
         </Typography>
         <Divider></Divider>
         <Box>
-        <Grid
-          container
-          sx={{
-            marginLeft: "10px",
-            width: "auto",
-          }}
-        >
-          {Array.from(Array(3)).map((_, index) => (
-            <Grid
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "start",
-              }}
-              xs={12}
-              md={6}
-              xl={4}
-              key={index}
-            >
-              <ReportCard></ReportCard>
-            </Grid>
-          ))}
-        </Grid>
-          
+          <Grid
+            container
+            sx={{
+              marginLeft: "10px",
+              width: "auto",
+            }}
+          >
+            {Array.from(Array(3)).map((_, index) => (
+              <Grid
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "start",
+                }}
+                xs={12}
+                md={6}
+                xl={4}
+                key={index}
+              >
+                <ReportCard></ReportCard>
+              </Grid>
+            ))}
+          </Grid>
         </Box>
       </Container>
     </>

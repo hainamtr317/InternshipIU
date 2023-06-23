@@ -1,9 +1,9 @@
 import { Box, Button } from "@mui/material";
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { OpenGrade, OpenAnnounce } from "../../redux/userSlice";
-function StudentDisplayRightSide() {
+function Teacherdisplayrightside() {
   const dispatch = useDispatch();
 
   const handleclickGrading = () => {
@@ -36,7 +36,7 @@ function StudentDisplayRightSide() {
           onClick={handleclickGrading}
           startIcon={<DriveFileRenameOutlineIcon />}
         >
-          Register Your Job
+          Grading
         </Button>
 
         <Button
@@ -47,11 +47,11 @@ function StudentDisplayRightSide() {
           onClick={handleclickAnnouce}
           startIcon={<DriveFileRenameOutlineIcon />}
         >
-          Register Instructor information
+          Make announcement to This student
         </Button>
       </Box>
     </>
   );
 }
 
-export default StudentDisplayRightSide;
+export default Teacherdisplayrightside;

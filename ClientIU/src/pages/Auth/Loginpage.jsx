@@ -23,7 +23,7 @@ import { Selector,changeRole } from "../../redux/userSlice"
 function Loginpage() {
   const navigate = useNavigate();
  //set role display
- const role = useSelector(Selector)
+ let role = useSelector(Selector);
  const [storeState, SetStoreState] = React.useState();
  const [isStudent, SetIsStudent] = React.useState(true);
  const [isTeacher, SetIsTeacher] = React.useState(false);

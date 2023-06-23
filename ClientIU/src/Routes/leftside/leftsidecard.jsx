@@ -17,13 +17,13 @@ import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOu
 import { Link } from "react-router-dom";
 import MenuLeftStudent from "../../components/Student/MenuLeftStudent";
 import MenuLeftTeacher from "../../components/Teacher/MenuLeftTeacher";
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from "react-redux";
 import { Selector } from "../../redux/userSlice";
 function Leftsidecard() {
   const [checked, setChecked] = React.useState(false);
   const [display, setDisplay] = React.useState(true);
   //set role display
-  const role = useSelector(Selector)
+  const role = useSelector(Selector);
   const [storeState, SetStoreState] = React.useState();
   const [isStudent, SetIsStudent] = React.useState(true);
   const [isTeacher, SetIsTeacher] = React.useState(false);
@@ -36,17 +36,10 @@ function Leftsidecard() {
       SetIsStudent(false);
       SetIsTeacher(true);
       console.log("display Teacher");
-    } 
-    // else if (role === "instructor") {
-    //   SetIsStudent(false);
-    //   SetIsTeacher(false);
-    //   console.log("display Instructor");
-    // }
+    }
   };
 
   React.useEffect(() => {
-    console.log(role)
-    // SetStoreState(role);
     CheckRoleUser(role);
   }, [role]);
 

@@ -10,12 +10,28 @@ import {
   CardActionArea,
 } from "@mui/material";
 import Cvcard from "../Cv/Cvcard";
+import GradingStudent from "../Teacher/GradingStudent";
+import { useSelector, useDispatch } from "react-redux";
+import { Modal, CloseModal } from "../../redux/userSlice";
+import ModalAnnouncementToStudent from "../Teacher/ModalAnnounment";
+import React from "react";
 
 function StudentDisplay() {
   const steps = ["Apply", "register", "working", "report", "grading"];
   const styleText = { marginLeft: "20px", color: "#1976d2", marginTop: "20px" };
+  const ismodalOpen = useSelector(Modal);
+  const dispatch = useDispatch();
+  console.log(ismodalOpen);
+  const HandleModalClose = () => {
+    dispatch(CloseModal(false));
+  };
   return (
     <>
+      <GradingStudent Open={ismodalOpen.Grade} Close={HandleModalClose} />
+      <ModalAnnouncementToStudent
+        Open={ismodalOpen.Announce}
+        Close={HandleModalClose}
+      />
       <Box>
         <Box
           sx={{
