@@ -38,7 +38,7 @@ function ModalAnnouncementToStudent(props) {
             }}
             variant="h3"
           >
-            <b>Announment</b>
+            <b>Announcement</b>
           </Typography>
           <Divider></Divider>
           <Container>

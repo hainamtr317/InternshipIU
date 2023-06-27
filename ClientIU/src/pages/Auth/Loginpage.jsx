@@ -24,20 +24,30 @@ function Loginpage() {
   const navigate = useNavigate();
  //set role display
  let role = useSelector(Selector);
+ const dispatch = useDispatch()
  const [storeState, SetStoreState] = React.useState();
  const [isStudent, SetIsStudent] = React.useState(true);
- const [isTeacher, SetIsTeacher] = React.useState(false);
- const dispatch = useDispatch()
- const CheckRoleUser = (role) => {
-   if (role === "student") {
-     SetIsStudent(true);
-     SetIsTeacher(false);
-   } else if (role === "teacher") {
-     SetIsStudent(false);
-     SetIsTeacher(true);
-   }
- };
-
+  const [isTeacher, SetIsTeacher] = React.useState(false);
+  const [isAdmin, SetIsAdmin] = React.useState(false);
+  const CheckRoleUser = (role) => {
+    if (role === "student") {
+      SetIsStudent(true);
+      SetIsTeacher(false);
+      SetIsAdmin(false);
+      console.log("displayStudent");
+    } else if (role === "teacher") {
+      SetIsStudent(false);
+      SetIsTeacher(true);
+      SetIsAdmin(false);
+      console.log("display Teacher");
+    }
+    else if (role === "admin") {
+      SetIsStudent(false);
+      SetIsTeacher(false);
+      SetIsAdmin(true);
+      console.log("display Admin");
+    }
+  };
  React.useEffect(() => {
    CheckRoleUser(role);
  }, [role]);
@@ -46,7 +56,7 @@ function Loginpage() {
    event.preventDefault();
    const data = new FormData(event.currentTarget);
    const password = data.get("password");
-   if (password === "student" || password === "teacher") {
+   if (password === "student" || password === "teacher" || password === "admin") {
      dispatch(changeRole(password));
    }
    await CheckRoleUser(role);

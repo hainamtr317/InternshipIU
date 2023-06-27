@@ -33,7 +33,7 @@ function StudentDisplayRightSide() {
           sx={{
             width: "300px",
           }}
-          onClick={handleclickGrading}
+          onClick={handleclickAnnouce}
           startIcon={<DriveFileRenameOutlineIcon />}
         >
           Register Your Job
@@ -44,7 +44,7 @@ function StudentDisplayRightSide() {
           sx={{
             width: "300px ",
           }}
-          onClick={handleclickAnnouce}
+          onClick={handleclickGrading}
           startIcon={<DriveFileRenameOutlineIcon />}
         >
           Register Instructor information

@@ -5,8 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import StudentPage from "./pages/Student/StudentPage";
 import Loginpage from "./pages/Auth/Loginpage";
 import TeacherPage from "./pages/Teacher/TeacherPage";
-import Jobpage from "./pages/Job/JobPage";
-import StudentCv from "./pages/Student/StudentCv";
+import AdminPage from "./pages/Admin/AdminPage";
 
 function App() {
   return (
@@ -16,6 +15,7 @@ function App() {
           <Route path="/*" element={<Loginpage />} />
           <Route path="Student/*" element={<StudentPage />} />
           <Route path="Teacher/*" element={<TeacherPage />} />
+          <Route path="Admin/*" element={<AdminPage />} />
         </Routes>
       </Router>
     </div>

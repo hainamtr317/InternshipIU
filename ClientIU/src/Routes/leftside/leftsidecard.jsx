@@ -19,6 +19,7 @@ import MenuLeftStudent from "../../components/Student/MenuLeftStudent";
 import MenuLeftTeacher from "../../components/Teacher/MenuLeftTeacher";
 import { useSelector } from "react-redux";
 import { Selector } from "../../redux/userSlice";
+import MenuLeftAdmin from "../../components/Admin/MenuLeft";
 function Leftsidecard() {
   const [checked, setChecked] = React.useState(false);
   const [display, setDisplay] = React.useState(true);
@@ -27,15 +28,24 @@ function Leftsidecard() {
   const [storeState, SetStoreState] = React.useState();
   const [isStudent, SetIsStudent] = React.useState(true);
   const [isTeacher, SetIsTeacher] = React.useState(false);
+  const [isAdmin, SetIsAdmin] = React.useState(false);
   const CheckRoleUser = (role) => {
     if (role === "student") {
       SetIsStudent(true);
       SetIsTeacher(false);
+      SetIsAdmin(false);
       console.log("displayStudent");
     } else if (role === "teacher") {
       SetIsStudent(false);
       SetIsTeacher(true);
+      SetIsAdmin(false);
       console.log("display Teacher");
+    }
+    else if (role === "admin") {
+      SetIsStudent(false);
+      SetIsTeacher(false);
+      SetIsAdmin(true);
+      console.log("display Admin");
     }
   };
 
@@ -135,6 +145,7 @@ function Leftsidecard() {
               <Divider />
               {isStudent && <MenuLeftStudent />}
               {isTeacher && <MenuLeftTeacher />}
+              {isAdmin && <MenuLeftAdmin/>}
             </Container>
           </Container>
         </Box>

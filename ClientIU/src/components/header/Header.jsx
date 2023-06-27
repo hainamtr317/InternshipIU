@@ -76,24 +76,30 @@ export default function Header() {
   //set role display
   const role = useSelector(Selector)
   const [storeState, SetStoreState] = React.useState();
-  const [isStudent, SetIsStudent] = React.useState(true);
+   const [isStudent, SetIsStudent] = React.useState(true);
   const [isTeacher, SetIsTeacher] = React.useState(false);
+  const [isAdmin, SetIsAdmin] = React.useState(false);
   const CheckRoleUser = (role) => {
     if (role === "student") {
       SetIsStudent(true);
       SetIsTeacher(false);
+      SetIsAdmin(false);
       console.log("displayStudent");
     } else if (role === "teacher") {
       SetIsStudent(false);
       SetIsTeacher(true);
+      SetIsAdmin(false);
       console.log("display Teacher");
-    } 
-    // else if (role === "instructor") {
-    //   SetIsStudent(false);
-    //   SetIsTeacher(false);
-    //   console.log("display Instructor");
-    // }
+    }
+    else if (role === "admin") {
+      SetIsStudent(false);
+      SetIsTeacher(false);
+      SetIsAdmin(true);
+      console.log("display Admin");
+    }
   };
+   
+  
 
   React.useEffect(() => {
     console.log(role)

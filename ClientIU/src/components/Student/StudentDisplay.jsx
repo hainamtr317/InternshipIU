@@ -7,6 +7,7 @@ import {
   Typography,
   Stepper,
   StepLabel,
+  Button,
   CardActionArea,
 } from "@mui/material";
 import Cvcard from "../Cv/Cvcard";
@@ -14,12 +15,17 @@ import GradingStudent from "../Teacher/GradingStudent";
 import { useSelector, useDispatch } from "react-redux";
 import { Modal, CloseModal } from "../../redux/userSlice";
 import ModalAnnouncementToStudent from "../Teacher/ModalAnnounment";
-import React from "react";
+import React, { useState } from "react";
+
 
 function StudentDisplay() {
   const steps = ["Apply", "register", "working", "report", "grading"];
   const styleText = { marginLeft: "20px", color: "#1976d2", marginTop: "20px" };
+  const [verified,setVerified] = useState(false);
   const ismodalOpen = useSelector(Modal);
+  const handleVerified = ()=>{
+    setVerified((prev) => !prev);
+  }
   const dispatch = useDispatch();
   console.log(ismodalOpen);
   const HandleModalClose = () => {
@@ -56,8 +62,8 @@ function StudentDisplay() {
               alignItems: "center",
             }}
           >
-            <Typography variant="h4">Student Name</Typography>
-            <Typography variant="h4">ID:</Typography>
+            <Typography variant="h4">Tran Hai Nam</Typography>
+            <Typography variant="h4">ID: ITITIU19161</Typography>
           </Container>
         </Box>
       </Box>
@@ -77,37 +83,42 @@ function StudentDisplay() {
         <Box>
           <Typography>Department: IT department</Typography>
           <Typography> Job: don't have</Typography>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: { xs: "column", xl: "row" },
-            }}
-          >
-            <Typography>Company:</Typography>
-            <CardActionArea
-              sx={{
-                marginLeft: "10px",
-              }}
-            >
-              <Typography>Name of Company:don't have</Typography>
-              <Typography>address: don't have</Typography>
-            </CardActionArea>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: { xs: "column", xl: "row" },
-            }}
-          >
-            <Typography>Instructor:don't have</Typography>
+          <Box>
+          {!verified && <Button variant="outlined" onClick={handleVerified} size="small">verified</Button> }
+          {verified &&  <Button variant="contained" onClick={handleVerified} size="small">verified</Button>}
+         
             <Box
               sx={{
-                marginLeft: "10px",
+                display: "flex",
+                flexDirection: { xs: "column", xl: "row" },
               }}
             >
-              <Typography>Name of Instructor:don't have</Typography>
-              <Typography>Phone:don't have</Typography>
-              <Typography>Email:don't have</Typography>
+              <Typography>Company:</Typography>
+              <Box
+                sx={{
+                  marginLeft: "10px",
+                }}
+              >
+                <Typography>Name of Company:don't have</Typography>
+                <Typography>address: don't have</Typography>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column", xl: "row" },
+              }}
+            >
+              <Typography>Instructor:don't have</Typography>
+              <Box
+                sx={{
+                  marginLeft: "10px",
+                }}
+              >
+                <Typography>Name of Instructor:don't have</Typography>
+                <Typography>Phone:don't have</Typography>
+                <Typography>Email:don't have</Typography>
+              </Box>
             </Box>
           </Box>
         </Box>

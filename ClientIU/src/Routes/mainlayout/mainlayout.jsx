@@ -12,33 +12,39 @@ import StudentReport from "../../pages/Student/StudentReport";
 import TeacherListStudents from "../../pages/Teacher/TeacherViewStudentList";
 import { Box } from "@mui/material";
 import StudentDisplay from "../../components/Student/StudentDisplay";
-
 import TeacherGradeView from "../../pages/Teacher/TeacherGradeview";
 import ApplyJob from "../../components/Job/ApplyFrom";
 import { useSelector, useDispatch } from "react-redux";
 import { Selector } from "../../redux/userSlice";
 import CompanyPage from "../../pages/Companies/CompanyPage";
+import UserManger from "../../pages/Admin/UserManger";
+import CompanyManger from "../../pages/Admin/CompanyManager";
+import JobsManager from "../../pages/Admin/JobsManager";
 function MainLayout() {
   //set role display
   const role = useSelector(Selector);
   const [storeState, SetStoreState] = React.useState();
   const [isStudent, SetIsStudent] = React.useState(true);
   const [isTeacher, SetIsTeacher] = React.useState(false);
+  const [isAdmin, SetIsAdmin] = React.useState(false);
   const CheckRoleUser = (role) => {
     if (role === "student") {
       SetIsStudent(true);
       SetIsTeacher(false);
+      SetIsAdmin(false);
       console.log("displayStudent");
     } else if (role === "teacher") {
       SetIsStudent(false);
       SetIsTeacher(true);
+      SetIsAdmin(false);
       console.log("display Teacher");
     }
-    // else if (role === "instructor") {
-    //   SetIsStudent(false);
-    //   SetIsTeacher(false);
-    //   console.log("display Instructor");
-    // }
+    else if (role === "admin") {
+      SetIsStudent(false);
+      SetIsTeacher(false);
+      SetIsAdmin(true);
+      console.log("display Admin");
+    }
   };
 
   React.useEffect(() => {
@@ -61,7 +67,7 @@ function MainLayout() {
         {isStudent && <Route index element={<JobsDisplay />} />}
         {/* Route for Teacher */}
         {isTeacher && <Route index element={<TeacherListStudents />} />}
-
+        {isAdmin && <Route index element={<UserManger/> }/>}
         <Route path="/job/:job_id" element={<Jobpage />} />
         <Route path="/UserInformation" element={<StudentInfoDisplay />} />
         <Route path="/ListJobApplied/*" element={<StudentAppliedJob />} />
@@ -73,6 +79,8 @@ function MainLayout() {
         {/* <Route path="/StudentId/Grading" element={<GradingStudent />} /> */}
         <Route path="/GradeList" element={<TeacherGradeView />} />
         <Route path="/Company" element={<CompanyPage />} />
+        <Route path="/JobsManager" element={<JobsManager/>} />
+        <Route path="/CompanyManager" element={<CompanyManger/>} />
       </Routes>
     </Box>
   );
