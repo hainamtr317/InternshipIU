@@ -22,11 +22,17 @@ import {
 
 function JobModal(props) {
   const Job = props.Job;
-  const direction = "job/" + Job.id;
-  const companyredirect = "Company";
+  const direction = "/Student/job/" + Job.id;
+  
   const navigate = useNavigate();
+  const handleclickJobName = ()=>{
+    navigate(direction)
+  }
+  const handleCompanyRedirect = ()=>{
+    navigate("/Student/Company");
+  }
   const handleApplybtn = () => {
-    navigate("/Student/job/Apply");
+    navigate("/Student/job/"+Job.id+"/Apply");
   };
   const listSkill = ["reactjs", "nodejs", "cloud"];
   const style = {
@@ -52,16 +58,15 @@ function JobModal(props) {
       >
         <Box sx={style}>
           <CardContent id="header-modal-job" sx={headerModal}>
-            <Link to={direction}>
-              <Typography id="Jos-Title" variant="h4" component="h">
+              <Typography onClick={handleclickJobName} id="Jos-Title" variant="h4" component="h">
                 {Job.nameJob}
               </Typography>
-            </Link>
-            <Link to={companyredirect}>
-              <Typography id="Jos-Title" variant="caption" component="p">
+            
+            
+              <Typography id="Jos-Title" variant="caption" component="p" onClick={handleCompanyRedirect}>
                 {Job.company}
               </Typography>
-            </Link>
+         
             <Button variant="outlined" onClick={handleApplybtn}>
               Apply Now
             </Button>

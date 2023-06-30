@@ -10,7 +10,9 @@ import {
 import React from "react";
 import LaunchIcon from "@mui/icons-material/Launch";
 import { JobData } from "../../components/Job/Data/jobData";
+import { useNavigate } from "react-router-dom";
 function CompanyCard(props) {
+  const navigate = useNavigate();
   const Job = JobData.find((job) => {
     if (job.id === props.jobid) {
       return job;
@@ -18,6 +20,9 @@ function CompanyCard(props) {
       return "Unfine";
     }
   });
+  const handleCompanyRedirect = ()=>{
+    navigate("/Student/Company");
+  }
   return (
     <>
       <Box>
@@ -42,6 +47,7 @@ function CompanyCard(props) {
                 }}
                 component="img"
                 image={Job.image}
+                onClick={handleCompanyRedirect}
                 alt="false to load image"
               ></CardMedia>
               <Box
@@ -59,6 +65,7 @@ function CompanyCard(props) {
                     fontWeight: "bold",
                     color: "#1976d2",
                   }}
+                  onClick={handleCompanyRedirect}
                 >
                   {Job.company}
                 </Typography>

@@ -40,6 +40,9 @@ function Jobpage() {
   console.log(Job);
  
   const navigate = useNavigate();
+  // const handleCompanyRedirect = ()=>{
+  //   navigate("/Student/Company");
+  // }
   const direction = "/Student/job/" + job_id + "/Apply";
   const handleApplybtn = () => {
     navigate(direction);

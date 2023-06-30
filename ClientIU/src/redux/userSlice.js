@@ -25,7 +25,9 @@ export const userSlice = createSlice({
     },
   },
 });
-
+export function SettingUser(user){
+  localStorage.setItem("User", user);
+}
 // Action creators are generated for each case reducer function
 export const { changeRole, OpenGrade, OpenAnnounce, CloseModal } =
   userSlice.actions;
