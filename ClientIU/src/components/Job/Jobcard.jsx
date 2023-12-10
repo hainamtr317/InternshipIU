@@ -18,7 +18,7 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import UpdateIcon from "@mui/icons-material/Update";
-
+import getTimePassed from "../SupportFunction/countTimepass";
 function JobCard(props) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -92,7 +92,7 @@ function JobCard(props) {
             </Typography>
             <Typography sx={{ marginLeft: "5px" }} component="p">
               <UpdateIcon fontSize="small" />
-              {Job.update}
+              {getTimePassed(new Date(Job.updatedAt))}
             </Typography>
           </CardContent>
         </CardActionArea>

@@ -4,8 +4,6 @@ import Leftsidecard from './leftsidecard'
 import * as React from 'react';
 import { useEffect,useState  } from "react";
 function Leftside() {
-    
-
     return (    
     <div className="left">
     <Leftsidecard/>

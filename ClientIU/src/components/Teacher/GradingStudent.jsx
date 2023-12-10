@@ -71,11 +71,16 @@ function GradingStudent(props) {
           >
             <FormGroup>
               <FormControlLabel
+              label="Sroce"
+                control={<input type="text" name="grade"/>}
+                
+              />
+              <FormControlLabel
                 control={<Checkbox defaultChecked />}
                 label="Good"
               />
               <FormControlLabel required control={<Checkbox />} label="Ok" />
-              <FormControlLabel disabled control={<Checkbox />} label="Bad" />
+              <FormControlLabel  control={<Checkbox />} label="Bad" />
             </FormGroup>
             <Typography>Comment:</Typography>
             <TextareaAutosize

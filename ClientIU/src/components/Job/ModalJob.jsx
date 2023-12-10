@@ -22,7 +22,8 @@ import {
 
 function JobModal(props) {
   const Job = props.Job;
-  const direction = "/Student/job/" + Job.id;
+  console.log(Job)
+  const direction = "/Student/job/" + Job._id;
   
   const navigate = useNavigate();
   const handleclickJobName = ()=>{
@@ -32,7 +33,7 @@ function JobModal(props) {
     navigate("/Student/Company");
   }
   const handleApplybtn = () => {
-    navigate("/Student/job/"+Job.id+"/Apply");
+    navigate("/Student/job/"+Job._id+"/Apply");
   };
   const listSkill = ["reactjs", "nodejs", "cloud"];
   const style = {

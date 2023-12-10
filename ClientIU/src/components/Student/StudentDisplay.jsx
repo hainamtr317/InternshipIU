@@ -13,7 +13,7 @@ import {
 import Cvcard from "../Cv/Cvcard";
 import GradingStudent from "../Teacher/GradingStudent";
 import { useSelector, useDispatch } from "react-redux";
-import { Modal, CloseModal } from "../../redux/userSlice";
+import { Modal, CloseModal } from "../../redux/modalActionSlice";
 import ModalAnnouncementToStudent from "../Teacher/ModalAnnounment";
 import React, { useState } from "react";
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { JobData } from "../../components/Job/Data/jobData";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
@@ -22,10 +22,12 @@ import {
   Container,
 } from "@mui/material";
 import UpdateIcon from "@mui/icons-material/Update";
+import Axios from "../../config/axiosConfig";
 
 function Jobpage() {
   const listSkill = ["reactjs", "nodejs", "cloud"];
   const { job_id } = useParams();
+  const [Job,setJob]= useState([])
   
   const styles = {
     bgcolor: "white",
@@ -34,15 +36,19 @@ function Jobpage() {
     marginRight: "auto",
   };
 
-  const Job = JobData.find((job) => {
-    if (job.id === job_id) return job;
-  });
-  console.log(Job);
+  // const Job = JobData.find((job) => {
+  //   if (job.id === job_id) return job;
+  // });
+ useEffect(()=>{
+  const getJobData =async() =>{ 
+    const data = await Axios.post("/api/jobs/getJob",{id:job_id}).then((res)=>{
+      setJob(res.data.job)
+    })
+  }
+  getJobData()
+ },[])
  
   const navigate = useNavigate();
-  // const handleCompanyRedirect = ()=>{
-  //   navigate("/Student/Company");
-  // }
   const direction = "/Student/job/" + job_id + "/Apply";
   const handleApplybtn = () => {
     navigate(direction);

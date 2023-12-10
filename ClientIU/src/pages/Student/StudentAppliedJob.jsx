@@ -2,7 +2,7 @@ import { Container, Box, Typography, Divider,Grid } from "@mui/material";
 import JobCard from "../../components/Job/Jobcard";
 import { JobData } from "../../components/Job/Data/jobData";
 import { useSelector, useDispatch } from "react-redux";
-import { Modal, CloseModal } from "../../redux/userSlice";
+import { Modal, CloseModal } from "../../redux/modalActionSlice";
 import ModalRegisterInstructor from "../../components/Student/Modal/modalregisterInstructor";
 import ModalRegisterJob from "../../components/Student/Modal/modalregisterJob";
 function StudentAppliedJob() {

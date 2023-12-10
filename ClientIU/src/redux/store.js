@@ -1,9 +1,12 @@
 
 import { configureStore } from '@reduxjs/toolkit'
-import UserReducer from './userSlice'
-
+import modalReducer from './modalActionSlice'
+import userReducer from './userSlice'
+import jobsSlice from './jobsSlice'
 export const store = configureStore({
   reducer: {
-    user: UserReducer,
+    modal: modalReducer,
+    user: userReducer,
+    jobs:jobsSlice
   },
 })

@@ -18,10 +18,14 @@ import CvModal from "./Cvmodal";
 
 function Cvcard() {
   const [isMain] = useState(false);
+  const [ischeck,setCheck] = useState(false);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
   };
+  const handleClickmain=() =>{
+    setCheck((pre)=>!pre)
+  }
   const handleClose = () => setOpen(false);
   return (
     <>
@@ -69,13 +73,21 @@ function Cvcard() {
             <Button variant="outlined" startIcon={<DeleteIcon />}>
               Delete
             </Button>
-            <Button
+            {ischeck &&  <Button
               sx={{ marginLeft: "10px" }}
-              variant="outlined"
-              startIcon={<StarBorderOutlinedIcon />}
+              variant="contained"
+              onClick={handleClickmain}
             >
               MainCv
-            </Button>
+            </Button>}
+            {!ischeck && <Button
+              sx={{ marginLeft: "10px" }}
+              variant="outlined"
+              onClick={handleClickmain}
+            >
+              MainCv
+            </Button> }
+            
           </Box>
         </CardContent>
       </Card>

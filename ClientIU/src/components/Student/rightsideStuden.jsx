@@ -2,7 +2,7 @@ import { Box, Button } from "@mui/material";
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { OpenGrade, OpenAnnounce } from "../../redux/userSlice";
+import { OpenGrade, OpenAnnounce } from "../../redux/modalActionSlice";
 function StudentDisplayRightSide() {
   const dispatch = useDispatch();
 

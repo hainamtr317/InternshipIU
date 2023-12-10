@@ -5,15 +5,27 @@ import Cvcard from "../Cv/Cvcard";
 import SendIcon from "@mui/icons-material/Send";
 import { JobData } from "./Data/jobData";
 import { useNavigate, useParams } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-
+import Axios from "../../config/axiosConfig";
+import { useMemo } from "react";
 function ApplyJob() {
   const [value, setValue] = useState("");
   const Jobid = useParams().job_id;
-  const Job = JobData.find((job) => job.id === Jobid);
-  console.log(Job);
+  const [Job,setJob] =useState([])
+  useMemo(()=>{
+    const getJobData =async() =>{
+      try {
+        const data = await Axios.post("/api/jobs/getJob",{id:Jobid}).then((res)=>{
+          setJob(res.data.job)
+        })
+        }catch (error) {
+        console.log(error)
+      } 
+    }
+    getJobData()
+   },[])
   return (
     <>
       <Box>

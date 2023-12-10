@@ -17,17 +17,35 @@ import logo from "../../assets/logo-small_logo.png";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Selector, changeRole } from "../../redux/userSlice";
+import { Selector, UserInfo, changeRole, login, register } from "../../redux/userSlice";
+import { getJobsList } from "../../redux/jobsSlice";
+import Axios from "../../config/axiosConfig";
+
 
 function Loginpage() {
   const navigate = useNavigate();
   //set role display
-  let role = useSelector(Selector);
+
+  let check = useSelector(UserInfo)
   const dispatch = useDispatch();
-  const [storeState, SetStoreState] = React.useState();
-  const [isStudent, SetIsStudent] = React.useState(true);
-  const [isTeacher, SetIsTeacher] = React.useState(false);
-  const [isAdmin, SetIsAdmin] = React.useState(false);
+  // const [storeState, SetStoreState] = React.useState();
+  // const [isStudent, SetIsStudent] = React.useState(true);
+  // const [isTeacher, SetIsTeacher] = React.useState(false);
+  // const [isAdmin, SetIsAdmin] = React.useState(false);
+  const sendRequestLogin=async(UserInfo)=>{
+    try {
+    const {data} = await Axios.post('/api/users/login',UserInfo)
+    localStorage.setItem("session_token",data.token);
+    return data.userRole
+    } catch (error) {
+      console.log(error) 
+    }
+    
+  }
+  const getUserRole =async()=>{
+    let role = await useSelector(Selector)
+    // CheckRoleUser(role)
+  }
   const CheckRoleUser = (role) => {
     if (role === "student") {
       navigate("Student");
@@ -38,18 +56,23 @@ function Loginpage() {
       navigate("Admin");
     }
   };
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const password = data.get("password");
-    if (
-      password === "student" ||
-      password === "teacher" ||
-      password === "admin"
-    ) {
-      await dispatch(changeRole(password));
-      await CheckRoleUser(password);
+    const dataRegister = {
+      userId:data.get('email'),
+      password:data.get('password')
+    }
+    try {   
+      const userLogin = await dispatch(login(dataRegister))
+      await dispatch(getJobsList())
+      console.log(userLogin.payload.userRole)
+      CheckRoleUser(userLogin.payload.userRole)
+      
+    } catch (error) {
+      console.log(error)
     }
   };
 
