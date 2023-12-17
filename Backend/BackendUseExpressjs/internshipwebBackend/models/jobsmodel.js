@@ -26,4 +26,46 @@ const jobsSchema = new mongoose.Schema({
 
     
 },{timestamps:  {createdAt: 'created_at', updated: 'updated_at'}})
-module.exports = mongoose.model('jobs',jobsSchema)
+
+Jobs = mongoose.model('jobs',jobsSchema)
+module.exports = Jobs
+
+const JobFind =async(data)=>{
+    try {
+        const ListJobs = await Jobs.find(data)
+        return ListJobs
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+const JobFindById =async(data)=>{
+    try {
+        const job = await Jobs.findById(data)
+        return job
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+const JobFindAndUpdate =async(id,updateData)=>{
+    try {
+        const job = await Jobs.findByIdAndUpdate(id,updateData)
+        return job
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+const JobFindOne =async(data)=>{
+    try {
+        const checkExit = await Jobs.findOne(data)
+        return checkExit
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
+
+module.exports = {jobsSchema,JobFind,JobFindById,JobFindAndUpdate,JobFindOne}

@@ -1,5 +1,5 @@
 const User = require('../models/Usermodel')
-
+const jwt = require("jsonwebtoken");
 
 const sendToken = (user, statusCode, res) => {
     const token = user.getSignedToken();
@@ -31,7 +31,6 @@ const getUsers = async(req,res)=>{
 //@ just create by admin
 
 const userLogin = async(req,res)=>{
-// check admin role before create new user
 const {userId,password} = req.body
 if (!userId||!password){
     return res.send("error")
@@ -47,11 +46,13 @@ try{
         }else{
             user.isLogin=true
             await user.save();
+            console.log("userLogin",user.userId)
             sendToken(user,200,res)
         }
     }  
 
 }catch(err){
+    console.log(err)
     return res.send(err)
 }
 
@@ -70,7 +71,7 @@ const userRegister = async(req,res)=>{
     const user = await User.create({ userId, password,roles,isLogin:false });
     // const confirmedToken = user.getConfirmedToken();
     await user.save();
-    console.log("register new user")
+    console.log("register new user",user.userId)
     res.status(200).json({
         success: true
     });
@@ -104,5 +105,53 @@ const forgotPassword = async (req,res)=>{
         return res.status(400).send({error:err})
     }
 } 
+const getUserData = async(req,res)=>{
 
-module.exports = {getUsers,userLogin,userRegister,forgotPassword}
+    try{
+        const {userId} = req.body
+        const user = await User.findById(userId)
+        if (!user){
+            return res.status(400).send({ error: 'User not found' });
+        }else{
+            const userData = user.userData
+            const objecdUserdata = userData[0]
+            return res.status(200).json({UserData:objecdUserdata})
+        }
+    }catch(err){
+        console.log(err)
+        return res.status(400).json({error:err})
+    }
+
+}
+const CheckLogged = async(req,res)=>{
+    let token
+    if (
+        req.headers.authorization &&
+        req.headers.authorization.startsWith("Bearer")
+    ) {
+        token = req.headers.authorization.split(" ")[1];
+    }
+    if (!token) {
+        return res.status(401).json({success:false,err:"Not authorized to access this route"})
+    }
+    console.log(token)
+    try {
+        const decode = jwt.verify(token,process.env.JWT_SECRET);
+        console.log(decode)
+       try {
+        const user = await User.findById(decode.userId);
+        if (!user) {
+        return res.status(404).json({success:false,err:"No user found with this id"}) 
+        }
+        else{
+        return res.status(200).json({success:true,data:decode})
+       }
+        } catch (error) {
+        console.log(error)
+       }
+    } catch (error) {
+        return res.status(401).json({success:false,err:"Not authorize to access this route"})
+    }
+}
+
+module.exports = {getUsers,userLogin,userRegister,forgotPassword,getUserData,CheckLogged}

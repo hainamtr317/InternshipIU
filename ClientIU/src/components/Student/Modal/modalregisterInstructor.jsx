@@ -14,6 +14,7 @@ import {
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
 import React from "react";
+import Axios from "../../../config/axiosConfig";
 function ModalRegisterInstructor(props) {
   const style = {
     position: "absolute",
@@ -28,6 +29,44 @@ function ModalRegisterInstructor(props) {
     boxShadow: 24,
     p: 4,
   };
+  const registerHandle= async (e)=>{
+    e.preventDefault();
+    var insName = e.target.elements.NameIns.value
+    var phoneIns = e.target.elements.phone.value
+    var emailIns = e.target.elements.Email.value
+    var positionIns = e.target.elements.Position.value
+    const dataRegister = ({
+        instructor:{
+        name:insName,
+        phone:phoneIns,
+        email:emailIns,
+        Position:positionIns
+      }
+    })
+      console.log({userId:JSON.parse(localStorage.getItem("userData")).userId,data:dataRegister})
+      try {
+        const user =await JSON.parse(localStorage.getItem("userData"))
+        await Axios.put("/api/student",{userId:user.userId,data:dataRegister}).then(async(res)=>{
+          if(res.data.success){
+            alert("Success resister instructor for",props.userData.name)
+            await Axios.post("api/student/saveStudent",{userId:user.userId}).then((res)=>{
+              if(res.data.success){
+                navigate('/student/ListJobApplied');
+              }
+            })
+          }
+          else{
+            alert("have error for resister instructor that error:",res.data.error)
+          }
+          })
+      } catch (error) {
+        console.log(error)
+        alert("have error for resister instructor that error:",error)
+      }
+
+
+  }
+
   return (
     <>
       <Modal open={props.Open} onClose={props.Close}>
@@ -44,14 +83,17 @@ function ModalRegisterInstructor(props) {
           </Typography>
           <Divider></Divider>
           <Container>
-            <Typography variant="h5"> Student id : </Typography>
+            <Typography variant="h5"> Student id : {props.userData.StudentId}</Typography>
           </Container>
 
           <Box
-            sx={{
-              marginLeft: "20px",
-              marginTop: "20px",
-            }}
+          component="form"
+          onSubmit={(e)=>{registerHandle(e)}}
+          sx={{
+            marginLeft: "20px",
+            marginTop: "20px",
+          }}
+
             className="registerForm "
           >
             <Container>
@@ -66,8 +108,9 @@ function ModalRegisterInstructor(props) {
                 </InputLabel>
                 <TextField
                   sx={{ ml: "20px", width: "300px" }}
-                  id="outlined-basic"
+                  id="NameIns"
                   label="Name"
+                  name="NameIns"
                   variant="outlined"
                 />
               </Box>
@@ -97,8 +140,9 @@ function ModalRegisterInstructor(props) {
                     <Typography variant="h6">Phone:</Typography>
                     <TextField
                       sx={{ ml: "10px", width: "300px" }}
-                      id="outlined-basic"
+                      id="phone"
                       label="Phone"
+                      name="phone"
                       variant="outlined"
                     />
                   </InputLabel>
@@ -112,7 +156,8 @@ function ModalRegisterInstructor(props) {
                     <Typography variant="h6">Email:</Typography>
                     <TextField
                       sx={{ ml: "17px", width: "300px" }}
-                      id="outlined-basic"
+                      id="Email"
+                      name="Email"
                       label="Email"
                       variant="outlined"
                     />
@@ -131,8 +176,9 @@ function ModalRegisterInstructor(props) {
                 </InputLabel>
                 <TextField
                   sx={{ ml: "20px", width: "300px" }}
-                  id="outlined-basic"
+                  id="Position"
                   label="Position"
+                  name="Position"
                   variant="outlined"
                 />
               </Box>
@@ -146,11 +192,14 @@ function ModalRegisterInstructor(props) {
               <Button
                 variant="contained"
                 size="large"
+                type="reset"
                 endIcon={<RestartAltOutlinedIcon></RestartAltOutlinedIcon>}
               >
                 Reset
               </Button>
-              <Button variant="contained" size="large">
+              <Button variant="contained" size="large"
+              type="submit"
+              >
                 Register Now
               </Button>
             </Box>

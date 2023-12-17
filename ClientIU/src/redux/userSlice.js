@@ -17,11 +17,30 @@ export const login = createAsyncThunk(
   async(data,{rejecWithValue})=>{
       try {
           const res = await Axios.post("/api/users/login",data);
-          // console.log(res.data)
+          localStorage.setItem("session_token",res.data.token);
           return res.data
       } catch (error) {
           return rejecWithValue(error.res.data)
       }
+  }
+)
+export const checkLogged = createAsyncThunk(
+  "user/logged",
+  async(_,{rejecWithValue})=>{
+    console.log(localStorage.getItem("session_token"))
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("session_token")}`,
+      },
+    };
+    try {
+      const { data } = await Axios.get("/api/users/checkLogged",config);
+      return data;
+    } catch (error) {
+      localStorage.removeItem("authToken");
+      return rejectWithValue(error.response.data);
+    }
   }
 )
 const initialState = {
@@ -29,6 +48,7 @@ const initialState = {
     data:{},
     isLoading:true,
     isLogin:false,
+    loggedUser:{},
 
   };
 
@@ -55,6 +75,20 @@ const initialState = {
       });
   
       build.addCase(login.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload.error;
+      });
+      build.addCase(checkLogged.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.loggedUser = action.payload;
+        state.isLogin = true;
+      });
+  
+      build.addCase(checkLogged.pending, (state, action) => {
+        state.isLoading = true;
+      });
+  
+      build.addCase(checkLogged.rejected, (state, action) => {
         state.isLoading = false;
         state.errorMessage = action.payload.error;
       });

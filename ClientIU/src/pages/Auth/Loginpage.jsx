@@ -17,7 +17,7 @@ import logo from "../../assets/logo-small_logo.png";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Selector, UserInfo, changeRole, login, register } from "../../redux/userSlice";
+import { Selector, UserInfo, changeRole, login, register,checkLogged } from "../../redux/userSlice";
 import { getJobsList } from "../../redux/jobsSlice";
 import Axios from "../../config/axiosConfig";
 
@@ -25,27 +25,24 @@ import Axios from "../../config/axiosConfig";
 function Loginpage() {
   const navigate = useNavigate();
   //set role display
-
-  let check = useSelector(UserInfo)
   const dispatch = useDispatch();
-  // const [storeState, SetStoreState] = React.useState();
-  // const [isStudent, SetIsStudent] = React.useState(true);
-  // const [isTeacher, SetIsTeacher] = React.useState(false);
-  // const [isAdmin, SetIsAdmin] = React.useState(false);
-  const sendRequestLogin=async(UserInfo)=>{
-    try {
-    const {data} = await Axios.post('/api/users/login',UserInfo)
-    localStorage.setItem("session_token",data.token);
-    return data.userRole
-    } catch (error) {
-      console.log(error) 
+  let check = useSelector(UserInfo)
+  const autoLogin=()=>{
+    if(check.isLogin){
+      CheckRoleUser(check.loggedUser.data.userRole)
     }
-    
   }
-  const getUserRole =async()=>{
-    let role = await useSelector(Selector)
-    // CheckRoleUser(role)
+  const checkUserLogged=async()=>{
+    try {
+      const userData = await dispatch(checkLogged())
+      localStorage.setItem("userData",JSON.stringify(userData.payload.data))
+      autoLogin()
+    } catch (error) {
+      return console.log(error)
+    }
   }
+
+
   const CheckRoleUser = (role) => {
     if (role === "student") {
       navigate("Student");
@@ -65,17 +62,22 @@ function Loginpage() {
       userId:data.get('email'),
       password:data.get('password')
     }
-    try {   
+
+    try {
+      console.log(dataRegister)   
       const userLogin = await dispatch(login(dataRegister))
-      await dispatch(getJobsList())
-      console.log(userLogin.payload.userRole)
-      CheckRoleUser(userLogin.payload.userRole)
-      
+      const userData = await dispatch(checkLogged())
+      await localStorage.setItem("userData",JSON.stringify(userData.payload.data))
+      CheckRoleUser(userLogin.payload.userRole) 
     } catch (error) {
       console.log(error)
     }
   };
-
+React.useEffect(()=>{
+  checkUserLogged()
+  
+ 
+},[])
   return (
     <div className="main-login">
       <div className="logo-header">

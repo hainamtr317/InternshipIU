@@ -12,14 +12,14 @@ const getCompanyList = async (req,res)=>{
 }
 const getCompany= async (req,res)=>{
     try{
-        const {id} = req.body
-        const Company = await Company.findById(id)
-        if(!Company){
-            return res.status(404).json({error:"can not find user"})
+        const {company} = req.body
+        const companyData = await Company.findOne({company:company})
+        if(!companyData){
+            return res.status(404).json({error:"can not find company"})
         }
         else{
-            console.log("find Company")
-            return res.status(200).json({Company})
+            console.log(companyData.company)
+            return res.status(200).json({companyData})
         }
     }catch(err){
         console.log(err)

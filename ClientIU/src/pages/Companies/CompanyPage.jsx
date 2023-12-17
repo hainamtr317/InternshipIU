@@ -12,11 +12,14 @@ import {
   Container,
   Card,
   Grid,
+  LinearProgress,
 } from "@mui/material";
 import JobCard from "../../components/Job/Jobcard";
 import React, { useEffect } from "react";
-import { JobData } from "../../components/Job/Data/jobData";
-import { companyData } from "../../components/Job/Data/CompanyData";
+import Axios from "../../config/axiosConfig";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+
 const textstylebox = {
   display: "flex",
   flexDirection: "column",
@@ -33,27 +36,36 @@ const textbottomstyle = {
   fontfamily: "Poppins, Helvetica Neue, Arial, Helvetica, sans-serif",
   fontWeight: 450,
 };
-const companyid = "1";
-const Company = companyData.find((company) => {
-  if (company.id === companyid) {
-    return company;
-  } else {
-    return "Undefine";
-  }
-});
-let Joblists = [];
-Company.Joblist.forEach((job) => {
-  JobData.forEach((jobdata) => {
-    if (jobdata.id == job) {
-      Joblists.push(jobdata);
-    }
-  });
-});
+
 
 function CompanyPage() {
+  const [companyData,setCompanyData] = useState([])
+  const [isLoading,setLoading]= useState(true)
+  const {companyName} = useParams()
+  useEffect(()=>{
+    const getCompanyData =async() =>{
+      try {
+        await Axios.post("/api/Company/getCompany",{company:companyName})
+        .then(async(res)=>{
+          await setCompanyData(res.data.companyData)
+          setLoading(false)
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getCompanyData()
+    console.log(companyData)
+  },[])
   return (
     <>
-      <center>
+      {isLoading ? (
+        <div>
+          <LinearProgress/>
+        </div>
+      ) : (
+        <div>
+          <center>
         <Box
           sx={{
             display: "flex",
@@ -81,30 +93,30 @@ function CompanyPage() {
               mt: "-30px",
             }}
             component="img"
-            image={Company.image}
+            image={companyData.image}
             alt="green iguana"
           />
-          <Typography variant="h4">{Company.company}</Typography>
+          <Typography variant="h4">{companyData.company}</Typography>
           <Typography variant="subtitle1">cong ty cp</Typography>
 
           <Box sx={textstylebox}>
             <Typography sx={textstyle}>Address</Typography>
-            <Typography sx={textbottomstyle}>{Company.Address}</Typography>
+            <Typography sx={textbottomstyle}>{companyData.Address}</Typography>
           </Box>
           <Box sx={textstylebox}>
             <Typography sx={textstyle}>website</Typography>
-            <Typography sx={textbottomstyle}>{Company.Website}l</Typography>
+            <Typography sx={textbottomstyle}>{companyData.Website}l</Typography>
           </Box>
           <Box sx={textstylebox}>
             <Typography sx={textstyle}>Business areas</Typography>
             <Typography sx={textbottomstyle}>
               {" "}
-              {Company.BussinessAreas}
+              {companyData.BussinessAreas}
             </Typography>
           </Box>
           <Box sx={textstylebox}>
             <Typography sx={textstyle}>Company Size</Typography>
-            <Typography sx={textbottomstyle}>{Company.CompanySize}</Typography>
+            <Typography sx={textbottomstyle}>{companyData.CompanySize}</Typography>
           </Box>
           <Button
             variant="outlined"
@@ -215,7 +227,7 @@ function CompanyPage() {
             width: "auto",
           }}
         >
-          {Joblists.map((job) => (
+          {companyData.JobList.length >0 && companyData.JobList.map((job) => (
             <Grid
               sx={{
                 display: "flex",
@@ -232,6 +244,9 @@ function CompanyPage() {
           ))}
         </Grid>
       </Container>
+        </div>
+      )}
+      
     </>
   );
 }

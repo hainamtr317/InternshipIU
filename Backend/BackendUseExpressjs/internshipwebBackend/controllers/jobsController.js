@@ -1,11 +1,12 @@
 const Jobs = require('../models/jobsmodel')
-
+const {JobFind,JobFindById,JobFindAndUpdate,JobFindOne} = require('../models/jobsmodel')
 const getJobsList = async (req,res)=>{
     try {
-    const ListJobs = await Jobs.find({})
+    const ListJobs = await JobFind({})
     console.log("display list jobs")
     return res.status(200).json({ListJobs})
     } catch (error) {
+        console.log(error)
         return res.status(500).json({error:error})
     }
     
@@ -13,7 +14,7 @@ const getJobsList = async (req,res)=>{
 const getJob= async (req,res)=>{
     try{
         const {id} = req.body
-        const job = await Jobs.findById(id)
+        const job = await Jobs.JobFindById(id)
         if(!job){
             return res.status(404).json({error:"can not find user"})
         }
@@ -31,7 +32,7 @@ const getJob= async (req,res)=>{
 const updateJob= async (req,res)=>{
     try {
         const {id,updateData}= req.body
-        const job = await Jobs.findByIdAndUpdate(id,updateData)
+        const job = await Jobs.JobFindAndUpdate(id,updateData)
         console.log('update success:',job.nameJob)
         return res.status(200).json({updateSuccess:true})
     } catch (error) {
@@ -49,7 +50,7 @@ const createListJob = async (req,res) => {
         await arrayData.map(async(jobData,index)=>{
             try {
                 const {nameJob,company} = jobData
-                const checkExit = await Jobs.findOne({nameJob:nameJob,company:company})
+                const checkExit = await Jobs.JobFindOne({nameJob:nameJob,company:company})
                 if(!checkExit){
                     const newJob = await Jobs(jobData)
                     const job = await newJob.save()
@@ -74,7 +75,7 @@ const createJob= async(req,res)=>{
     try {
         const data = req.body
         const {nameJob,company} = req.body   
-        const checkExit = await Jobs.findOne({nameJob:nameJob,company:company})
+        const checkExit = await Jobs.JobFindOne({nameJob:nameJob,company:company})
         if(!checkExit){
             const newJob = await Jobs(data)
             const job = await newJob.save()

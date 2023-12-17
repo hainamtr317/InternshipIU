@@ -21,7 +21,7 @@ import ShowAnnounceList from "../announment/ShowAnnouList";
 import HeaderStudent from "../Student/HeaderStudent";
 import HeaderTeacher from "../Teacher/HeaderTeacher";
 import { useSelector, useDispatch } from 'react-redux'
-import { Selector } from "../../redux/userSlice";
+import { Selector,reset } from "../../redux/userSlice";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -73,6 +73,9 @@ export default function Header() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const isAnnounceMenuOpen = Boolean(AnnounceAnchorEl);
+  
+
+  const dispatch = useDispatch()
   //set role display
   const role = useSelector(Selector)
   const [storeState, SetStoreState] = React.useState();
@@ -98,14 +101,16 @@ export default function Header() {
       console.log("display Admin");
     }
   };
-   
+  const getRole =async()=>{
+    const data =await JSON.parse(localStorage.getItem("userData"))
+    CheckRoleUser(data.userRole) 
+
+  }
   
 
   React.useEffect(() => {
-    console.log(role)
-    // SetStoreState(role);
-    CheckRoleUser(role);
-  }, [role]);
+    getRole();
+  }, []);
   // set function navigate
   const navigation = useNavigate();
   // function to set action of menu is open or not
@@ -132,7 +137,9 @@ export default function Header() {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await dispatch(reset())
+    localStorage.clear()
     navigation("/");
   };
 

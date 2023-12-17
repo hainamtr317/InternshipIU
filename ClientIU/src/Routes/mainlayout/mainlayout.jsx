@@ -46,12 +46,14 @@ function MainLayout() {
       console.log("display Admin");
     }
   };
+  const getRole =async()=>{
+    const data =await JSON.parse(localStorage.getItem("userData"))
+    CheckRoleUser(data.userRole) 
 
+  }
   React.useEffect(() => {
-    console.log(role);
-    // SetStoreState(role);
-    CheckRoleUser(role);
-  }, [role]);
+    getRole()
+  }, []);
   return (
     <Box
       className="MainLayout"
@@ -78,7 +80,7 @@ function MainLayout() {
         <Route path="/StudentId" element={<StudentDisplay />} />
         {/* <Route path="/StudentId/Grading" element={<GradingStudent />} /> */}
         <Route path="/GradeList" element={<TeacherGradeView />} />
-        <Route path="/Company" element={<CompanyPage />} />
+        <Route path="/Company/:companyName" element={<CompanyPage />} />
         <Route path="/JobsManager" element={<JobsManager/>} />
         <Route path="/CompanyManager" element={<CompanyManger/>} />
       </Routes>

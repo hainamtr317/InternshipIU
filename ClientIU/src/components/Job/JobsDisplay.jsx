@@ -8,10 +8,11 @@ import {getJobsList,Jobs} from "../../redux/jobsSlice"
 import Axios from "../../config/axiosConfig";
 function JobsDisplay() {
 const [jobsList,setJobList] = useState([])
-
+const userData = JSON.parse(localStorage.getItem("userData"))
+console.log(userData)
 useEffect(()=>{
  const sendRequestGetJob=async()=>{
-  const Jobs = await Axios.get('/api/jobs/getListJobs').then((res)=>{setJobList(res.data.ListJobs)})
+   await Axios.get('/api/jobs/getListJobs').then((res)=>{setJobList(res.data.ListJobs)})
  }
  sendRequestGetJob()
 },[])

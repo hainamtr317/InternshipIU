@@ -1,23 +1,53 @@
 const mongoose = require('mongoose')
-const studentSchema = new mongoose.Schema({
-    StudentId:{
+const {StudentSchema} = require('./studentModel')
+const TeacherSchema = new mongoose.Schema({
+    TeacherID:{
         type: String,
         required:true
     },
-    studentName:{
+    name:{
         type: String,
         required: true 
     }
     ,
-    major:{
+    Department:String,
+    phone:String,
+    email:{
         type:String,
         required:true
     }
-    ,report:String,
-    grade:Number,
-    status:String,
-    Cv:String,
+    ,
+    AvatarImage:String,
+    ListStudent:[StudentSchema]
 
     
 },{timestamps: true})
-module.exports = mongoose.model('student',studentSchema)
+const TeacherFindandUpdate=async(id,data)=>{
+    try {
+        const updateTeacher = await Teacher.findByIdAndUpdate(id,data)
+        await updateTeacher.save()
+        return updateTeacher
+    } catch (error) {
+        return error
+    }
+}
+const TeacherFindOne=async(data)=>{
+    try {
+        const Teacher1 = await Teacher.findOne(data)
+        return Teacher1
+    } catch (error) {
+        return error
+    }
+}
+const TeacherCreateData =async(data)=>{
+    try {
+        const Teacher1 = await Teacher(data)
+        await Teacher1.save()
+        return Teacher1
+    } catch (error) {
+        return error
+    }
+}
+const Teacher =  mongoose.model('teacher',TeacherSchema)
+module.exports = Teacher
+module.exports = {TeacherSchema,TeacherFindandUpdate,TeacherFindOne,TeacherCreateData}

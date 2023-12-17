@@ -12,6 +12,8 @@ app.use(cors());
 app.use("/api", require("./routes/UserRoute"))
 app.use("/api",require('./routes/jobsRoute'))
 app.use("/api",require('./routes/CompanyRoute'))
+app.use("/api",require('./routes/StudentRoute'))
+app.use("/api",require('./routes/TeacherRoute'))
 
 mongoose.connection.once('open',()=>{
     app.listen(port,()=>{

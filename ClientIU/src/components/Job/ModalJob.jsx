@@ -30,7 +30,7 @@ function JobModal(props) {
     navigate(direction)
   }
   const handleCompanyRedirect = ()=>{
-    navigate("/Student/Company");
+    navigate("/Student/Company/"+Job.company);
   }
   const handleApplybtn = () => {
     navigate("/Student/job/"+Job._id+"/Apply");

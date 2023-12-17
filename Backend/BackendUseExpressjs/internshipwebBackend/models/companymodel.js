@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const {jobsSchema} = require('./jobsmodel')
 const companySchema = new mongoose.Schema({
     company:{
         type: String,
@@ -9,6 +10,10 @@ const companySchema = new mongoose.Schema({
         required:true
     }
     ,
+    email:{
+        type:String,
+        required:true
+    },
     Address:{
         type:String,
         required:true},
@@ -27,7 +32,7 @@ const companySchema = new mongoose.Schema({
     office:{
         type:String
     },
-    JobList:[{type:mongoose.Schema.Types.ObjectId,ref:'jobs'}],
+    JobList:[jobsSchema],
 
     
 },{timestamps:  {createdAt: 'created_at', updated: 'updated_at'}})

@@ -3,10 +3,11 @@ import './left.scss';
 import Leftsidecard from './leftsidecard'
 import * as React from 'react';
 import { useEffect,useState  } from "react";
-function Leftside() {
+function Leftside(props) {
+    console.log(props)
     return (    
     <div className="left">
-    <Leftsidecard/>
+    <Leftsidecard userData={props.userData}/>
     </div> );
 }
 

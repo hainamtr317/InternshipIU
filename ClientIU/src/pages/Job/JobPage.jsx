@@ -36,9 +36,6 @@ function Jobpage() {
     marginRight: "auto",
   };
 
-  // const Job = JobData.find((job) => {
-  //   if (job.id === job_id) return job;
-  // });
  useEffect(()=>{
   const getJobData =async() =>{ 
     const data = await Axios.post("/api/jobs/getJob",{id:job_id}).then((res)=>{

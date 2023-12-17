@@ -20,7 +20,18 @@ import MenuLeftTeacher from "../../components/Teacher/MenuLeftTeacher";
 import { useSelector } from "react-redux";
 import { Selector } from "../../redux/userSlice";
 import MenuLeftAdmin from "../../components/Admin/MenuLeft";
-function Leftsidecard() {
+function Leftsidecard(props) {
+  let dataUser
+  if(props.userData){
+    dataUser = props.userData.userData
+  }
+  else{
+    dataUser = {AvatarImage:"",
+    userName:"can not find",
+    Major:"can not find"
+  }
+  }
+
   const [checked, setChecked] = React.useState(false);
   const [display, setDisplay] = React.useState(true);
   //set role display
@@ -48,10 +59,14 @@ function Leftsidecard() {
       console.log("display Admin");
     }
   };
+  const getRole =async()=>{
+    const data =await JSON.parse(localStorage.getItem("userData"))
+    CheckRoleUser(data.userRole) 
 
+  }
   React.useEffect(() => {
-    CheckRoleUser(role);
-  }, [role]);
+    getRole();
+  }, []);
 
   const DisplayBtn = () => {
     setChecked((prev) => !prev);
@@ -129,11 +144,11 @@ function Leftsidecard() {
               }}
               className="bgtag"
             ></Paper>
-            <Avatar sx={{ width: 65, height: 65 }} className="avatar" src="" />
+            <Avatar sx={{ width: 65, height: 65 }} className="avatar" src={dataUser.AvatarImage} />
             <div className="Userinfor">
-              <Link to="UserInformation">Name of user</Link>
-              <a className="linktoaddphoto">addphoto</a>
-              <p className="userdes">Comperter sciences</p>
+              <Link to="UserInformation">{dataUser.userName}</Link>
+              <p className="userdes">{dataUser.Major}</p>
+              <Button  className="linktoaddphoto">Change Image</Button>
             </div>
             <Container
               sx={{
