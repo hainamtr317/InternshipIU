@@ -7,6 +7,7 @@ import JobsDisplay from "../../components/Job/JobsDisplay";
 import Jobpage from "../../pages/Job/JobPage";
 import StudentCv from "../../pages/Student/StudentCv";
 import StudentInfoDisplay from "../../pages/Student/StudentInfordisplay";
+import TeachInfoDisplay from "../../pages/Teacher/TeacherInfordisplay"
 import StudentAppliedJob from "../../pages/Student/StudentAppliedJob";
 import StudentReport from "../../pages/Student/StudentReport";
 import TeacherListStudents from "../../pages/Teacher/TeacherViewStudentList";
@@ -21,7 +22,7 @@ import UserManger from "../../pages/Admin/UserManger";
 import CompanyManger from "../../pages/Admin/CompanyManager";
 import JobsManager from "../../pages/Admin/JobsManager";
 function MainLayout() {
-  //set role display
+  //set role displays
   const role = useSelector(Selector);
   const [storeState, SetStoreState] = React.useState();
   const [isStudent, SetIsStudent] = React.useState(true);
@@ -71,13 +72,14 @@ function MainLayout() {
         {isTeacher && <Route index element={<TeacherListStudents />} />}
         {isAdmin && <Route index element={<UserManger/> }/>}
         <Route path="/job/:job_id" element={<Jobpage />} />
-        <Route path="/UserInformation" element={<StudentInfoDisplay />} />
+        {isStudent && <Route path="/UserInformation" element={<StudentInfoDisplay />} />}
+        {isTeacher && <Route path="/UserInformation" element={<TeachInfoDisplay />} />}
         <Route path="/ListJobApplied/*" element={<StudentAppliedJob />} />
         <Route path="/ListJobApplied/job/:job_id" element={<Jobpage />} />
         <Route path="/job/:job_id/Apply" element={<ApplyJob />} />
         <Route path="/Report" element={<StudentReport />} />
         <Route path="/MyCv" element={<StudentCv />} />
-        <Route path="/StudentId" element={<StudentDisplay />} />
+        <Route path="/:StudentId" element={<StudentDisplay />} />
         {/* <Route path="/StudentId/Grading" element={<GradingStudent />} /> */}
         <Route path="/GradeList" element={<TeacherGradeView />} />
         <Route path="/Company/:companyName" element={<CompanyPage />} />

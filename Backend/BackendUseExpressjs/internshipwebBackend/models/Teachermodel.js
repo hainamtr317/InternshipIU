@@ -48,6 +48,14 @@ const TeacherCreateData =async(data)=>{
         return error
     }
 }
+const TeacherFindbyID = async(data)=>{
+    try {
+        const Teacher1 = await Teacher.findById(data)
+        return Teacher1
+    } catch (error) {
+        return error
+    }
+}
 const Teacher =  mongoose.model('teacher',TeacherSchema)
 module.exports = Teacher
-module.exports = {TeacherSchema,TeacherFindandUpdate,TeacherFindOne,TeacherCreateData}
+module.exports = {TeacherSchema,TeacherFindandUpdate,TeacherFindbyID,TeacherFindOne,TeacherCreateData}

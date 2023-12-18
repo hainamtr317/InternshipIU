@@ -83,6 +83,14 @@ const StudentCreateData =async(data)=>{
         return error
     }
 }
+const StudentFindById =async(data)=>{
+    try {
+        const student1 = await Student.findById(data)
+        return student1
+    } catch (error) {
+        return error
+    }
+}
 const Student =  mongoose.model('student',StudentSchema)
 module.exports = Student
-module.exports = {StudentSchema,StudentFindandUpdate,StudentFindOne,StudentCreateData}
+module.exports = {StudentSchema,StudentFindById,StudentFindandUpdate,StudentFindOne,StudentCreateData}

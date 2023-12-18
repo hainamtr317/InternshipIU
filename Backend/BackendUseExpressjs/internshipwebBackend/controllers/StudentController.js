@@ -42,6 +42,34 @@ const updateStudent = async (req,res)=>{
         })
     }
 }
+const getStudent =async(req,res)=>{
+    const {StudentId}= req.body
+    console.log(StudentId)
+    try {
+        const stu = await StudentFindOne({StudentId:StudentId})
+        if(stu){
+            console.log(stu)
+            return res.status(200).json({
+                success:true,
+                data:stu
+            })
+        }
+        else{
+            console.log("can't fin student")
+            return res.status(500).json({
+                success:false,
+                error:"can't find student"
+            })
+        }
+    } catch (error) {
+        const err = error
+        console.log(err)
+        return res.status(500).json({
+            success:false,
+            error:err
+        })
+    }
+}
 const saveStudentToUser = async(req,res)=>{
     const {userId}= req.body
     const user = await User.findById(userId)
@@ -115,4 +143,4 @@ const CreateStudent = async(req,res)=>{
     }
     
 }
-module.exports = {CreateStudent,updateStudent,saveStudentToUser}
+module.exports = {CreateStudent,updateStudent,saveStudentToUser,getStudent}

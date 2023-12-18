@@ -113,8 +113,17 @@ const getUserData = async(req,res)=>{
         if (!user){
             return res.status(400).send({ error: 'User not found' });
         }else{
-            const userData = user.userData
-            const objecdUserdata = userData[0]
+            let objecdUserdata
+            if(user.roles =="student"){
+            objecdUserdata = user.userData[0] 
+            }
+            else if (user.roles =="teacher"){
+            objecdUserdata = user.teacherData[0] 
+            }
+            else{
+                return res.status(400).send({ error: 'not that role' });
+            }
+           
             return res.status(200).json({UserData:objecdUserdata})
         }
     }catch(err){
