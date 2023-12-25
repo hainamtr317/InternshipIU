@@ -49,11 +49,7 @@ function ModalRegisterInstructor(props) {
         await Axios.put("/api/student",{userId:user.userId,data:dataRegister}).then(async(res)=>{
           if(res.data.success){
             alert("Success resister instructor for",props.userData.name)
-            await Axios.post("api/student/saveStudent",{userId:user.userId}).then((res)=>{
-              if(res.data.success){
-                navigate('/student/ListJobApplied');
-              }
-            })
+            navigate('/student/ListJobApplied');
           }
           else{
             alert("have error for resister instructor that error:",res.data.error)

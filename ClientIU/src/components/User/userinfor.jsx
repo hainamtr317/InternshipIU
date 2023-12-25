@@ -110,6 +110,10 @@ function Userinfor() {
               <Typography>Phone Number:  {dataUser.phone}</Typography>
             </Container>
           </Container>
+          {(!dataUser.job)? <Box sx={stylebox}>
+          <Typography sx={{fontWeight: 'bold'}}>Job:</Typography>
+          <Typography sx={{ ml: "20px" }}>Do not have job</Typography>
+          </Box>: 
           <Box sx={stylebox}>
             <Typography sx={{fontWeight: 'bold'}}>Job:</Typography>
             <Typography sx={{ ml: "20px" }}>Job Name:  {dataUser.job.JobName}</Typography>
@@ -117,6 +121,7 @@ function Userinfor() {
             <Typography sx={{ ml: "20px" }}>Company: {dataUser.job.Company}</Typography>
             <Typography sx={{ ml: "20px" }}>TypeOfCompany:  {dataUser.job.TypeofCompany}</Typography>
           </Box>
+          }
         </Box>
         {/* Box display information of people relation */}
         <Box sx={{
@@ -127,6 +132,11 @@ function Userinfor() {
             <Typography sx={{fontWeight: 'bold'}}>Your Teacher:</Typography>
             <Typography sx={{ ml: "20px" }}>Teacher name</Typography>
           </Box>
+
+          {(!dataUser.instructor)? <Box sx={stylebox}>
+          <Typography sx={{fontWeight: 'bold'}}>Your Instructor:</Typography>
+          <Typography sx={{ ml: "20px" }}>Do not register your Instructor</Typography>
+          </Box>:
           <Box sx={stylebox}>
             <Typography sx={{fontWeight: 'bold'}}>Your Instructor:</Typography>
             <Typography sx={{ ml: "20px" }}>Name:  {dataUser.instructor.name}</Typography>
@@ -134,6 +144,7 @@ function Userinfor() {
             <Typography sx={{ ml: "20px" }}>phone Number: {dataUser.instructor.phone}</Typography>
             <Typography sx={{ ml: "20px" }}>Position in Company:  {dataUser.instructor.Position}</Typography>
           </Box>
+          }
         </Box>
         </Box>
         {/* Box procession internship */}

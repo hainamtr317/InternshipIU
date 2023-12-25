@@ -28,11 +28,10 @@ const userApplyJobHandle=async()=>{
   await Axios.put("/api/student",{userId:data.userId,data:newData}).then(async(res)=>{
     if(res.data.success){
       alert("Success apply Jobs for",dataUser.name)
-      await Axios.post("api/student/saveStudent",{userId:data.userId}).then((res)=>{
-        if(res.data.success){
-          navigate('/student/ListJobApplied');
-        }
-      })
+      navigate('/student/ListJobApplied');
+    }
+    else{
+      alert("error apply Jobs for",dataUser.name)
     }
     })
 }  

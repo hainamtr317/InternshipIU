@@ -5,6 +5,92 @@ const Teacher = require('../models/Teachermodel')
 const Student = require('../models/studentModel')
 const {TeacherFindandUpdate,TeacherFindbyID,TeacherFindOne,TeacherCreateData} =require('../models/Teachermodel')
 const {StudentFindandUpdate,StudentFindById,StudentFindOne,StudentCreateData}= require('../models/studentModel')
+
+const UpdateStudentDataTeacher =async(req,res)=>{
+    const {userId}= req.body
+    try {
+        const getUser = await User.findById(userId)
+        if(getUser){
+            try {
+                const teacher = await TeacherFindbyID(getUser.teacherData.toString())
+                let listStudentId=[]
+                await teacher.ListStudent.map((e)=>{
+                    listStudentId.push(e._id)
+                })
+                
+                try {
+                    await Promise.all(listStudentId.map(async(e)=>{
+                        const student = await StudentFindById(e.toString())
+                        return student
+                    })).then(async(value)=>{
+                        teacher.ListStudent = value
+                        await teacher.save()
+                    })
+                    console.log("update success student in ",teacher.TeacherID)
+                    return res.status(200).json({
+                        success:true,
+                        data:teacher.ListStudent
+                    })
+                    
+                } catch (error) {
+                    console.log(errors)
+                }
+                
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        else{
+            return res.status(500).json({
+                success:false,
+                error:'can not find user in database'
+            })
+        }
+        
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            error:error
+        })
+    }
+}
+
+const GradingStudent = async (req,res)=>{
+    try {
+        const {StudentId,data}= req.body
+        const userStudent = await StudentFindOne({StudentId:StudentId})
+        if(userStudent){
+                try {  
+                    console.log(userStudent._id)
+                    console.log(data)
+                    const updateStudent = await StudentFindandUpdate(userStudent._id.toString(),data)
+                    return res.status(200).json({
+                        success:true,
+                        data:updateStudent})
+                } catch (err) {
+                    console.log(err)
+                    return res.status(500).json({
+                        success:false,
+                        error:err
+                    })
+                }
+            
+        }
+        else{
+            return res.status(500).json({
+                success:false,
+                error:'can not find student in database'
+            })
+        }
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            error:error
+        })
+    }
+}
+
+
 const updateTeacher = async (req,res)=>{
     try {
         const data =req.body.data
@@ -118,8 +204,9 @@ const CreateTeacher = async(req,res)=>{
 }
 
 const TestStudentExit =async (teacher,student)=>{
-const findstudent = await teacher.find(e=> e.StudentId === student)
-if(findstudent){
+const findstudent = await teacher.find(e=> e.StudentId == student)
+console.log(!findstudent)
+if(!findstudent){
     return false
 }else{
     return true
@@ -138,7 +225,8 @@ const addStudentToList =async (req,res)=>{
                     const Student1 = await StudentFindOne({StudentId:StudentId})
                     if(teacher1){
                         if(Student1){
-                            if(TestStudentExit(teacher1.ListStudent,StudentId)){
+                            const exitStudent = await TestStudentExit(teacher1.ListStudent,StudentId)
+                            if(exitStudent){
                                 return res.status(500).json({
                                     success:false,
                                     error:'exit student in teacher'
@@ -147,8 +235,6 @@ const addStudentToList =async (req,res)=>{
                             else{
                                 await teacher1.ListStudent.push(Student1)
                                 await teacher1.save()
-                                user.teacherData[0] = teacher1
-                                await user.save()
                                 return res.status(200).json({
                                 success:true,
                                 data:user.teacherData[0]})
@@ -192,4 +278,4 @@ const addStudentToList =async (req,res)=>{
     }
 }
 // updateTeacher,saveTeacherToUser
-module.exports = {CreateTeacher,updateTeacher,saveTeacherToUser,addStudentToList}
+module.exports = {CreateTeacher,UpdateStudentDataTeacher,updateTeacher,saveTeacherToUser,addStudentToList,GradingStudent}

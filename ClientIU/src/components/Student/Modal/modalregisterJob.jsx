@@ -2,17 +2,12 @@ import {
   Box,
   Divider,
   Typography,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
   TextField,
   Button,
   Container,
   Modal,
   InputLabel,
-} from "@mui/material";
-import TextareaAutosize from "@mui/base/TextareaAutosize";
-import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
+} from "@mui/material";import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
 import React from "react";
 import Axios from "../../../config/axiosConfig";
 function ModalRegisterJob(props) {
@@ -49,11 +44,8 @@ function ModalRegisterJob(props) {
         await Axios.put("/api/student",{userId:user.userId,data:dataRegister}).then(async(res)=>{
           if(res.data.success){
             alert("Success resister Job for",props.userData.name)
-            await Axios.post("api/student/saveStudent",{userId:user.userId}).then((res)=>{
-              if(res.data.success){
-                navigate('/student/ListJobApplied');
-              }
-            })
+            navigate('/student/ListJobApplied');
+            
           }
           else{
             alert("have error for resister Job that error:",res.data.error)

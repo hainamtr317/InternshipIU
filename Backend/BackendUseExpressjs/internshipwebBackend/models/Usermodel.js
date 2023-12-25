@@ -2,8 +2,10 @@ const mongoose = require('mongoose')
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const {StudentSchema} = require('./studentModel')
-const {TeacherSchema} = require("./Teachermodel")
+const {StudentSchema, StudentFindById} = require('./studentModel')
+const {TeacherSchema, TeacherFindbyID} = require("./Teachermodel")
+
+
 const userSchema = new mongoose.Schema({
     userId:{
         type: String,
@@ -22,8 +24,8 @@ const userSchema = new mongoose.Schema({
     isLogin:{
         type: Boolean
     },
-    userData:[StudentSchema],
-    teacherData:[TeacherSchema],
+    userData:{type: mongoose.Types.ObjectId, ref: "student" },
+    teacherData:{type: mongoose.Types.ObjectId, ref: "teacher" },
     resetPasswordToken: String,
     session_token: String,
     confirmRegistrationExpire: Date,
@@ -42,21 +44,24 @@ userSchema.methods.matchPasswords = async function (password) {
     return await bcrypt.compare(password, this.password);
 };
 
-userSchema.methods.getSignedToken = function () {
+userSchema.methods.getSignedToken = async function () {
 let data
     if(this.roles =="student"){
+    const student = await StudentFindById(this.userData.toString())
     data = {
-        userName:this.userData[0].name,
-        Major:this.userData[0].major,
-        AvatarImage:this.userData[0].AvatarImage
+        userName:student.name,
+        Major:student.major,
+        AvatarImage:student.AvatarImage
     }
 } else if (this.roles =="teacher"){
+    const teacher = await TeacherFindbyID(this.teacherData.toString())
     data = {
-        userName:this.teacherData[0].name,
-        Major:this.teacherData[0].Department,
-        AvatarImage:this.teacherData[0].AvatarImage
+        userName:teacher.name,
+        Major:teacher.Department,
+        AvatarImage:teacher.AvatarImage
     }
 }
+
 const tokenJwt = jwt.sign({ userId:this._id,userRole:this.roles,userData:data}, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,
 });

@@ -1,8 +1,10 @@
 const User = require('../models/Usermodel')
 const jwt = require("jsonwebtoken");
+const { StudentFindById } = require('../models/studentModel');
+const { TeacherFindbyID } = require('../models/Teachermodel');
 
-const sendToken = (user, statusCode, res) => {
-    const token = user.getSignedToken();
+const sendToken = async (user, statusCode, res) => {
+    const token = await user.getSignedToken();
     res.status(statusCode).json({ success: true,userRole:user.roles, token });
   };
 
@@ -115,15 +117,15 @@ const getUserData = async(req,res)=>{
         }else{
             let objecdUserdata
             if(user.roles =="student"){
-            objecdUserdata = user.userData[0] 
+            objecdUserdata = await StudentFindById(user.userData.toString())
+            
             }
             else if (user.roles =="teacher"){
-            objecdUserdata = user.teacherData[0] 
+            objecdUserdata = await TeacherFindbyID(user.teacherData.toString())
             }
             else{
                 return res.status(400).send({ error: 'not that role' });
             }
-           
             return res.status(200).json({UserData:objecdUserdata})
         }
     }catch(err){

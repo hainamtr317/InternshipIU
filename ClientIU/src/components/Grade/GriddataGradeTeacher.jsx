@@ -10,7 +10,7 @@ function GridDataGradeTeacher(props) {
     },
     {
       field: "studentName",
-      width: 150,
+      width: 180,
       headerName: "Student Name",
       description: "Student information.",
     },
@@ -21,11 +21,10 @@ function GridDataGradeTeacher(props) {
       headerName: "Phone Number",
       type: "number",
     },
-    { field: "Instructor", width: 150, headerName: "Instructor" },
-    { field: "Report", width: 150, headerName: "Report" },
+    { field: "Report", width: 200, headerName: "Report" },
     { field: "status", headerName: "Status" },
-    { field: "date", headerName: "Date grading" },
-    { field: "Fngrade", headerName: "Final grade" },
+    { field: "grade", headerName: "Grade" },
+    { field: "gradeComment",width:300, headerName: "grade Comment" },
   ];
 
   return (

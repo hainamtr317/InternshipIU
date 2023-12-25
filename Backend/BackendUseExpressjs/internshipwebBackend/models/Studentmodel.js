@@ -28,14 +28,17 @@ const StudentSchema = new mongoose.Schema({
         required:true
     },
     teacher:{
-        teacherID:{type:mongoose.Schema.Types.ObjectId,ref:'jobs'},
+        teacherID:{type:mongoose.Schema.Types.ObjectId,ref:'teacher'},
         teacherName:String,
         teacherPhone:Number,
         teacherEmail:String
     }
     ,
     report:String,
-    grade:Number,
+    grade:{
+        Grade:Number,
+        Comment:String,
+    },
     progressionStatus:Number,
     instructor:{
         name:String,
@@ -49,9 +52,9 @@ const StudentSchema = new mongoose.Schema({
         Company:String,
         TypeofCompany:String
     },
-    announcement:[announcementSchema],
+    announcement:[{ type: mongoose.Types.ObjectId, ref: "announcement"}],
     mainCV:{type:String},
-    Cv:[CvSchema],
+    Cv:[{ type: mongoose.Types.ObjectId, ref: "Cv"}],
     JobsApplied:[jobsSchema]
 
     

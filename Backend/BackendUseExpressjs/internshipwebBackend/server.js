@@ -14,6 +14,7 @@ app.use("/api",require('./routes/jobsRoute'))
 app.use("/api",require('./routes/CompanyRoute'))
 app.use("/api",require('./routes/StudentRoute'))
 app.use("/api",require('./routes/TeacherRoute'))
+app.use("/api",require('./routes/adminRoute'))
 
 mongoose.connection.once('open',()=>{
     app.listen(port,()=>{

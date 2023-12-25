@@ -35,8 +35,8 @@ function Loginpage() {
   const checkUserLogged=async()=>{
     try {
       const userData = await dispatch(checkLogged())
-      localStorage.setItem("userData",JSON.stringify(userData.payload.data))
-      autoLogin()
+      await localStorage.setItem("userData",JSON.stringify(userData.payload.data))
+      await autoLogin()
     } catch (error) {
       return console.log(error)
     }

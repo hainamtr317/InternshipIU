@@ -4,6 +4,9 @@ const User = require('../models/Usermodel')
 const Student = require('../models/studentModel')
 const {StudentFindandUpdate,StudentFindOne,StudentCreateData} =require('../models/studentModel')
 
+
+
+
 const updateStudent = async (req,res)=>{
     try {
         const data =req.body.data
@@ -12,14 +15,11 @@ const updateStudent = async (req,res)=>{
 
         if(user){
                 try {  
-                    const dataStudent = user.userData
-                    const OjectStudent = dataStudent[0]
-                        const updateStudent = await StudentFindandUpdate(OjectStudent._id.toString(),data)
-                        user.userData[0] = updateStudent
-                        await user.save()
+                        const OjectStudent= user.userData
+                        const updateStudent = await StudentFindandUpdate(OjectStudent.toString(),data)
                         return res.status(200).json({
                             success:true,
-                            data:user.userData[0]})
+                            data:updateStudent})
                 } catch (err) {
                     console.log(err)
                     return res.status(500).json({
@@ -42,13 +42,13 @@ const updateStudent = async (req,res)=>{
         })
     }
 }
+
+
 const getStudent =async(req,res)=>{
     const {StudentId}= req.body
-    console.log(StudentId)
     try {
         const stu = await StudentFindOne({StudentId:StudentId})
         if(stu){
-            console.log(stu)
             return res.status(200).json({
                 success:true,
                 data:stu
@@ -70,21 +70,21 @@ const getStudent =async(req,res)=>{
         })
     }
 }
-const saveStudentToUser = async(req,res)=>{
-    const {userId}= req.body
-    const user = await User.findById(userId)
-    try {
-        user.userData=[]
-        const dataStudent = await StudentFindOne({StudentId:user.userId})
-        await user.userData.push(dataStudent)
-        await user.save()
-        return res.status(200).json({
-            success:true,
-            data:user.userData[0]})
-    } catch (error) {
-        console.log(error)
-    }
-}
+// const saveStudentToUser = async(req,res)=>{
+//     const {userId}= req.body
+//     const user = await User.findById(userId)
+//     try {
+//         user.userData=[]
+//         const dataStudent = await StudentFindOne({StudentId:user.userId})
+//         await user.userData.push(dataStudent)
+//         await user.save()
+//         return res.status(200).json({
+//             success:true,
+//             data:user.userData[0]})
+//     } catch (error) {
+//         console.log(error)
+//     }
+// }
 const CreateStudent = async(req,res)=>{
     try {
         const data = req.body.data
@@ -97,9 +97,7 @@ const CreateStudent = async(req,res)=>{
                     const checkExit = await StudentFindOne({StudentId:StudentId})
                     if(!checkExit){
                         const newStudent = await StudentCreateData(data)
-                        user.userData = []
-                        await user.save()
-                        user.userData.push(newStudent)
+                        user.userData = newStudent._id
                         await user.save()
                         console.log("update Student and user success")
                         return res.status(200).json({
@@ -143,4 +141,4 @@ const CreateStudent = async(req,res)=>{
     }
     
 }
-module.exports = {CreateStudent,updateStudent,saveStudentToUser,getStudent}
+module.exports = {CreateStudent,updateStudent,getStudent}

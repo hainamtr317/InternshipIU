@@ -2,16 +2,19 @@ import {
   Box,
   Divider,
   Typography,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
+  TextField,
   Button,
   Container,
   Modal,
+  InputLabel
 } from "@mui/material";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
 import React from "react";
+import Axios from "../../config/axiosConfig";
+
+
+
 function GradingStudent(props) {
   const style = {
     position: "absolute",
@@ -26,6 +29,39 @@ function GradingStudent(props) {
     boxShadow: 24,
     p: 4,
   };
+
+const GradingHandle=async (e)=>{
+  e.preventDefault();
+  var Grade = e.target.elements.grade.value
+  var Comment = e.target.elements.comment.value
+  const dataGrading = ({  
+      grade:{
+        Grade:Grade,
+        Comment:Comment
+      }
+  })
+  console.log(dataGrading)
+  try {
+    const user =await JSON.parse(localStorage.getItem("userData"))
+    await Axios.put("/api/teacher/grading",{StudentId:props.Student.StudentId,data:dataGrading}).then(async(res)=>{
+      if(res.data.success){
+        await Axios.post("/api/teacher/saveStudent",{userId:user.userId}).then(async(res)=>{
+          if(res.data.success){
+            alert("Success grading for Student",props.Student.StudentId)
+          }
+        })
+      }
+      else{
+        alert("have error grading for Student:",res.data.error)
+      }
+      })
+  } catch (error) {
+    console.log(error)
+    alert("have error grading for Student:",error)
+  }
+
+}
+
   return (
     <>
       <Modal open={props.Open} onClose={props.Close}>
@@ -42,7 +78,7 @@ function GradingStudent(props) {
           </Typography>
           <Divider></Divider>
           <Container>
-            <Typography variant="h5"> Student id : </Typography>
+            <Typography variant="h5"> Student id : {props.Student.StudentId} </Typography>
           </Container>
           <Box
             sx={{
@@ -69,25 +105,49 @@ function GradingStudent(props) {
             }}
             className="gradingForm "
           >
-            <FormGroup>
-              <FormControlLabel
-              label="Sroce"
-                control={<input type="text" name="grade"/>}
-                
-              />
-              <FormControlLabel
-                control={<Checkbox defaultChecked />}
-                label="Good"
-              />
-              <FormControlLabel required control={<Checkbox />} label="Ok" />
-              <FormControlLabel  control={<Checkbox />} label="Bad" />
-            </FormGroup>
-            <Typography>Comment:</Typography>
-            <TextareaAutosize
-              aria-label="minimum height"
-              minRows={3}
-              placeholder="Minimum 3 rows"
-              style={{ width: 200 }}
+            <Box
+            component="form"
+            onSubmit={(e)=>{GradingHandle(e)}}
+            sx={{
+            justifyContent:'center',
+            alignItems:'center'
+            }}
+            className="Grading "
+            >
+            <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <InputLabel>
+                  <Typography variant="h6">Grade: </Typography>
+                </InputLabel>
+                <TextField
+                  sx={{ ml: "20px", width: "300px" }}
+                  type="number"
+                  id="grade"
+                  required
+                  label="Grade "
+                  variant="outlined"
+                  name="grade"
+                  autoComplete="Grade"
+                  autoFocus
+                />
+              </Box>
+              <InputLabel>
+                  <Typography variant="h6">Comment: </Typography>
+              </InputLabel>
+            <TextareaAutosize  
+              style={{ width: '400px' }}
+              minRows={4}
+              id="comment"
+              required
+              label="Comment "
+              variant="outlined"
+              name="comment"
+              autoComplete="comment"
+              autoFocus
             />
             <Box
               sx={{
@@ -98,13 +158,15 @@ function GradingStudent(props) {
               <Button
                 variant="contained"
                 size="large"
+                type="reset"
                 endIcon={<RestartAltOutlinedIcon></RestartAltOutlinedIcon>}
               >
                 Reset
               </Button>
-              <Button variant="contained" size="large">
+              <Button variant="contained" size="large" type="submit">
                 Grading
               </Button>
+            </Box>
             </Box>
           </Box>
         </Box>

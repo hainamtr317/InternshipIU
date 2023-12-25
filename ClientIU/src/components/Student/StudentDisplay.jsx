@@ -52,7 +52,7 @@ function StudentDisplay() {
   }
   return (
     <>
-      <GradingStudent Open={ismodalOpen.Grade} Close={HandleModalClose} />
+      <GradingStudent Student={student}  Open={ismodalOpen.Grade} Close={HandleModalClose} />
       <ModalAnnouncementToStudent
         Open={ismodalOpen.Announce}
         Close={HandleModalClose}/>
@@ -100,11 +100,12 @@ function StudentDisplay() {
       >
         <Box>
           <Typography>Department: {" "}{student.Department}</Typography>
-          <Typography> Job: {student.job.JobName}</Typography>
+          <Typography> Job:{(!student.job) ? "Don't have Job":`${student.job.JobName}` } </Typography>
           <Box>
           {!verified && <Button variant="outlined" onClick={handleVerified} size="small">verified</Button> }
           {verified &&  <Button variant="contained" onClick={handleVerified} size="small">verified</Button>}
-            <Box
+
+          {(!student.job)? <Box/>:  <Box
               sx={{
                 display: "flex",
                 flexDirection: { xs: "column", xl: "row" },
@@ -120,7 +121,8 @@ function StudentDisplay() {
                 <Typography>Address:{student.job.Address}</Typography>
                 <Typography>Type of Company: {student.job.TypeofCompany}</Typography>
               </Box>
-            </Box>
+            </Box>}
+        
             <Box
               sx={{
                 display: "flex",
@@ -128,7 +130,8 @@ function StudentDisplay() {
               }}
             >
               <Typography>Instructor:</Typography>
-              <Box
+
+              {(!student.instructor)? <Box><Typography>Do not have Instructor</Typography></Box> :  <Box
                 sx={{
                   marginLeft: "10px",
                 }}
@@ -137,7 +140,9 @@ function StudentDisplay() {
                 <Typography>Phone:{student.instructor.phone}</Typography>
                 <Typography>Email:{student.instructor.email}e</Typography>
                 <Typography>Position:{student.instructor.Position}e</Typography>
-              </Box>
+              </Box>}
+
+             
             </Box>
           </Box>
         </Box>

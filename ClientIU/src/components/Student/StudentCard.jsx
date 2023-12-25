@@ -85,7 +85,7 @@ function StudentCard(props) {
                     color: "white",
                   }}
                 >
-                  Job:{StudentData.job.JobName}
+                  Job:{(!StudentData.job) ? "Don't have Job":`${StudentData.job.JobName}` }
                 </Typography>
               </Box>
             </Container>
