@@ -142,7 +142,7 @@ function StudentDisplay() {
                 <Typography>Position:{student.instructor.Position}e</Typography>
               </Box>}
 
-             
+            
             </Box>
           </Box>
         </Box>

@@ -19,6 +19,16 @@ import {
   randomId,
   randomArrayItem,
 } from '@mui/x-data-grid-generator';
+import Axios from '../../config/axiosConfig';
+import { ExportButton } from './components/ExportButton';
+
+function CustomToolbar(props) {
+  return (
+    <GridToolbarContainer {...props}>
+      <ExportButton />
+    </GridToolbarContainer>
+  );
+}
 
 function EditToolbar(props) {
   const { setRows, setRowModesModel } = props;
@@ -56,6 +66,7 @@ function GridDataGradeTeacher(props) {
 
   const handleSaveClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+
   };
 
   const handleDeleteClick = (id) => () => {
@@ -74,8 +85,32 @@ function GridDataGradeTeacher(props) {
     }
   };
 
-  const processRowUpdate = (newRow) => {
+  const processRowUpdate = async (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
+    try {
+      const dataGrading = ({  
+        grade:{
+          Grade:newRow.grade,
+          Comment:newRow.gradeComment
+        }
+      })
+      const user =await JSON.parse(localStorage.getItem("userData"))
+      await Axios.put("/api/teacher/grading",{StudentId:newRow.id,data:dataGrading}).then(async(res)=>{
+        if(res.data.success){
+          await Axios.post("/api/teacher/saveStudent",{userId:user.userId}).then(async(res)=>{
+            if(res.data.success){
+              alert("Success grading for Student",newRow.id)
+            }
+          })
+        }
+        else{
+          alert("have error grading for Student:",res.data.error)
+        }
+        })
+    } catch (error) {
+      console.log(error)
+      alert("have error grading for Student:",error)
+    }
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     return updatedRow;
   };
@@ -167,7 +202,7 @@ function GridDataGradeTeacher(props) {
       onRowEditStop={handleRowEditStop}
       processRowUpdate={processRowUpdate}
       slots={{
-        toolbar: EditToolbar,
+        toolbar: CustomToolbar,
       }}
       slotProps={{
         toolbar: { setRows, setRowModesModel },

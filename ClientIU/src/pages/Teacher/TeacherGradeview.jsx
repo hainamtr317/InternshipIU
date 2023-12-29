@@ -93,9 +93,6 @@ function TeacherGradeView() {
               ml: "800px",
             }}
           >
-            {/* <Button variant="outlined" onClick={} startIcon={<ExitToAppOutlinedIcon />}>
-              Export
-            </Button> */}
           </Box>
         </Box>
         <Divider></Divider>

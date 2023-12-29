@@ -17,6 +17,35 @@ const TestStudentExit =async (teacher,student)=>{
     }
     }
 
+
+    const getUserDataToManager = async(req,res)=>{
+
+        try{
+            const {userId} = req.body
+            const user = await User.findById(userId)
+            if (!user){
+                return res.status(400).send({ error: 'User not found' });
+            }else{
+                let objecdUserdata
+                if(user.roles =="student"){
+                objecdUserdata = await StudentFindById(user.userData.toString())
+                
+                }
+                else if (user.roles =="teacher"){
+                objecdUserdata = await TeacherFindbyID(user.teacherData.toString())
+                }
+                else{
+                    return res.status(400).json({ success:false,error: 'not that role' });
+                }
+                return res.status(200).json({success:true,UserData:objecdUserdata})
+            }
+        }catch(err){
+            console.log(err)
+            return res.status(400).json({success:false,error:err})
+        }
+    
+    }
+
 const SetTeacherandStudent = async (req,res)=>{
     const {TeacherId,StudentListID}= req.body
     try {
@@ -113,4 +142,4 @@ const  CreateAnnounce = async (req,res)=>{
 
 }
 
-module.exports={SetTeacherandStudent,CreateAnnounce}
+module.exports={SetTeacherandStudent,CreateAnnounce,getUserDataToManager}

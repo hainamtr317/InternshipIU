@@ -1,85 +1,73 @@
-import { Box, Divider, Typography, Button } from "@mui/material";
-import React from "react";
+  import { Box, Container,Paper,Avatar, Typography, Divider, Step,
+  StepLabel,
+  Stepper,
+  LinearProgress,Button} from "@mui/material";
+import React, { useEffect, useState } from "react";
 import GriddataUser from "../../components/Admin/GriddataUser";
 import SaveAsOutlinedIcon from "@mui/icons-material/SaveAsOutlined";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
+import Axios from "../../config/axiosConfig";
 
 function UserManger() {
-  const rows = [
-    {
-      id: "ITITIU19161",
-      Name: "Trần Hải Nam",
-      email: "hainamtr317@gmail.com",
-      password: "asdasdfsdf",
-      phoneNumber: 917417799,
-      Role:"Teacher",
-      Manager:""
-      
-    },
-    {
-        id: "ITITIU19161",
-        Name: "Trần Hải Nam",
-        email: "hainamtr317@gmail.com",
-        password: "asdasdfsdf",
-        phoneNumber: 917417799,
-        Role:"Teacher",
-        Manager:""
-    },
-    {
-        id: "ITITIU19161",
-        Name: "Trần Hải Nam",
-        email: "hainamtr317@gmail.com",
-        password: "asdasdfsdf",
-        phoneNumber: 917417799,
-        Role:"Teacher",
-        Manager:""
-    },
-    {
-        id: "ITITIU19161",
-        Name: "Trần Hải Nam",
-        email: "hainamtr317@gmail.com",
-        password: "asdasdfsdf",
-        phoneNumber: 917417799,
-        Role:"Teacher",
-        Manager:""
-    },
-    {
-        id: "ITITIU19161",
-      Name: "Trần Hải Nam",
-      email: "hainamtr317@gmail.com",
-      password: "asdasdfsdf",
-      phoneNumber: 917417799,
-      Role:"Teacher",
-      Manager:""
-    },
-    {
-        id: "ITITIU19161",
-        Name: "Trần Hải Nam",
-        email: "hainamtr317@gmail.com",
-        password: "asdasdfsdf",
-        phoneNumber: 917417799,
-        Role:"Teacher",
-        Manager:""
-    },
-    {
-        id: "ITITIU19161",
-        Name: "Trần Hải Nam",
-        email: "hainamtr317@gmail.com",
-        password: "asdasdfsdf",
-        phoneNumber: 917417799,
-        Role:"Teacher",
-        Manager:""
-    },
-    {
-        id: "ITITIU19161",
-        Name: "Trần Hải Nam",
-        email: "hainamtr317@gmail.com",
-        password: "asdasdfsdf",
-        phoneNumber: 917417799,
-        Role:"Teacher",
-        Manager:""
-    },
-  ];
+const [IsLoading,setIsLoading]= useState(true)
+const [rows,setRows]= useState()
+  const getListUser = async()=>{
+    await Axios.get("/api/users").then(async (res)=>{
+      const RowData = await getRow(res.data.userList)
+      setRows(RowData)
+      setIsLoading(false)
+    })
+  }
+const getRow =(data)=>{
+  let newRow = []
+    data.map((e)=>{
+      if(e.roles =="student"){
+        const setData = {
+          id: e._id,
+          UserID: e.userId,
+          password:e.password,
+          Role:e.roles,
+          dataUser:e.userData,
+          Update:e.updatedAt,
+          LoginStatus:(e.isLogin)? "online": "offline",
+          Manager:''
+      }
+      newRow.push(setData)
+    }else if(e.roles == "teacher"){
+      const setData = {
+        id: e._id,
+        UserID: e.userId,
+        password:e.password,
+        Role:e.roles,
+        dataUser:e.teacherData,
+        Update:e.updatedAt, 
+        LoginStatus:(e.isLogin)? "online": "offline",
+        Manager:''  
+    }
+    newRow.push(setData)
+    }
+    })
+    return newRow
+}  
+useEffect(()=>{
+  getListUser()
+},[])
+
+  // const rows = [
+  //   {
+  //     id: "ITITIU19161",
+  //     Name: "Trần Hải Nam",
+  //     email: "hainamtr317@gmail.com",
+  //     password: "asdasdfsdf",
+  //     phoneNumber: 917417799,
+  //     Role:"Teacher",
+  //     Manager:""
+  //   } 
+  // ];
+
+  if (IsLoading) {
+    return <Box><LinearProgress>IsLoading...</LinearProgress> </Box>
+  }
   return (
     <>
       <Box>
@@ -99,18 +87,6 @@ function UserManger() {
           >
             <b>User Table:</b>
           </Typography>
-          <Box
-            sx={{
-              ml: "700px",
-            }}
-          >
-            <Button variant="outlined" startIcon={<SaveAsOutlinedIcon />}>
-              Save
-            </Button>
-            <Button variant="outlined" startIcon={<ExitToAppOutlinedIcon />}>
-              Export
-            </Button>
-          </Box>
         </Box>
         <Divider></Divider>
         <Box sx={{ width: "100%", height: 650 }}>

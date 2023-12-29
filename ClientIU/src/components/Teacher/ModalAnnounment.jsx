@@ -9,7 +9,7 @@ import {
   Container,
   Modal,
 } from "@mui/material";
-import TextareaAutosize from "@mui/base/TextareaAutosize";
+import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
 import React from "react";
 function ModalAnnouncementToStudent(props) {

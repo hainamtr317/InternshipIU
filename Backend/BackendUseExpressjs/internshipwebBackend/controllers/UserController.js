@@ -20,13 +20,30 @@ const getUsers = async(req,res)=>{
             return res.status(400).send({ error: 'User not found' });
     
         }else{
-            return res.status(200).send({user})
+            return res.status(200).json({userList:user})
         }
     }catch(err){
         return res.status(400).send({error:err})
     }
 
 }
+
+const UserUpdate = async(req,res)=>{
+    try{
+        const {userId,data}= req.body
+        const user = await User.findByIdAndUpdate(userId,data)
+        if (!user){
+            return res.status(400).json({success:false, error: 'User not found' });
+    
+        }else{
+            return res.status(200).json({success:true,user:user})
+        }
+    }catch(err){
+        return res.status(400).json({success:false,error:err})
+    }
+
+}
+
 //@desc Get all users
 //@route GET /api/contacts
 //@access private
@@ -204,4 +221,5 @@ const getAnnounce = async(req,res)=>{
     }
 }
 
-module.exports = {getUsers,userLogin,userRegister,forgotPassword,getAnnounce,getUserData,CheckLogged}
+
+module.exports = {getUsers,userLogin,userRegister,forgotPassword,getAnnounce,getUserData,CheckLogged,UserUpdate}

@@ -1,6 +1,6 @@
 import { Box, Typography, Divider, Button,LinearProgress } from "@mui/material";
 import JobCard from "./Jobcard";
-import TextareaAutosize from "@mui/base/TextareaAutosize";
+import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import Cvcard from "../Cv/Cvcard";
 import SendIcon from "@mui/icons-material/Send";
 import { JobData } from "./Data/jobData";
