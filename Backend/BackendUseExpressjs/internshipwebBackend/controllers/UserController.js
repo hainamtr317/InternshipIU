@@ -2,7 +2,7 @@ const User = require('../models/Usermodel')
 const jwt = require("jsonwebtoken");
 const { StudentFindById } = require('../models/studentModel');
 const { TeacherFindbyID } = require('../models/Teachermodel');
-
+const {annouceFindbyId} = require('../models/announmentsModel')
 const sendToken = async (user, statusCode, res) => {
     const token = await user.getSignedToken();
     res.status(statusCode).json({ success: true,userRole:user.roles, token });
@@ -165,4 +165,43 @@ const CheckLogged = async(req,res)=>{
     }
 }
 
-module.exports = {getUsers,userLogin,userRegister,forgotPassword,getUserData,CheckLogged}
+const getAnnounce = async(req,res)=>{
+    try {
+        const {userId} = req.body
+        const userData = await User.findById(userId)
+        if(userData){
+            if(userData.announcement.length>0){
+                await Promise.all(userData.announcement.map(async (e)=>{
+                    const annouce = await annouceFindbyId(e.toString())
+                    if(annouce){
+                        return annouce
+                    }
+                    else{
+                        return "no value"
+                    } 
+                })).then(async(value)=>{
+                    console.log(value)
+                    return res.status(200).json({
+                        success:true,
+                        data:value
+                    })
+                })
+            }
+            else{
+                return res.status(200).json({
+                    success:true,
+                    data:userData.announcement
+                })
+            }
+            
+        }
+    } catch (error) {
+        const err = error
+        return res.status(404).json({
+            success:false,
+            error:err
+        })
+    }
+}
+
+module.exports = {getUsers,userLogin,userRegister,forgotPassword,getAnnounce,getUserData,CheckLogged}

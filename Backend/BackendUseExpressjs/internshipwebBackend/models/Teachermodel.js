@@ -19,7 +19,6 @@ const TeacherSchema = new mongoose.Schema({
     ,
     AvatarImage:String,
     ListStudent:[StudentSchema]
-
     
 },{timestamps: true})
 const TeacherFindandUpdate=async(id,data)=>{

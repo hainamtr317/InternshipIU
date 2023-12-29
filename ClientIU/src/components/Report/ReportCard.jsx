@@ -48,25 +48,6 @@ import {
             >
               Name of file
             </Typography>
-            {/* <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              marginLeft: "170px",
-              marginTop: "-35px",
-            }}
-          >
-            <Button variant="outlined" startIcon={<DeleteIcon />}>
-              Delete
-            </Button>
-            <Button
-              sx={{ marginLeft: "10px" }}
-              variant="outlined"
-              startIcon={<StarBorderOutlinedIcon />}
-            >
-              MainCv
-            </Button>
-          </Box> */}
           </CardContent>
         </Card>
       </>

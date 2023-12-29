@@ -91,7 +91,7 @@ function Cvcard() {
           </Box>
         </CardContent>
       </Card>
-      <CvModal Open={open} Close={handleClose} CvNumber="1"></CvModal>
+      {/* <CvModal Open={open} Close={handleClose} CvNumber="1"></CvModal> */}
     </>
   );
 }

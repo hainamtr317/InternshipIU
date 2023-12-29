@@ -22,6 +22,7 @@ import HeaderStudent from "../Student/HeaderStudent";
 import HeaderTeacher from "../Teacher/HeaderTeacher";
 import { useSelector, useDispatch } from 'react-redux'
 import { Selector,reset } from "../../redux/userSlice";
+import Axios from "../../config/axiosConfig";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -82,6 +83,10 @@ export default function Header() {
    const [isStudent, SetIsStudent] = React.useState(true);
   const [isTeacher, SetIsTeacher] = React.useState(false);
   const [isAdmin, SetIsAdmin] = React.useState(false);
+  // const [isLoading, setIsLoading] = useState(true);
+  const [announceData,SetAnnounceData]= React.useState([])
+
+
   const CheckRoleUser = (role) => {
     if (role === "student") {
       SetIsStudent(true);
@@ -104,7 +109,9 @@ export default function Header() {
   const getRole =async()=>{
     const data =await JSON.parse(localStorage.getItem("userData"))
     CheckRoleUser(data.userRole) 
-
+    await Axios.post("/api/users/Announce",{userId:data.userId}).then((res)=>{
+      SetAnnounceData(res.data.data)
+      })
   }
   
 
@@ -162,7 +169,7 @@ export default function Header() {
       open={isAnnounceMenuOpen}
       onClose={handleAnnounceMenuClose}
     >
-      <ShowAnnounceList></ShowAnnounceList>
+      <ShowAnnounceList dataUser={announceData}></ShowAnnounceList>
     </Menu>
   );
   const renderMenu = (
@@ -211,7 +218,7 @@ export default function Header() {
           aria-haspopup="true"
           color="inherit"
         >
-          <Badge badgeContent={17} color="error">
+          <Badge badgeContent={announceData.length} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -286,7 +293,7 @@ export default function Header() {
             color="inherit"
             onClick={handleAnnounceMenuOpen}
           >
-            <Badge badgeContent={17} color="error">
+            <Badge badgeContent={announceData.length} color="error">
               <NotificationsIcon />
             </Badge>
           </IconButton>

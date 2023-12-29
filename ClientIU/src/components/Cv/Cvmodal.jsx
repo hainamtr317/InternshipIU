@@ -1,9 +1,5 @@
 import { Modal, Box } from "@mui/material";
 import React from "react";
-import "@react-pdf-viewer/core/lib/styles/index.css";
-import "@react-pdf-viewer/default-layout/lib/styles/index.css";
-import { Viewer, Worker } from "@react-pdf-viewer/core";
-import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 function CvModal(props) {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const style = {

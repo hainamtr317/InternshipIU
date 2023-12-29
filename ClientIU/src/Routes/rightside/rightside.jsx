@@ -11,6 +11,7 @@ function Rightside() {
         <Route path="/GradeList" element={(<></>)}/>
         <Route path="/UserInformation" element={(<></>)}/>
         <Route path="/Report" element={(<></>)}/>
+        <Route path="/CompanyManager" element={(<></>)}/>
         <Route path="/ListJobApplied" element={<StudentDisplayRightSide />} />
       </Routes>
     </>

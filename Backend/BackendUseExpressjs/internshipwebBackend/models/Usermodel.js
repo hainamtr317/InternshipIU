@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema({
     isLogin:{
         type: Boolean
     },
+    announcement:[{ type: mongoose.Types.ObjectId, ref: "announcement"}],
     userData:{type: mongoose.Types.ObjectId, ref: "student" },
     teacherData:{type: mongoose.Types.ObjectId, ref: "teacher" },
     resetPasswordToken: String,

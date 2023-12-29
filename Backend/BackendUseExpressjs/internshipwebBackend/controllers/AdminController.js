@@ -3,6 +3,8 @@ const { model } = require('mongoose')
 const User = require('../models/Usermodel')
 const Teacher = require('../models/Teachermodel')
 const Student = require('../models/studentModel')
+const Announcement = require('../models/announmentsModel')
+const {addAnnounce} = require('../models/announmentsModel')
 const {TeacherFindandUpdate,TeacherFindbyID,TeacherFindOne,TeacherCreateData} =require('../models/Teachermodel')
 const {StudentFindandUpdate,StudentFindById,StudentFindOne,StudentCreateData}= require('../models/studentModel')
 
@@ -75,4 +77,40 @@ const SetTeacherandStudent = async (req,res)=>{
     }
 }
 
-module.exports={SetTeacherandStudent}
+const  CreateAnnounce = async (req,res)=>{
+    const {From,To,data}= req.body
+    try {
+        const userSend = await User.findOne({userId:From})
+        const userReceive = await User.findOne({userId:To})
+        if(userSend){
+            if(userReceive){
+                const mess = await addAnnounce(data)
+                await userReceive.announcement.push(mess._id)
+                await userReceive.save()
+                return res.status(200).json({
+                    success:true,
+                    data:userReceive
+                })
+            }else{
+                return res.status(500).json({
+                    success:false,
+                    mess:"userReive not found"
+                })
+            }
+        }
+        else{
+            return res.status(500).json({
+                success:false,
+                mess:"userSend not found"
+            })
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            success:false
+        })
+    }
+
+}
+
+module.exports={SetTeacherandStudent,CreateAnnounce}

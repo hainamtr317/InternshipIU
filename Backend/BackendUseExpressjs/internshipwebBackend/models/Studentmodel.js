@@ -52,7 +52,6 @@ const StudentSchema = new mongoose.Schema({
         Company:String,
         TypeofCompany:String
     },
-    announcement:[{ type: mongoose.Types.ObjectId, ref: "announcement"}],
     mainCV:{type:String},
     Cv:[{ type: mongoose.Types.ObjectId, ref: "Cv"}],
     JobsApplied:[jobsSchema]

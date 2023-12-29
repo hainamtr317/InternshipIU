@@ -41,19 +41,7 @@ function TeacherGradeView() {
     if (localStorage.getItem("userData")){
       const data =await JSON.parse(localStorage.getItem("userData"))
       await Axios.post("/api/users/getUserData",{userId:data.userId}).then(async(res)=>{
-      // setDataUser(res.data.UserData.ListStudent)
-      const rowData = [
-        // {
-        //   id: "ITITIU19171",
-        //   studentName: "Trần Hải Nam",
-        //   email: "hainamtr317@gmail.com",
-        //   phoneNumber: 917417799,
-        //   Report: "Don't have",
-        //   status: "apply job",
-        //   gradeComment: "not grading",
-        //   grade: "not grading",
-        // }
-      ]
+      const rowData = []
       await setRows(rowData.concat(getRow(res.data.UserData.ListStudent)))
       await setIsLoading(false);
       })
@@ -63,19 +51,7 @@ function TeacherGradeView() {
         const userData = await dispatch(checkLogged())
         await localStorage.setItem("userData",JSON.stringify(userData.payload.data))
         await Axios.post("/api/users/getUserData",{userId:userData.payload.data.userId}).then(async(res)=>{
-          const rowData = [
-            {
-              id: "ITITIU19171",
-              studentName: "Trần Hải Nam",
-              email: "hainamtr317@gmail.com",
-              phoneNumber: 917417799,
-              Instructor: "Don't Have",
-              Report: "Don't have",
-              status: "apply job",
-              date: "not grading",
-              Fngrade: "not grading",
-            }
-          ]
+          const rowData = []
           await setRows(rowData.concat(getRow(res.data.UserData.ListStudent)))
           await setIsLoading(false);
         })
@@ -114,15 +90,12 @@ function TeacherGradeView() {
           </Typography>
           <Box
             sx={{
-              ml: "700px",
+              ml: "800px",
             }}
           >
-            <Button variant="outlined" startIcon={<SaveAsOutlinedIcon />}>
-              Save
-            </Button>
-            <Button variant="outlined" startIcon={<ExitToAppOutlinedIcon />}>
+            {/* <Button variant="outlined" onClick={} startIcon={<ExitToAppOutlinedIcon />}>
               Export
-            </Button>
+            </Button> */}
           </Box>
         </Box>
         <Divider></Divider>
