@@ -1,12 +1,12 @@
-import React from "react"
+import React from "react";
 
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 
-import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import UpdateIcon from "@mui/icons-material/Update";
 import { Link, redirect, useNavigate } from "react-router-dom";
 import {
@@ -22,18 +22,18 @@ import {
 
 function JobModal(props) {
   const Job = props.Job;
-  console.log(Job)
+  console.log(Job);
   const direction = "/Student/job/" + Job._id;
-  
+
   const navigate = useNavigate();
-  const handleclickJobName = ()=>{
-    navigate(direction)
-  }
-  const handleCompanyRedirect = ()=>{
-    navigate("/Student/Company/"+Job.company);
-  }
+  const handleclickJobName = () => {
+    navigate(direction);
+  };
+  const handleCompanyRedirect = () => {
+    navigate("/Student/Company/" + Job.company);
+  };
   const handleApplybtn = () => {
-    navigate("/Student/job/"+Job._id+"/Apply");
+    navigate("/Student/job/" + Job._id + "/Apply");
   };
   const listSkill = ["reactjs", "nodejs", "cloud"];
   const style = {
@@ -59,15 +59,24 @@ function JobModal(props) {
       >
         <Box sx={style}>
           <CardContent id="header-modal-job" sx={headerModal}>
-              <Typography onClick={handleclickJobName} id="Jos-Title" variant="h4" component="h">
-                {Job.nameJob}
-              </Typography>
-            
-            
-              <Typography id="Jos-Title" variant="caption" component="p" onClick={handleCompanyRedirect}>
-                {Job.company}
-              </Typography>
-         
+            <Typography
+              onClick={handleclickJobName}
+              id="Jos-Title"
+              variant="h4"
+              component="h"
+            >
+              {Job.nameJob}
+            </Typography>
+
+            <Typography
+              id="Jos-Title"
+              variant="caption"
+              component="p"
+              onClick={handleCompanyRedirect}
+            >
+              {Job.company}
+            </Typography>
+
             <Button variant="outlined" onClick={handleApplybtn}>
               Apply Now
             </Button>
