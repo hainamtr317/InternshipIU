@@ -1,142 +1,144 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Close";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import {
   GridRowModes,
   DataGrid,
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
-} from '@mui/x-data-grid';
+} from "@mui/x-data-grid";
 import {
   randomCreatedDate,
   randomTraderName,
   randomId,
   randomArrayItem,
-} from '@mui/x-data-grid-generator';
-import Axios from '../../config/axiosConfig';
-import UserModal from '../../pages/Admin/components/modalUserEdit';
+} from "@mui/x-data-grid-generator";
 
-
+import UserModal from "../../pages/Admin/components/modalUserEdit";
+import RegisterModal from "../../pages/Admin/components/modalRegNewUser";
+import Axios from "../../config/axiosConfig";
 function EditToolbar(props) {
   const { setRows, setRowModesModel } = props;
+  const [OpenReg, setOpenReg] = React.useState(false);
+  const handleOpenReg = () => setOpenReg(true);
+  const handleCloseReg = () => setOpenReg(false);
+
   const handleClick = () => {
-    const id = randomId();
-    setRows((oldRows) => [...oldRows, { id, name: '', age: '', isNew: true }]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-    }));
+    handleOpenReg();
   };
 
   return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
-      </Button>
-    </GridToolbarContainer>
+    <>
+      <GridToolbarContainer>
+        <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+          Add record
+        </Button>
+      </GridToolbarContainer>
+      <RegisterModal Open={OpenReg} Close={handleCloseReg}></RegisterModal>
+    </>
   );
 }
 
-
-function GriddataUser({rowData}) {
+function GriddataUser({ rowData }) {
   const [isOpen, setIsOpen] = React.useState(false);
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
-  const [userData,setUserData] = React.useState()
-  const [role,setRole]= React.useState()
 
-const [rows, setRows] = React.useState(rowData);
-const [rowModesModel, setRowModesModel] = React.useState({});
+  const [userData, setUserData] = React.useState();
+  const [role, setRole] = React.useState();
 
-const handleRowEditStop = (params, event) => {
-  if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-    event.defaultMuiPrevented = true;
-  }
-};
+  const [rows, setRows] = React.useState(rowData);
+  const [rowModesModel, setRowModesModel] = React.useState({});
 
-const handleEditClick = (id) => () => {
-  setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-};
+  const handleRowEditStop = (params, event) => {
+    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
+      event.defaultMuiPrevented = true;
+    }
+  };
 
-const handleSaveClick = (id) => () => {
-  setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  const handleEditClick = (id) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
 
-};
+  const handleSaveClick = (id) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  };
 
-const handleDeleteClick = (id) => () => {
-  setRows(rows.filter((row) => row.id !== id));
-};
-
-const handleCancelClick = (id) => () => {
-  setRowModesModel({
-    ...rowModesModel,
-    [id]: { mode: GridRowModes.View, ignoreModifications: true },
-  });
-
-  const editedRow = rows.find((row) => row.id === id);
-  if (editedRow.isNew) {
+  const handleDeleteClick = (id) => () => {
     setRows(rows.filter((row) => row.id !== id));
-  }
-};
+  };
 
-const processRowUpdate = async (newRow) => {
-  const updatedRow = { ...newRow, isNew: false };
-  // try {
-  //   const dataGrading = ({  
-  //     grade:{
-  //       Grade:newRow.grade,
-  //       Comment:newRow.gradeComment
-  //     }
-  //   })
-  //   const user =await JSON.parse(localStorage.getItem("userData"))
-  //   await Axios.put("/api/teacher/grading",{StudentId:newRow.id,data:dataGrading}).then(async(res)=>{
-  //     if(res.data.success){
-  //       await Axios.post("/api/teacher/saveStudent",{userId:user.userId}).then(async(res)=>{
-  //         if(res.data.success){
-  //           alert("Success grading for Student",newRow.id)
-  //         }
-  //       })
-  //     }
-  //     else{
-  //       alert("have error grading for Student:",res.data.error)
-  //     }
-  //     })
-  // } catch (error) {
-  //   console.log(error)
-  //   alert("have error grading for Student:",error)
-  // }
-  setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-  return updatedRow;
-};
+  const handleCancelClick = (id) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+    });
 
-const handleRowModesModelChange = (newRowModesModel) => {
-  setRowModesModel(newRowModesModel);
-};
+    const editedRow = rows.find((row) => row.id === id);
+    if (editedRow.isNew) {
+      setRows(rows.filter((row) => row.id !== id));
+    }
+  };
 
-const handleOpenManager =async(id,row)=>{
-  try {
-    await Axios.post("/api/admin/getUserData",{userId:id}).then(async(res)=>{
-      if(res.data.success){
-        await setRole(row.Role)
-        await setUserData(res.data.UserData)
-        handleOpen()
+  const processRowUpdate = async (newRow) => {
+    if (confirm("Do you want change password?")) {
+      const updatedRow = { ...newRow, isNew: false };
+
+      try {
+        const dataGrading = {
+          password: newRow.password,
+        };
+        await Axios.put("/api/users", {
+          userId: newRow.id,
+          data: dataGrading,
+        }).then(async (res) => {
+          if (res.data.success) {
+            alert("Success change password for User", newRow.id);
+            location.reload(true);
+          } else {
+            alert("have error change password for User:", res.data);
+          }
+        });
+      } catch (error) {
+        console.log(error);
+        alert("have error change pass for Student:", error);
       }
-      else{
-        alert("have error :")
-      }
-      })
-  } catch (error) {
-    console.log(error)
-    alert("have error:")
-  }
-}
+      setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+      return updatedRow;
+    } else {
+      alert("nothing change");
+    }
+  };
+
+  const handleRowModesModelChange = (newRowModesModel) => {
+    setRowModesModel(newRowModesModel);
+  };
+
+  const handleOpenManager = async (id, row) => {
+    try {
+      await Axios.post("/api/admin/getUserData", { userId: id }).then(
+        async (res) => {
+          if (res.data.success) {
+            await setRole(row.Role);
+            await setUserData(res.data.UserData);
+            handleOpen();
+          } else {
+            alert("have error :");
+          }
+        }
+      );
+    } catch (error) {
+      console.log(error);
+      alert("have error:");
+    }
+  };
   const columns = [
     {
       field: "id",
@@ -149,41 +151,44 @@ const handleOpenManager =async(id,row)=>{
       width: 150,
       headerName: "User ID",
       description: "User ID.",
-    },  
-    { field: "password", width: 150, headerName: "Password" },
+    },
+    { field: "password", width: 150, headerName: "Password", editable: true },
     { field: "Role", width: 80, headerName: "Role" },
     { field: "dataUser", width: 150, headerName: "Data User" },
-    { field: "Update"
-    , width: 110
-    , headerName: "Update date",
-    valueFormatter: params => new Date(params?.value).toLocaleString(),
-  },
+    {
+      field: "Update",
+      width: 110,
+      headerName: "Update date",
+      valueFormatter: (params) => new Date(params?.value).toLocaleString(),
+    },
     { field: "LoginStatus", width: 100, headerName: "Login Status" },
     {
       field: "Manager",
       width: 150,
       headerName: "Manager Data User",
-      renderCell:({id,row})=>{
-        return[
+      renderCell: ({ id, row }) => {
+        return [
           <Box>
-          <Button 
-            variant="contained" size="small"
-            startIcon={<ManageAccountsIcon/>}
-            onClick={()=>{handleOpenManager(id,row)}}>
-            Open
-          </Button>
-
-          </Box>
-            ] 
-      }
-        
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<ManageAccountsIcon />}
+              onClick={() => {
+                handleOpenManager(id, row);
+              }}
+            >
+              Open
+            </Button>
+          </Box>,
+        ];
+      },
     },
     {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Actions',
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
       width: 100,
-      cellClassName: 'actions',
+      cellClassName: "actions",
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
         if (isInEditMode) {
@@ -192,7 +197,7 @@ const handleOpenManager =async(id,row)=>{
               icon={<SaveIcon />}
               label="Save"
               sx={{
-                color: 'primary.main',
+                color: "primary.main",
               }}
               onClick={handleSaveClick(id)}
             />,
@@ -222,14 +227,32 @@ const handleOpenManager =async(id,row)=>{
           />,
         ];
       },
-    }
+    },
   ];
 
   return (
     <>
-      <DataGrid columns={columns} rows={rows} 
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        editMode="row"
+        rowModesModel={rowModesModel}
+        onRowModesModelChange={handleRowModesModelChange}
+        onRowEditStop={handleRowEditStop}
+        processRowUpdate={processRowUpdate}
+        slots={{
+          toolbar: EditToolbar,
+        }}
+        slotProps={{
+          toolbar: { setRows, setRowModesModel },
+        }}
       />
-      <UserModal Role={role} User={userData} Open={isOpen} Close={handleClose}></UserModal>    
+      <UserModal
+        Role={role}
+        User={userData}
+        Open={isOpen}
+        Close={handleClose}
+      ></UserModal>
     </>
   );
 }

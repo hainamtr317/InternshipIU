@@ -151,13 +151,12 @@ const CreateTeacher = async (req, res) => {
           const checkExit = await TeacherFindOne({ TeacherID: TeacherId });
           if (!checkExit) {
             const newTeacher = await TeacherCreateData(data);
-            user.teacherData = [];
-            await user.save();
-            user.teacherData.push(newTeacher);
+            user.teacherData = newTeacher._id;
             await user.save();
             console.log("create Teacher success");
             return res.status(200).json({
               createSuccess: true,
+              data: newTeacher.TeacherID,
             });
           } else {
             return res.status(404).json({

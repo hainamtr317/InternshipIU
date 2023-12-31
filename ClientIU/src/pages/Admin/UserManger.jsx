@@ -1,7 +1,16 @@
-  import { Box, Container,Paper,Avatar, Typography, Divider, Step,
+import {
+  Box,
+  Container,
+  Paper,
+  Avatar,
+  Typography,
+  Divider,
+  Step,
   StepLabel,
   Stepper,
-  LinearProgress,Button} from "@mui/material";
+  LinearProgress,
+  Button,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import GriddataUser from "../../components/Admin/GriddataUser";
 import SaveAsOutlinedIcon from "@mui/icons-material/SaveAsOutlined";
@@ -9,64 +18,56 @@ import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import Axios from "../../config/axiosConfig";
 
 function UserManger() {
-const [IsLoading,setIsLoading]= useState(true)
-const [rows,setRows]= useState()
-  const getListUser = async()=>{
-    await Axios.get("/api/users").then(async (res)=>{
-      const RowData = await getRow(res.data.userList)
-      setRows(RowData)
-      setIsLoading(false)
-    })
-  }
-const getRow =(data)=>{
-  let newRow = []
-    data.map((e)=>{
-      if(e.roles =="student"){
+  const [IsLoading, setIsLoading] = useState(true);
+  const [rows, setRows] = useState();
+  const getListUser = async () => {
+    await Axios.get("/api/users").then(async (res) => {
+      const RowData = await getRow(res.data.userList);
+      setRows(RowData);
+      setIsLoading(false);
+    });
+  };
+  const getRow = (data) => {
+    let newRow = [];
+    data.map((e) => {
+      if (e.roles == "student") {
         const setData = {
           id: e._id,
           UserID: e.userId,
-          password:e.password,
-          Role:e.roles,
-          dataUser:e.userData,
-          Update:e.updatedAt,
-          LoginStatus:(e.isLogin)? "online": "offline",
-          Manager:''
+          password: e.password,
+          Role: e.roles,
+          dataUser: e.userData,
+          Update: e.updatedAt,
+          LoginStatus: e.isLogin ? "online" : "offline",
+          Manager: "",
+        };
+        newRow.push(setData);
+      } else if (e.roles == "teacher") {
+        const setData = {
+          id: e._id,
+          UserID: e.userId,
+          password: e.password,
+          Role: e.roles,
+          dataUser: e.teacherData,
+          Update: e.updatedAt,
+          LoginStatus: e.isLogin ? "online" : "offline",
+          Manager: "",
+        };
+        newRow.push(setData);
       }
-      newRow.push(setData)
-    }else if(e.roles == "teacher"){
-      const setData = {
-        id: e._id,
-        UserID: e.userId,
-        password:e.password,
-        Role:e.roles,
-        dataUser:e.teacherData,
-        Update:e.updatedAt, 
-        LoginStatus:(e.isLogin)? "online": "offline",
-        Manager:''  
-    }
-    newRow.push(setData)
-    }
-    })
-    return newRow
-}  
-useEffect(()=>{
-  getListUser()
-},[])
-
-  // const rows = [
-  //   {
-  //     id: "ITITIU19161",
-  //     Name: "Trần Hải Nam",
-  //     email: "hainamtr317@gmail.com",
-  //     password: "asdasdfsdf",
-  //     phoneNumber: 917417799,
-  //     Role:"Teacher",
-  //     Manager:""
-  //   } 
-  // ];
+    });
+    return newRow;
+  };
+  useEffect(() => {
+    getListUser();
+  }, []);
 
   if (IsLoading) {
-    return <Box><LinearProgress>IsLoading...</LinearProgress> </Box>
+    return (
+      <Box>
+        <LinearProgress>IsLoading...</LinearProgress>{" "}
+      </Box>
+    );
   }
   return (
     <>

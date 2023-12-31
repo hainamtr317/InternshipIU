@@ -24,8 +24,8 @@ import {
   Divider,
   Step,
 } from "@mui/material";
-
-function StudentModal({ User }) {
+import Axios from "../../../../config/axiosConfig";
+function RegisterStudent({ Role }) {
   const steps = [
     "Apply job",
     "register Job",
@@ -34,16 +34,7 @@ function StudentModal({ User }) {
     "grading",
   ];
   const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 700,
     bgcolor: "background.paper",
-    border: "2px solid whitesmoke",
-    borderRadius: "10px",
-    boxShadow: 24,
-    p: 4,
   };
   const textHolder = {
     display: "flex",
@@ -54,7 +45,7 @@ function StudentModal({ User }) {
   const teacherInfoDisplay = {
     display: "flex",
     flexDirection: "column",
-    width: 650,
+    width: 700,
     borderRadius: "10px",
     boxShadow: 24,
   };
@@ -65,28 +56,50 @@ function StudentModal({ User }) {
   };
   const handleClickUpdate = async (e) => {
     e.preventDefault();
+    var userIdS = e.target.elements.name.value;
+    var passS = e.target.elements.email.value;
     var nameS = e.target.elements.name.value;
     var emailS = e.target.elements.email.value;
     var majorS = e.target.elements.major.value;
     var phoneS = e.target.elements.phone.value;
     var departmentS = e.target.elements.department.value;
-    const dataUpdate = {
-      name: nameS,
-      email: emailS,
-      phone: phoneS,
-      Department: departmentS,
-      major: majorS,
+    const dataRegisterUser = {
+      userId: userIdS,
+      password: passS,
+      roles: Role,
     };
-    console.log(dataUpdate);
+    const dataRegisterStudent = {
+      StudentId: userIdS,
+      name: nameS,
+      major: majorS,
+      Department: departmentS,
+      email: emailS,
+      AvatarImage:
+        "https://t3.ftcdn.net/jpg/05/67/12/76/360_F_567127618_aAU0YHdlOn0TfRuHBqwU3bXhLKb5S9jG.jpg",
+      phone: phoneS,
+      progressionStatus: 0,
+    };
     try {
-      await Axios.put("/api/admin/updateStudent", {
-        StudentID: User._id,
-        data: dataUpdate,
-      }).then((res) => {
-        if (res.data.success) {
-          alert("update success");
+      await Axios.post("/api/users/register", dataRegisterUser).then(
+        async (res) => {
+          if (res.data.success) {
+            alert("create user success");
+            await Axios.post("/api/student", {
+              userId: res.data.data,
+              data: dataRegisterStudent,
+            }).then((res2) => {
+              if (res2.data.createSuccess) {
+                alert("create Student success", res2.data.data);
+                location.reload(true);
+              } else {
+                alert("have error", res2.data.error);
+              }
+            });
+          } else {
+            alert("have err");
+          }
         }
-      });
+      );
     } catch (error) {
       console.log(error);
     }
@@ -94,8 +107,6 @@ function StudentModal({ User }) {
 
   return (
     <Box sx={style}>
-      <h3>Hello {User.StudentId}</h3>
-
       <Box
         sx={{
           display: "flex",
@@ -123,6 +134,50 @@ function StudentModal({ User }) {
                     mt: "12px",
                   }}
                 >
+                  UserId:
+                </Typography>
+              </Box>
+              <Box>
+                <TextField
+                  required
+                  id="userId"
+                  name="userId"
+                  label="UserId"
+                  sx={{ ml: "10px" }}
+                  variant="filled"
+                ></TextField>
+              </Box>
+            </Box>
+
+            <Box sx={textHolder}>
+              <Box>
+                <Typography
+                  sx={{
+                    mt: "12px",
+                  }}
+                >
+                  Password:
+                </Typography>
+              </Box>
+              <Box>
+                <TextField
+                  required
+                  id="password"
+                  name="password"
+                  label="Password"
+                  sx={{ ml: "10px" }}
+                  variant="filled"
+                ></TextField>
+              </Box>
+            </Box>
+
+            <Box sx={textHolder}>
+              <Box>
+                <Typography
+                  sx={{
+                    mt: "12px",
+                  }}
+                >
                   Name:
                 </Typography>
               </Box>
@@ -133,7 +188,6 @@ function StudentModal({ User }) {
                   name="name"
                   label="name"
                   sx={{ ml: "10px" }}
-                  defaultValue={User.name}
                   variant="filled"
                 ></TextField>
               </Box>
@@ -156,7 +210,6 @@ function StudentModal({ User }) {
                   name="email"
                   label="email"
                   sx={{ ml: "10px" }}
-                  defaultValue={User.email}
                   variant="filled"
                 ></TextField>
               </Box>
@@ -174,11 +227,11 @@ function StudentModal({ User }) {
               </Box>
               <Box>
                 <TextField
+                  required
                   id="phone"
                   name="phone"
                   label="phone"
                   sx={{ ml: "10px" }}
-                  defaultValue={User.phone}
                   variant="filled"
                 ></TextField>
               </Box>
@@ -201,7 +254,7 @@ function StudentModal({ User }) {
                   name="major"
                   label="Major"
                   //   sx={{ ml: "10px", width: "400px" }}
-                  defaultValue={User.major}
+
                   variant="filled"
                 ></TextField>
               </Box>
@@ -224,7 +277,6 @@ function StudentModal({ User }) {
                   name="department"
                   label="department"
                   sx={{ ml: "10px", width: "400px" }}
-                  defaultValue={User.Department}
                   variant="filled"
                 ></TextField>
               </Box>
@@ -256,105 +308,9 @@ function StudentModal({ User }) {
             </Box>
           </Box>
         </Box>
-        {/* display data user */}
-        <Box sx={(teacherInfoDisplay, { ml: "25px", mt: "30px" })}>
-          {!User.job ? (
-            <Box sx={styleBox}>
-              <Typography sx={{ fontWeight: "bold" }}>Job:</Typography>
-              <Typography sx={{ ml: "20px" }}>Do not have job</Typography>
-            </Box>
-          ) : (
-            <Box sx={styleBox}>
-              <Typography sx={{ fontWeight: "bold" }}>Job:</Typography>
-              <Typography sx={{ ml: "20px" }}>
-                Job Name: {User.job.JobName}
-              </Typography>
-              <Typography sx={{ ml: "20px" }}>
-                Address: {User.job.Address}
-              </Typography>
-              <Typography sx={{ ml: "20px" }}>
-                Company: {User.job.Company}
-              </Typography>
-              <Typography sx={{ ml: "20px" }}>
-                TypeOfCompany: {User.job.TypeofCompany}
-              </Typography>
-            </Box>
-          )}
-          {!User.teacher ? (
-            <Box sx={styleBox}>
-              <Typography sx={{ fontWeight: "bold" }}>Your Teacher:</Typography>
-              <Typography sx={{ ml: "20px" }}> don't have</Typography>
-            </Box>
-          ) : (
-            <Box sx={styleBox}>
-              <Typography sx={{ fontWeight: "bold" }}>Your Teacher:</Typography>
-              <Typography sx={{ ml: "20px" }}>
-                Teacher name:{User.teacher.teacherName}
-              </Typography>
-              <Typography sx={{ ml: "20px" }}>
-                Teacher Phone:{User.teacher.teacherPhone}
-              </Typography>
-              <Typography sx={{ ml: "20px" }}>
-                Teacher Email:{User.teacher.teacherEmail}
-              </Typography>
-            </Box>
-          )}
-          {!User.instructor ? (
-            <Box sx={styleBox}>
-              <Typography sx={{ fontWeight: "bold" }}>
-                Your Instructor:
-              </Typography>
-              <Typography sx={{ ml: "20px" }}>
-                Do not register your Instructor
-              </Typography>
-            </Box>
-          ) : (
-            <Box sx={styleBox}>
-              <Typography sx={{ fontWeight: "bold" }}>
-                Your Instructor:
-              </Typography>
-              <Typography sx={{ ml: "20px" }}>
-                Name: {User.instructor.name}
-              </Typography>
-              <Typography sx={{ ml: "20px" }}>
-                email: {User.instructor.email}
-              </Typography>
-              <Typography sx={{ ml: "20px" }}>
-                phone Number: {User.instructor.phone}
-              </Typography>
-              <Typography sx={{ ml: "20px" }}>
-                Position in Company: {User.instructor.Position}
-              </Typography>
-            </Box>
-          )}
-
-          <Box>
-            <Box sx={styleBox}>
-              <Typography sx={{ fontWeight: "bold" }}>
-                Your procession internship:
-              </Typography>
-            </Box>
-            <Divider></Divider>
-            <Box sx={{ width: "auto", marginTop: "20px" }}>
-              <Stepper
-                sx={{ width: "auto" }}
-                activeStep={User.progressionStatus}
-                alternativeLabel
-              >
-                {steps.map((label) => (
-                  <Step key={label}>
-                    <StepLabel>
-                      <Typography variant="small">{label}</Typography>
-                    </StepLabel>
-                  </Step>
-                ))}
-              </Stepper>
-            </Box>
-          </Box>
-        </Box>
       </Box>
     </Box>
   );
 }
 
-export default StudentModal;
+export default RegisterStudent;

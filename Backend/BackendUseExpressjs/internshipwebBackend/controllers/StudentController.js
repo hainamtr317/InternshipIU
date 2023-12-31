@@ -1,75 +1,76 @@
-const { model } = require('mongoose')
+const { model } = require("mongoose");
 
-const User = require('../models/Usermodel')
-const Student = require('../models/studentModel')
-const {StudentFindandUpdate,StudentFindOne,StudentCreateData} =require('../models/studentModel')
+const User = require("../models/Usermodel");
+const Student = require("../models/studentModel");
+const {
+  StudentFindandUpdate,
+  StudentFindOne,
+  StudentCreateData,
+} = require("../models/studentModel");
 
+const updateStudent = async (req, res) => {
+  try {
+    const data = req.body.data;
+    const { userId } = req.body;
+    const user = await User.findById(userId);
 
-
-
-const updateStudent = async (req,res)=>{
-    try {
-        const data =req.body.data
-        const {userId}= req.body
-        const user = await User.findById(userId)
-
-        if(user){
-                try {  
-                        const OjectStudent= user.userData
-                        const updateStudent = await StudentFindandUpdate(OjectStudent.toString(),data)
-                        return res.status(200).json({
-                            success:true,
-                            data:updateStudent})
-                } catch (err) {
-                    console.log(err)
-                    return res.status(500).json({
-                        success:false,
-                        error:err
-                    })
-                }
-            
-        }
-        else{
-            return res.status(500).json({
-                success:false,
-                error:'can not fin user in database'
-            })
-        }
-    } catch (error) {
+    if (user) {
+      try {
+        const OjectStudent = user.userData;
+        const updateStudent = await StudentFindandUpdate(
+          OjectStudent.toString(),
+          data
+        );
+        return res.status(200).json({
+          success: true,
+          data: updateStudent,
+        });
+      } catch (err) {
+        console.log(err);
         return res.status(500).json({
-            success:false,
-            error:error
-        })
+          success: false,
+          error: err,
+        });
+      }
+    } else {
+      return res.status(500).json({
+        success: false,
+        error: "can not fin user in database",
+      });
     }
-}
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: error,
+    });
+  }
+};
 
-
-const getStudent =async(req,res)=>{
-    const {StudentId}= req.body
-    try {
-        const stu = await StudentFindOne({StudentId:StudentId})
-        if(stu){
-            return res.status(200).json({
-                success:true,
-                data:stu
-            })
-        }
-        else{
-            console.log("can't fin student")
-            return res.status(500).json({
-                success:false,
-                error:"can't find student"
-            })
-        }
-    } catch (error) {
-        const err = error
-        console.log(err)
-        return res.status(500).json({
-            success:false,
-            error:err
-        })
+const getStudent = async (req, res) => {
+  const { StudentId } = req.body;
+  try {
+    const stu = await StudentFindOne({ StudentId: StudentId });
+    if (stu) {
+      return res.status(200).json({
+        success: true,
+        data: stu,
+      });
+    } else {
+      console.log("can't fin student");
+      return res.status(500).json({
+        success: false,
+        error: "can't find student",
+      });
     }
-}
+  } catch (error) {
+    const err = error;
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      error: err,
+    });
+  }
+};
 // const saveStudentToUser = async(req,res)=>{
 //     const {userId}= req.body
 //     const user = await User.findById(userId)
@@ -85,60 +86,55 @@ const getStudent =async(req,res)=>{
 //         console.log(error)
 //     }
 // }
-const CreateStudent = async(req,res)=>{
-    try {
-        const data = req.body.data
-        const {userId}= req.body
-        const user = await User.findById(userId)
-        if(user){
-            if(user.roles == "student"){
-                try {     
-                    const {StudentId} = data
-                    const checkExit = await StudentFindOne({StudentId:StudentId})
-                    if(!checkExit){
-                        const newStudent = await StudentCreateData(data)
-                        user.userData = newStudent._id
-                        await user.save()
-                        console.log("update Student and user success")
-                        return res.status(200).json({
-                            createSuccess:true
-                        })
-                    }
-                    else{
-                        return res.status(404).json({
-                            createSuccess:false,
-                            error:'Student exit in database'
-                        })
-                    }
-                } catch (err) {
-                    console.log(err)
-                    return res.status(500).json({
-                        createSuccess:false,
-                        error:err
-                    })
-                }
-            }
-            else{
-                return res.status(500).json({
-                    createSuccess:false,
-                    error:'User is not student role'
-                })
-            }
+const CreateStudent = async (req, res) => {
+  try {
+    const data = req.body.data;
+    const { userId } = req.body;
+    const user = await User.findById(userId);
+    if (user) {
+      if (user.roles == "student") {
+        try {
+          const { StudentId } = data;
+          const checkExit = await StudentFindOne({ StudentId: StudentId });
+          if (!checkExit) {
+            const newStudent = await StudentCreateData(data);
+            user.userData = newStudent._id;
+            await user.save();
+            console.log("update Student and user success");
+            return res.status(200).json({
+              createSuccess: true,
+              data: newStudent.StudentId,
+            });
+          } else {
+            return res.status(404).json({
+              createSuccess: false,
+              error: "Student exit in database",
+            });
+          }
+        } catch (err) {
+          return res.status(500).json({
+            createSuccess: false,
+            error: err,
+          });
         }
-        else{
-            return res.status(500).json({
-                createSuccess:false,
-                error:'can not fin user in database'
-            })
-        }
-        
-    } catch (err) {
-        console.log(err)
+      } else {
         return res.status(500).json({
-            createSuccess:false,
-            error:err
-        })
+          createSuccess: false,
+          error: "User is not student role",
+        });
+      }
+    } else {
+      return res.status(500).json({
+        createSuccess: false,
+        error: "can not fin user in database",
+      });
     }
-    
-}
-module.exports = {CreateStudent,updateStudent,getStudent}
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      createSuccess: false,
+      error: err,
+    });
+  }
+};
+module.exports = { CreateStudent, updateStudent, getStudent };

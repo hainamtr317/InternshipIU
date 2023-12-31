@@ -203,10 +203,27 @@ const getStudentList = async (req, res) => {
     });
   }
 };
+const adminUpdateStudent = async (req, res) => {
+  try {
+    const { StudentID, data } = req.body;
+    const updateStudent = await StudentFindandUpdate(StudentID, data);
+    return res.status(200).json({
+      success: true,
+      data: updateStudent,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      error: err,
+    });
+  }
+};
 
 module.exports = {
   SetTeacherandStudent,
   CreateAnnounce,
   getUserDataToManager,
   getStudentList,
+  adminUpdateStudent,
 };
