@@ -30,7 +30,7 @@ import {
 import RegisterStudent from "./register/registerStudent";
 import RegisterTeacher from "./register/registerTeacher";
 
-function RegisterModal({ Open, Close, User }) {
+function RegisterModal({ Open, Close }) {
   const [Role, setRole] = useState("student");
   const handleChange = (event) => {
     setRole(event.target.value);

@@ -1,7 +1,8 @@
 import { Alert, Box, Button, Input, Snackbar } from "@mui/material";
 import React, { useState } from "react";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
-function FileUploadReport() {
+import SendIcon from "@mui/icons-material/Send";
+function ImageUploadFile() {
   const [isAlertOpen, SetAlertOpen] = useState(false);
   const HandleClose = () => {
     SetAlertOpen(false);
@@ -42,7 +43,7 @@ function FileUploadReport() {
             width: "70%",
           }}
           type="file"
-          inputProps={{ accept: "application/pdf" }}
+          inputProps={{ accept: "image/png, image/jpeg" }}
           autoFocus="true"
           onChange={handleFile}
         ></Input>
@@ -60,4 +61,4 @@ function FileUploadReport() {
   );
 }
 
-export default FileUploadReport;
+export default ImageUploadFile;

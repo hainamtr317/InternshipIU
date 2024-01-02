@@ -14,12 +14,6 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import {
-  randomCreatedDate,
-  randomTraderName,
-  randomId,
-  randomArrayItem,
-} from "@mui/x-data-grid-generator";
 
 import UserModal from "../../pages/Admin/components/modalUserEdit";
 import RegisterModal from "../../pages/Admin/components/modalRegNewUser";

@@ -11,15 +11,15 @@ const AdminPage = () => {
     <Box sx={{ padding: "0", margin: "0", height: "950px" }}>
       <Header />
       <Grid container className="main" sx={{ marginTop: "120px" }}>
-        <Grid sm>
+        <Grid sm={2}>
           <Leftside />
         </Grid>
-        <Grid sm={8}>
+        <Grid sm={9}>
           <MainLayout />
         </Grid>
-        <Grid sm>
+        {/* <Grid sm>
           <Rightside />
-        </Grid>
+        </Grid> */}
       </Grid>
       <ChatTab />
     </Box>
