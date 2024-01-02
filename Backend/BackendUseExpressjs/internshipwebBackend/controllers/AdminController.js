@@ -2,7 +2,20 @@ const { model } = require("mongoose");
 
 const User = require("../models/Usermodel");
 const Teacher = require("../models/Teachermodel");
-const Student = require("../models/studentModel");
+const {
+  JobFind,
+  JobFindById,
+  JobFindAndUpdate,
+  JobFindOne,
+} = require("../models/jobsmodel");
+const Company = require("../models/companymodel");
+const {
+  StudentFindandUpdate,
+  StudentFindById,
+  StudentFindOne,
+  StudentCreateData,
+  StudentGetall,
+} = require("../models/studentModel");
 const Announcement = require("../models/announmentsModel");
 const { addAnnounce } = require("../models/announmentsModel");
 const {
@@ -11,13 +24,8 @@ const {
   TeacherFindOne,
   TeacherCreateData,
 } = require("../models/Teachermodel");
-const {
-  StudentFindandUpdate,
-  StudentFindById,
-  StudentFindOne,
-  StudentCreateData,
-  StudentGetall,
-} = require("../models/studentModel");
+
+const { updateCompany } = require("./CompanyController");
 
 const TestStudentExit = async (teacher, student) => {
   const findstudent = await teacher.find((e) => e.StudentId == student);
@@ -219,6 +227,58 @@ const adminUpdateStudent = async (req, res) => {
     });
   }
 };
+const autoHandleJobAndCompany = async (req, res) => {
+  try {
+    const JobList = await JobFind({});
+    if (JobList) {
+      await Promise.all(
+        JobList.map(async (e) => {
+          const company1 = await Company.findOne({ company: e.company });
+          if (company1) {
+            const updateJob = await JobFindAndUpdate(e._id, {
+              companyRef: [company1._id],
+            });
+            const companyUpdate = await Company.findByIdAndUpdate(
+              company1._id,
+              {
+                JobList: [
+                  ...company1.JobList,
+                  {
+                    JobId: e._id,
+                    JobName: e.nameJob,
+                  },
+                ],
+              }
+            );
+
+            console.log(
+              "update success",
+              updateJob.nameJob,
+              updateCompany.company
+            );
+            return true;
+          } else {
+            return false;
+          }
+        })
+      ).then((value) => {
+        return res.status(200).json({
+          success: true,
+          data: value,
+        });
+      });
+    } else {
+      return res.status(500).json({
+        success: false,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+    });
+  }
+};
 
 module.exports = {
   SetTeacherandStudent,
@@ -226,4 +286,5 @@ module.exports = {
   getUserDataToManager,
   getStudentList,
   adminUpdateStudent,
+  autoHandleJobAndCompany,
 };

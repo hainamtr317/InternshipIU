@@ -18,22 +18,30 @@ function CompanyManger() {
   const getData = async () => {
     await Axios.get("/api/Company/getListCompany").then(async (res) => {
       await Promise.all(
-        res.data.ListCompany.map((e) => {
+        res.data.ListCompany.map(async (element) => {
+          // await Promise.all(
+          //   element.JobList.map((data) => {
+          //     return data.JobName;
+          //   })
+          // ).then((jobListName) => {
+
+          // });
           return {
-            id: e._id,
-            company: e.company,
-            image: e.image,
-            email: e.email,
-            Address: e.Address,
-            Website: e.Website,
-            CompanySize: e.CompanySize,
-            BussinessAreas: e.BussinessAreas,
-            Decripsion: e.Decripsion,
-            office: e.office,
-            Joblist: e.Joblist,
+            id: element._id,
+            company: element.company,
+            image: element.image,
+            email: element.email,
+            Address: element.Address,
+            Website: element.Website,
+            CompanySize: element.CompanySize,
+            BussinessAreas: element.BussinessAreas,
+            Decripsion: element.Decripsion,
+            office: element.office,
+            Joblist: element.JobList,
           };
         })
       ).then((value) => {
+        console.log(value);
         setRows(value);
         SetIsLoading(false);
       });
@@ -58,7 +66,6 @@ function CompanyManger() {
   return (
     <>
       <Box>
-        {console.log(rows)}
         <Box
           sx={{
             display: "flex",
@@ -79,14 +86,7 @@ function CompanyManger() {
             sx={{
               ml: "700px",
             }}
-          >
-            <Button variant="outlined" startIcon={<SaveAsOutlinedIcon />}>
-              Save
-            </Button>
-            <Button variant="outlined" startIcon={<ExitToAppOutlinedIcon />}>
-              Export
-            </Button>
-          </Box>
+          ></Box>
         </Box>
         <Divider></Divider>
         <Box sx={{ width: "100%", height: 650 }}>

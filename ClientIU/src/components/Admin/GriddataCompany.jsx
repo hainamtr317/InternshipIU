@@ -1,4 +1,4 @@
-import { Button, Card, CardMedia, Box } from "@mui/material";
+import { Button, Card, CardMedia, Box, Typography } from "@mui/material";
 import {
   GridRowModes,
   DataGrid,
@@ -12,7 +12,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+
 import Axios from "../../config/axiosConfig";
 import ModalCreateCompany from "./components/CreateCompanyModal";
 
@@ -133,6 +133,16 @@ function GridDataCompany({ rowData }) {
       </Card>
     );
   }
+  function RenderListJobs(props) {
+    const { hasFocus, value } = props;
+    return (
+      <Box sx={{ flexDirection: "column", display: "flex" }}>
+        {value.map((e) => (
+          <Typography variant="caption">- {e.JobName}</Typography>
+        ))}
+      </Box>
+    );
+  }
   const columns = [
     {
       field: "company",
@@ -168,7 +178,12 @@ function GridDataCompany({ rowData }) {
       editable: true,
     },
     { field: "office", headerName: "office", editable: true },
-    { field: "Joblist", width: 120, headerName: "Joblist", editable: true },
+    {
+      field: "Joblist",
+      width: 120,
+      headerName: "Joblist",
+      renderCell: RenderListJobs,
+    },
     {
       field: "actions",
       type: "actions",
