@@ -29,7 +29,7 @@ function EditToolbar(props) {
     <>
       <GridToolbarContainer>
         <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-          Add Company
+          Add Job
         </Button>
       </GridToolbarContainer>
       <ModalCreateJob Open={OpenReg} Close={handleCloseReg}></ModalCreateJob>

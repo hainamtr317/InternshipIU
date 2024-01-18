@@ -56,7 +56,7 @@ function RegisterStudent({ Role }) {
   };
   const handleClickUpdate = async (e) => {
     e.preventDefault();
-    var userIdS = e.target.elements.name.value;
+    var userIdS = e.target.elements.userId.value;
     var passS = e.target.elements.email.value;
     var nameS = e.target.elements.name.value;
     var emailS = e.target.elements.email.value;

@@ -15,7 +15,11 @@ import ImageUploadFile from "../../Fileupload/imageUpload";
 
 function ModalCreateCompany({ Open, Close }) {
   const [Role, setRole] = useState("student");
-
+  const [linkImage, getLinkImage] = useState();
+  const handleClose = async () => {
+    await getLinkImage();
+    Close();
+  };
   const teacherInfoDisplay = {
     display: "flex",
     flexDirection: "column",
@@ -87,7 +91,7 @@ function ModalCreateCompany({ Open, Close }) {
     <>
       <Modal
         open={Open}
-        onClose={Close}
+        onClose={handleClose}
         aria-labelledby="modal-user"
         aria-describedby="modal-user"
       >
@@ -156,13 +160,14 @@ function ModalCreateCompany({ Open, Close }) {
                       ml: "-20px",
                     }}
                   >
-                    <ImageUploadFile></ImageUploadFile>
+                    <ImageUploadFile getFile={getLinkImage}></ImageUploadFile>
                     <TextField
                       required
                       id="image"
                       name="image"
+                      value={linkImage}
                       label="Image Link"
-                      sx={{ ml: "40px" }}
+                      sx={{ ml: "40px", width: "200px" }}
                       variant="filled"
                     ></TextField>
                   </Box>

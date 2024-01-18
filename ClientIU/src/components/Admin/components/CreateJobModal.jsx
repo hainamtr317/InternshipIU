@@ -115,7 +115,7 @@ function ModalCreateJob({ Open, Close }) {
               }}
             >
               <Box>
-                <Typography variant="h5"> Create Company</Typography>
+                <Typography variant="h5"> Create Job</Typography>
               </Box>
               <Box
                 component="form"

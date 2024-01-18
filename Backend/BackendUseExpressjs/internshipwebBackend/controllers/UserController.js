@@ -48,6 +48,7 @@ const UserUpdate = async (req, res) => {
 
 const userLogin = async (req, res) => {
   const { userId, password } = req.body;
+
   if (!userId || !password) {
     return res.send("error");
   }
@@ -57,6 +58,7 @@ const userLogin = async (req, res) => {
       return res.status(400).send({ error: "User not found" });
     } else {
       const matchPass = await user.matchPasswords(password);
+      console.log(password);
       if (!matchPass) {
         return res.status(400).send({ error: matchPass });
       } else {
