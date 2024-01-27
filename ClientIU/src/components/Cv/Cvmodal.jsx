@@ -1,7 +1,6 @@
 import { Modal, Box } from "@mui/material";
 import React from "react";
 function CvModal(props) {
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const style = {
     position: "absolute",
     top: "50%",
@@ -24,21 +23,20 @@ function CvModal(props) {
         aria-describedby="modal-modal-display-Cv"
       >
         <Box sx={style}>
-          <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.js">
-            <div
-              style={{
-                height: "100%",
-                width: "100%",
-                marginLeft: "auto",
-                marginRight: "auto",
-              }}
-            >
-              <Viewer
-                fileUrl={`/Assets/MyCv${props.CvNumber}.pdf`}
-                plugins={[defaultLayoutPluginInstance]}
-              />
-            </div>
-          </Worker>
+          <object
+            data="https://localhost:4443/display/UsersCv/1706508227865MyCv1.pdf"
+            type="application/pdf"
+            width="100%"
+            height="800px"
+          >
+            <p>
+              Unable to display PDF file.{" "}
+              <a href="https://localhost:4000/display/UsersCv/1706367947808MyCv1.pdf">
+                Download
+              </a>{" "}
+              instead.
+            </p>
+          </object>
         </Box>
       </Modal>
     </>

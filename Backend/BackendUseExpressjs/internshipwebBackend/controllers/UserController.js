@@ -1,7 +1,13 @@
 const User = require("../models/Usermodel");
 const jwt = require("jsonwebtoken");
-const { StudentFindById } = require("../models/studentModel");
-const { TeacherFindbyID } = require("../models/Teachermodel");
+const {
+  StudentFindById,
+  StudentFindandUpdate,
+} = require("../models/studentModel");
+const {
+  TeacherFindbyID,
+  TeacherFindandUpdate,
+} = require("../models/Teachermodel");
 const { annouceFindbyId } = require("../models/announmentsModel");
 const sendToken = async (user, statusCode, res) => {
   const token = await user.getSignedToken();
@@ -55,12 +61,14 @@ const userLogin = async (req, res) => {
   try {
     const user = await User.findOne({ userId }).select("+password");
     if (!user) {
-      return res.status(400).send({ error: "User not found" });
+      return res.status(400).json({ success: false, msg: "User not found" });
     } else {
       const matchPass = await user.matchPasswords(password);
-      console.log(password);
+      console.log(matchPass);
       if (!matchPass) {
-        return res.status(400).send({ error: matchPass });
+        return res
+          .status(400)
+          .json({ success: matchPass, msg: "password Incorrect" });
       } else {
         user.isLogin = true;
         await user.save();
@@ -221,6 +229,34 @@ const getAnnounce = async (req, res) => {
     });
   }
 };
+const updateUserData = async (req, res) => {
+  try {
+    const { userId, data } = req.body;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(400).send({ error: "User not found" });
+    } else {
+      let objecdUserdata;
+      if (user.roles == "student") {
+        objecdUserdata = await StudentFindandUpdate(
+          user.userData.toString(),
+          data
+        );
+      } else if (user.roles == "teacher") {
+        objecdUserdata = await TeacherFindandUpdate(
+          user.teacherData.toString(),
+          data
+        );
+      } else {
+        return res.status(400).send({ error: "not that role" });
+      }
+      return res.status(200).json({ success: true });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: err });
+  }
+};
 
 module.exports = {
   getUsers,
@@ -231,4 +267,5 @@ module.exports = {
   getUserData,
   CheckLogged,
   UserUpdate,
+  updateUserData,
 };

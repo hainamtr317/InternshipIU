@@ -19,11 +19,13 @@ import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import UpdateIcon from "@mui/icons-material/Update";
 import getTimePassed from "../SupportFunction/countTimepass";
-function JobCard(props) {
+import Axios from "../../config/axiosConfig";
+function JobCard({ JobData }) {
   const [open, setOpen] = React.useState(false);
+  const [isLoading, setLoading] = React.useState(true);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const Job = props.Job;
+  let Job = JobData;
   return (
     <div className="Jobcardshow">
       <Card

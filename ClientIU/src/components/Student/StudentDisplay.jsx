@@ -15,47 +15,59 @@ import GradingStudent from "../Teacher/GradingStudent";
 import { useSelector, useDispatch } from "react-redux";
 import { Modal, CloseModal } from "../../redux/modalActionSlice";
 import ModalAnnouncementToStudent from "../Teacher/ModalAnnounment";
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Axios from "../../config/axiosConfig";
 
 function StudentDisplay() {
   const steps = ["Apply", "register", "working", "report", "grading"];
   const styleText = { marginLeft: "20px", color: "#1976d2", marginTop: "20px" };
-  const [verified,setVerified] = useState(false);
+  const [verified, setVerified] = useState(false);
   const ismodalOpen = useSelector(Modal);
-  const {StudentId} = useParams();
-  const [student,setStudent]= useState()
-  const [IsLoading,setIsLoading]= useState(true)
+  const { StudentId } = useParams();
+  const [student, setStudent] = useState();
+  const [IsLoading, setIsLoading] = useState(true);
 
-  const handleVerified = ()=>{
+  const handleVerified = () => {
     setVerified((prev) => !prev);
-  }
+  };
   const dispatch = useDispatch();
-  
-
   const HandleModalClose = () => {
     dispatch(CloseModal(false));
   };
 
-  useEffect(()=>{
-    const getStudentData =async() =>{
-      const data = await Axios.post("/api/student/getStudent",{StudentId:StudentId}).then((res)=>{
-        setStudent(res.data.data)
-        setIsLoading(false)
-      })
-    }
-    getStudentData()
-   },[])
-  if(IsLoading){
-    return(<h1>Loading...</h1>)
+  useEffect(() => {
+    const checkVerifiedBtn = (studentData) => {
+      if (studentData.progressionStatus > 2) {
+        setVerified(true);
+      }
+    };
+    const getStudentData = async () => {
+      const data = await Axios.post("/api/student/getStudent", {
+        StudentId: StudentId,
+      }).then(async (res) => {
+        await setStudent(res.data.data);
+        await checkVerifiedBtn(res.data.data);
+        setIsLoading(false);
+      });
+    };
+
+    getStudentData();
+  }, []);
+  if (IsLoading) {
+    return <h1>Loading...</h1>;
   }
   return (
     <>
-      <GradingStudent Student={student}  Open={ismodalOpen.Grade} Close={HandleModalClose} />
+      <GradingStudent
+        Student={student}
+        Open={ismodalOpen.Grade}
+        Close={HandleModalClose}
+      />
       <ModalAnnouncementToStudent
         Open={ismodalOpen.Announce}
-        Close={HandleModalClose}/>
+        Close={HandleModalClose}
+      />
       <Box>
         <Box
           sx={{
@@ -71,6 +83,7 @@ function StudentDisplay() {
               height: "100px",
               width: "100px",
             }}
+            src={student.AvatarImage}
           ></Avatar>
           <Container
             sx={{
@@ -81,7 +94,7 @@ function StudentDisplay() {
             }}
           >
             <Typography variant="h4">{student.name}</Typography>
-            <Typography variant="h4">ID: {" "}{student.StudentId}</Typography>
+            <Typography variant="h4">ID: {student.StudentId}</Typography>
           </Container>
         </Box>
       </Box>
@@ -99,30 +112,49 @@ function StudentDisplay() {
         }}
       >
         <Box>
-          <Typography>Department: {" "}{student.Department}</Typography>
-          <Typography> Job:{(!student.job) ? "Don't have Job":`${student.job.JobName}` } </Typography>
+          <Typography>Department: {student.Department}</Typography>
+          <Typography>
+            {" "}
+            Job:{!student.job
+              ? "Don't have Job"
+              : `${student.job.JobName}`}{" "}
+          </Typography>
           <Box>
-          {!verified && <Button variant="outlined" onClick={handleVerified} size="small">verified</Button> }
-          {verified &&  <Button variant="contained" onClick={handleVerified} size="small">verified</Button>}
+            {!verified && (
+              <Button variant="outlined" onClick={handleVerified} size="small">
+                verified
+              </Button>
+            )}
+            {verified && (
+              <Button variant="contained" onClick={handleVerified} size="small">
+                verified
+              </Button>
+            )}
 
-          {(!student.job)? <Box/>:  <Box
-              sx={{
-                display: "flex",
-                flexDirection: { xs: "column", xl: "row" },
-              }}
-            >
-              <Typography>Company:</Typography>
+            {!student.job ? (
+              <Box />
+            ) : (
               <Box
                 sx={{
-                  marginLeft: "10px",
+                  display: "flex",
+                  flexDirection: { xs: "column", xl: "row" },
                 }}
               >
-                <Typography>Name of Company:{student.job.Company}</Typography>
-                <Typography>Address:{student.job.Address}</Typography>
-                <Typography>Type of Company: {student.job.TypeofCompany}</Typography>
+                <Typography>Company:</Typography>
+                <Box
+                  sx={{
+                    marginLeft: "10px",
+                  }}
+                >
+                  <Typography>Name of Company:{student.job.Company}</Typography>
+                  <Typography>Address:{student.job.Address}</Typography>
+                  <Typography>
+                    Type of Company: {student.job.TypeofCompany}
+                  </Typography>
+                </Box>
               </Box>
-            </Box>}
-        
+            )}
+
             <Box
               sx={{
                 display: "flex",
@@ -131,18 +163,26 @@ function StudentDisplay() {
             >
               <Typography>Instructor:</Typography>
 
-              {(!student.instructor)? <Box><Typography>Do not have Instructor</Typography></Box> :  <Box
-                sx={{
-                  marginLeft: "10px",
-                }}
-              >
-                <Typography>Name of Instructor:{student.instructor.name}</Typography>
-                <Typography>Phone:{student.instructor.phone}</Typography>
-                <Typography>Email:{student.instructor.email}e</Typography>
-                <Typography>Position:{student.instructor.Position}e</Typography>
-              </Box>}
-
-            
+              {!student.instructor ? (
+                <Box>
+                  <Typography>Do not have Instructor</Typography>
+                </Box>
+              ) : (
+                <Box
+                  sx={{
+                    marginLeft: "10px",
+                  }}
+                >
+                  <Typography>
+                    Name of Instructor:{student.instructor.name}
+                  </Typography>
+                  <Typography>Phone:{student.instructor.phone}</Typography>
+                  <Typography>Email:{student.instructor.email}e</Typography>
+                  <Typography>
+                    Position:{student.instructor.Position}e
+                  </Typography>
+                </Box>
+              )}
             </Box>
           </Box>
         </Box>
@@ -223,7 +263,11 @@ function StudentDisplay() {
         <Typography variant="h5" sx={styleText}>
           Progression:
         </Typography>
-        <Stepper sx={{ width: "auto" }} activeStep={0} alternativeLabel>
+        <Stepper
+          sx={{ width: "auto" }}
+          activeStep={student.progressionStatus}
+          alternativeLabel
+        >
           {steps.map((label) => (
             <Step key={label}>
               <StepLabel>

@@ -3,10 +3,19 @@ const app = express();
 const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
+const https = require("https");
+const fs = require("fs");
 const PORT = 4000;
 app.use(express.json());
 app.use(cors());
 
+// add key
+const options = {
+  key: fs.readFileSync("./config/cert.key"),
+  cert: fs.readFileSync("./config/cert.crt"),
+};
+
+app.use("/", express.static("public"));
 //set upload destination for images
 const storageImages = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -55,13 +64,15 @@ app.post("/uploadImage", uploadImage.single("image"), (req, res) => {
 });
 app.post("/uploadCv", uploadCv.single("userCv"), (req, res) => {
   return res.status(200).json({
-    Cv: `http://localhost:4000/display/UsersCv/${req.file.filename}`,
+    Cv: `https://localhost:4443/display/UsersCv/${req.file.filename}`,
+    NameCV: req.file.filename,
   });
 });
 
 app.post("/uploadReport", uploadReport.single("Report"), (req, res) => {
   return res.status(200).json({
-    Cv: `http://localhost:4000/display/UsersReport/${req.file.filename}`,
+    Cv: `https://localhost:4443/display/UsersReport/${req.file.filename}`,
+    NameRP: req.file.filename,
   });
 });
 
@@ -72,4 +83,10 @@ app.use("/display/UsersReport", express.static("Reports"));
 
 app.listen(PORT, () => {
   console.log("server images and files on port", PORT);
+});
+
+// Create the https server by initializing it with 'options'
+// -------------------- STEP 3
+https.createServer(options, app).listen(4443, () => {
+  console.log(`HTTPS server started on port 4443`);
 });

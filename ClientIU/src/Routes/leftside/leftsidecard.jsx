@@ -20,26 +20,31 @@ import MenuLeftTeacher from "../../components/Teacher/MenuLeftTeacher";
 import { useSelector } from "react-redux";
 import { Selector } from "../../redux/userSlice";
 import MenuLeftAdmin from "../../components/Admin/MenuLeft";
+import AvatarChangeModal from "./components/modalChangeImage";
 function Leftsidecard(props) {
-  let dataUser
-  if(props.userData){
-    dataUser = props.userData.userData
+  let dataUser;
+  if (props.userData) {
+    dataUser = props.userData.userData;
+  } else {
+    dataUser = {
+      AvatarImage: "",
+      userName: "can not find",
+      Major: "can not find",
+    };
   }
-  else{
-    dataUser = {AvatarImage:"",
-    userName:"can not find",
-    Major:"can not find"
-  }
-  }
-
+  const [useId, setUserId] = React.useState(
+    JSON.parse(localStorage.getItem("userData"))
+  );
   const [checked, setChecked] = React.useState(false);
   const [display, setDisplay] = React.useState(true);
   //set role display
   const role = useSelector(Selector);
-  const [storeState, SetStoreState] = React.useState();
   const [isStudent, SetIsStudent] = React.useState(true);
   const [isTeacher, SetIsTeacher] = React.useState(false);
   const [isAdmin, SetIsAdmin] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const handleOpen = () => setIsOpen(true);
+  const handleClose = () => setIsOpen(false);
   const CheckRoleUser = (role) => {
     if (role === "student") {
       SetIsStudent(true);
@@ -51,19 +56,17 @@ function Leftsidecard(props) {
       SetIsTeacher(true);
       SetIsAdmin(false);
       console.log("display Teacher");
-    }
-    else if (role === "admin") {
+    } else if (role === "admin") {
       SetIsStudent(false);
       SetIsTeacher(false);
       SetIsAdmin(true);
       console.log("display Admin");
     }
   };
-  const getRole =async()=>{
-    const data =await JSON.parse(localStorage.getItem("userData"))
-    CheckRoleUser(data.userRole) 
-
-  }
+  const getRole = async () => {
+    const data = await JSON.parse(localStorage.getItem("userData"));
+    CheckRoleUser(data.userRole);
+  };
   React.useEffect(() => {
     getRole();
   }, []);
@@ -144,11 +147,17 @@ function Leftsidecard(props) {
               }}
               className="bgtag"
             ></Paper>
-            <Avatar sx={{ width: 65, height: 65 }} className="avatar" src={dataUser.AvatarImage} />
+            <Avatar
+              sx={{ width: 65, height: 65 }}
+              className="avatar"
+              src={dataUser.AvatarImage}
+            />
             <div className="Userinfor">
               <Link to="UserInformation">{dataUser.userName}</Link>
               <p className="userdes">{dataUser.Major}</p>
-              <Button  className="linktoaddphoto">Change Image</Button>
+              <Button className="linktoaddphoto" onClick={handleOpen}>
+                Change Image
+              </Button>
             </div>
             <Container
               sx={{
@@ -160,8 +169,13 @@ function Leftsidecard(props) {
               <Divider />
               {isStudent && <MenuLeftStudent />}
               {isTeacher && <MenuLeftTeacher />}
-              {isAdmin && <MenuLeftAdmin/>}
+              {isAdmin && <MenuLeftAdmin />}
             </Container>
+            <AvatarChangeModal
+              Open={isOpen}
+              Close={handleClose}
+              UserId={useId.userId}
+            ></AvatarChangeModal>
           </Container>
         </Box>
       </Collapse>

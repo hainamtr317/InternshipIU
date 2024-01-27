@@ -27,8 +27,8 @@ import Axios from "../../config/axiosConfig";
 function Jobpage() {
   const listSkill = ["reactjs", "nodejs", "cloud"];
   const { job_id } = useParams();
-  const [Job,setJob]= useState([])
-  
+  const [Job, setJob] = useState([]);
+
   const styles = {
     bgcolor: "white",
     maxWidth: "1000px",
@@ -36,15 +36,17 @@ function Jobpage() {
     marginRight: "auto",
   };
 
- useEffect(()=>{
-  const getJobData =async() =>{ 
-    const data = await Axios.post("/api/jobs/getJob",{id:job_id}).then((res)=>{
-      setJob(res.data.job)
-    })
-  }
-  getJobData()
- },[])
- 
+  useEffect(() => {
+    const getJobData = async () => {
+      const data = await Axios.post("/api/jobs/getJob", { id: job_id }).then(
+        (res) => {
+          setJob(res.data.job);
+        }
+      );
+    };
+    getJobData();
+  }, []);
+
   const navigate = useNavigate();
   const direction = "/Student/job/" + job_id + "/Apply";
   const handleApplybtn = () => {
@@ -308,7 +310,7 @@ function Jobpage() {
           </ul>
         </div>
       </CardContent>
-      <CompanyCard jobid={job_id} />
+      <CompanyCard CompanyName={Job.company} />
     </Box>
   );
 }

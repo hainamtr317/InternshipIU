@@ -1,6 +1,13 @@
-import { Container, Box, Typography, Divider,Grid,LinearProgress } from "@mui/material";
+import {
+  Container,
+  Box,
+  Typography,
+  Divider,
+  Grid,
+  LinearProgress,
+} from "@mui/material";
 import JobCard from "../../components/Job/Jobcard";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { JobData } from "../../components/Job/Data/jobData";
 import { useSelector, useDispatch } from "react-redux";
 import { Modal, CloseModal } from "../../redux/modalActionSlice";
@@ -17,35 +24,45 @@ function StudentAppliedJob() {
     dispatch(CloseModal(false));
   };
   const [isLoading, setIsLoading] = useState(true);
-  const [dataUser,setDataUser]= useState()
+  const [dataUser, setDataUser] = useState();
 
-  useEffect(()=>{
-    const checkUserLogged=async()=>{
-      if (localStorage.getItem("userData")){
-        const data =await JSON.parse(localStorage.getItem("userData"))
-        await Axios.post("/api/users/getUserData",{userId:data.userId}).then((res)=>{
-        setDataUser(res.data.UserData)
-        setIsLoading(false);
-        })
-      }
-      else{
+  useEffect(() => {
+    const checkUserLogged = async () => {
+      if (localStorage.getItem("userData")) {
+        const data = await JSON.parse(localStorage.getItem("userData"));
+        await Axios.post("/api/users/getUserData", {
+          userId: data.userId,
+        }).then((res) => {
+          setDataUser(res.data.UserData);
+          setIsLoading(false);
+        });
+      } else {
         try {
-          const userData = await dispatch(checkLogged())
-          await localStorage.setItem("userData",JSON.stringify(userData.payload.data))
-          await Axios.post("/api/users/getUserData",{userId:userData.payload.data.userId}).then((res)=>{
-            setDataUser(res.data.UserData)
+          const userData = await dispatch(checkLogged());
+          await localStorage.setItem(
+            "userData",
+            JSON.stringify(userData.payload.data)
+          );
+          await Axios.post("/api/users/getUserData", {
+            userId: userData.payload.data.userId,
+          }).then((res) => {
+            setDataUser(res.data.UserData);
             setIsLoading(false);
-          })
+          });
         } catch (error) {
-          return console.log(error)
+          return console.log(error);
         }
       }
-    }
-    checkUserLogged()
-    console.log(dataUser)
-   },[])
+    };
+    checkUserLogged();
+    console.log(dataUser);
+  }, []);
   if (isLoading) {
-    return <Box><LinearProgress>IsLoading...</LinearProgress> </Box>
+    return (
+      <Box>
+        <LinearProgress>IsLoading...</LinearProgress>{" "}
+      </Box>
+    );
   }
   return (
     <>
@@ -79,21 +96,22 @@ function StudentAppliedJob() {
             width: "auto",
           }}
         >
-          {dataUser.JobsApplied.length>0 && dataUser.JobsApplied.map((job) => (
-            <Grid
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "start",
-              }}
-              xs={11}
-              md={6}
-              xl={4}
-              key={job.id}
-            >
-              <JobCard Job={job} />
-            </Grid>
-          ))}
+          {dataUser.JobsApplied.length > 0 &&
+            dataUser.JobsApplied.map((job) => (
+              <Grid
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "start",
+                }}
+                xs={11}
+                md={6}
+                xl={4}
+                key={job.id}
+              >
+                <JobCard JobData={job} />
+              </Grid>
+            ))}
         </Grid>
       </Box>
     </>
