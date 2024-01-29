@@ -17,6 +17,14 @@ const CvSchema = mongoose.Schema(
   },
   { timestamps: true }
 );
+const CvFindOne = async (data) => {
+  try {
+    const StudentCvData = await StudentCV.findOne(data);
+    return StudentCvData;
+  } catch (error) {
+    return error;
+  }
+};
+const StudentCV = mongoose.model("Cv", CvSchema);
 
-module.exports = mongoose.model("Cv", CvSchema);
-module.exports = { CvSchema };
+module.exports = { StudentCV, CvSchema, CvFindOne };

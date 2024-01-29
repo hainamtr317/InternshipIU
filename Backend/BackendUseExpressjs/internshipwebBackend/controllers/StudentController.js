@@ -2,10 +2,12 @@ const { model } = require("mongoose");
 
 const User = require("../models/Usermodel");
 const Student = require("../models/studentModel");
+const { StudentCV } = require("../models/Cvmodel");
 const {
   StudentFindandUpdate,
   StudentFindOne,
   StudentCreateData,
+  StudentFindById,
 } = require("../models/studentModel");
 
 const updateStudent = async (req, res) => {
@@ -71,21 +73,121 @@ const getStudent = async (req, res) => {
     });
   }
 };
-// const saveStudentToUser = async(req,res)=>{
-//     const {userId}= req.body
-//     const user = await User.findById(userId)
-//     try {
-//         user.userData=[]
-//         const dataStudent = await StudentFindOne({StudentId:user.userId})
-//         await user.userData.push(dataStudent)
-//         await user.save()
-//         return res.status(200).json({
-//             success:true,
-//             data:user.userData[0]})
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
+const CvCreateAndSave = async (req, res) => {
+  const { Cv, NameCv, StudentId } = req.body;
+  const dataStudent = await StudentFindById(StudentId);
+  try {
+    if (dataStudent) {
+      const CvExit = await StudentCV.findOne({ NameCV: NameCv });
+      if (CvExit) {
+        return res.status(500).json({
+          success: false,
+          error: "Cv Exit in data",
+        });
+      } else {
+        const newCv = await StudentCV.create({
+          NameCV: NameCv,
+          MainCv: false,
+          LinkCv: Cv,
+        });
+        await dataStudent.Cv.push(newCv);
+        await dataStudent.save();
+        return res.status(200).json({
+          success: true,
+          msg: "success add Cv to Student data",
+        });
+      }
+    } else {
+      return res.status(500).json({
+        success: false,
+        error: "can't find student",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: error.toString(),
+    });
+  }
+};
+const setMainCv = async (req, res) => {
+  const { studentId, CvId } = req.body;
+  const dataStudent = await StudentFindById(studentId);
+  try {
+    if (dataStudent) {
+      if (dataStudent.Cv.length > 0) {
+        Promise.all(
+          dataStudent.Cv.map((e, index) => {
+            dataStudent.Cv[index].MainCv = false;
+          })
+        ).then(async () => {
+          const MainIndex = await dataStudent.Cv.findIndex(
+            (e) => e._id.toString() === CvId
+          );
+          dataStudent.Cv[MainIndex].MainCv = true;
+          // dataStudent.mainCV = dataStudent.Cv[MainIndex];
+          await dataStudent.save();
+
+          return res.status(200).json({
+            success: true,
+            msg: "change main success",
+          });
+        });
+      } else {
+        return res.status(500).json({
+          success: false,
+          error: "can't find Cv list",
+        });
+      }
+    } else {
+      return res.status(500).json({
+        success: false,
+        error: "can't find student",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: error.toString(),
+    });
+  }
+};
+
+const DeleteCv = async (req, res) => {
+  const { studentId, CvId } = req.body;
+  const dataStudent = await StudentFindById(studentId);
+  try {
+    if (dataStudent) {
+      if (dataStudent.Cv.length > 0) {
+        await StudentCV.findByIdAndDelete(CvId);
+        const MainIndex = await dataStudent.Cv.findIndex(
+          (e) => e._id.toString() === CvId
+        );
+        await dataStudent.Cv.splice(MainIndex, 1);
+        await dataStudent.save();
+        return res.status(200).json({
+          success: true,
+          msg: "delete success",
+        });
+      } else {
+        return res.status(500).json({
+          success: false,
+          error: "can't find Cv list",
+        });
+      }
+    } else {
+      return res.status(500).json({
+        success: false,
+        error: "can't find student",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: error.toString(),
+    });
+  }
+};
 const CreateStudent = async (req, res) => {
   try {
     const data = req.body.data;
@@ -137,4 +239,11 @@ const CreateStudent = async (req, res) => {
     });
   }
 };
-module.exports = { CreateStudent, updateStudent, getStudent };
+module.exports = {
+  CreateStudent,
+  updateStudent,
+  getStudent,
+  setMainCv,
+  CvCreateAndSave,
+  DeleteCv,
+};

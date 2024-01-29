@@ -1,12 +1,22 @@
-const express = require("express")
-const routers = express.Router()
+const express = require("express");
+const routers = express.Router();
 
-const {CreateStudent,updateStudent,getStudent} = require('../controllers/StudentController')
+const {
+  CreateStudent,
+  updateStudent,
+  getStudent,
+  setMainCv,
+  CvCreateAndSave,
+  DeleteCv,
+} = require("../controllers/StudentController");
 
 // routers.route("/student/saveStudent").post(saveStudentToUser)
-routers.route("/student/getStudent").post(getStudent)
-routers.route("/student").post(CreateStudent)
-routers.route("/student").put(updateStudent)
-routers.route("/student").delete()
+routers.route("/student/getStudent").post(getStudent);
+routers.route("/student").post(CreateStudent);
+routers.route("/student").put(updateStudent);
+routers.route("/student").delete();
+routers.route("/student/AddCv").post(CvCreateAndSave);
+routers.route("/student/SetMainCv").post(setMainCv);
+routers.route("/student/DeleteStudentCv").post(DeleteCv);
 
 module.exports = routers;

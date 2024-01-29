@@ -5,6 +5,7 @@ import {
   CardActionArea,
   CardContent,
   CardMedia,
+  Hidden,
   Typography,
 } from "@mui/material";
 
@@ -13,16 +14,48 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import React, { useState } from "react";
 
 import CvModal from "./Cvmodal";
+import Axios from "../../config/axiosConfig";
 
-function Cvcard({ CvData }) {
+function Cvcard({ CvData, StudentId }) {
   const [isMain] = useState(false);
-  const [ischeck, setCheck] = useState(false);
+  const isCheck = CvData.MainCv;
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
   };
-  const handleClickmain = () => {
-    setCheck((pre) => !pre);
+  const handleDelete = async () => {
+    if (confirm("Are you sure you want to delete this Cv")) {
+      await Axios.post("/api/student/DeleteStudentCv", {
+        studentId: StudentId,
+        CvId: CvData._id,
+      })
+        .then((res) => {
+          if (res.data.success) {
+            alert(res.data.msg);
+            location.reload();
+          } else [alert(res.data.error)];
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+    } else {
+      return true;
+    }
+  };
+  const handleClickMain = async () => {
+    if (confirm("Are you sure you want to change Main Cv")) {
+      await Axios.post("/api/student/SetMainCv", {
+        studentId: StudentId,
+        CvId: CvData._id,
+      }).then((res) => {
+        if (res.data.success) {
+          alert(res.data.msg);
+          location.reload();
+        } else [alert(res.data.error)];
+      });
+    } else {
+      return true;
+    }
   };
   const handleClose = () => setOpen(false);
   return (
@@ -32,7 +65,7 @@ function Cvcard({ CvData }) {
         sx={{
           display: "flex",
           flexDirection: "column",
-          height: 250,
+          height: 290,
           width: 400,
           borderStyle: "groove",
           border: "2px whitesmoke solid",
@@ -42,67 +75,72 @@ function Cvcard({ CvData }) {
         }}
       >
         <CardActionArea
-          class="z-20"
           sx={{
             flexGrow: "3",
           }}
           onClick={handleOpen}
         >
           <Box
-            class="z-10"
             sx={{
-              zIndex: "-2",
+              display: "flex",
               justifyContent: "center",
               alignItems: "center",
             }}
           >
             <object
-              class="z-0 ml-5 mt-2"
-              data="https://localhost:4443/display/UsersCv/1706508227865MyCv1.pdf"
+              class="mt-5 mb-5 overflow-hidden"
+              data={CvData.LinkCv}
               align="middle"
-              width="90%"
-              height="90%"
+              width="80%"
+              height="80%"
             ></object>
           </Box>
         </CardActionArea>
         <CardContent
           sx={{
             flexGrow: "1",
+            flexDirection: "row",
           }}
         >
           <Typography
             variant="h6"
             sx={{
+              width: "150px",
               marginTop: "10px",
+              overflowWrap: "break-word",
             }}
           >
-            Name of file
+            {CvData.NameCV}
           </Typography>
           <Box
             sx={{
               display: "flex",
               flexDirection: "row",
               marginLeft: "170px",
-              marginTop: "-35px",
+              marginTop: "-45px",
             }}
           >
-            <Button variant="outlined" startIcon={<DeleteIcon />}>
+            <Button
+              variant="outlined"
+              startIcon={<DeleteIcon />}
+              onClick={handleDelete}
+            >
               Delete
             </Button>
-            {ischeck && (
+            {isCheck && (
               <Button
                 sx={{ marginLeft: "10px" }}
                 variant="contained"
-                onClick={handleClickmain}
+                onClick={handleClickMain}
               >
                 MainCv
               </Button>
             )}
-            {!ischeck && (
+            {!isCheck && (
               <Button
                 sx={{ marginLeft: "10px" }}
                 variant="outlined"
-                onClick={handleClickmain}
+                onClick={handleClickMain}
               >
                 MainCv
               </Button>

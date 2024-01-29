@@ -5,13 +5,57 @@ import {
   Input,
   Typography,
   Grid,
+  LinearProgress,
 } from "@mui/material";
-import React from "react";
-
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { checkLogged } from "../../redux/userSlice";
+import Axios from "../../config/axiosConfig";
 import Cvcard from "../../components/Cv/Cvcard";
 import FileUploadCv from "../../components/Fileupload/FileuploadCV";
 
 const StudentCv = () => {
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
+  const [dataUser, setDataUser] = useState();
+  const checkUserLogged = async () => {
+    if (localStorage.getItem("userData")) {
+      const data = await JSON.parse(localStorage.getItem("userData"));
+      await Axios.post("/api/users/getUserData", { userId: data.userId }).then(
+        (res) => {
+          setDataUser(res.data.UserData);
+          setIsLoading(false);
+        }
+      );
+    } else {
+      try {
+        const userData = await dispatch(checkLogged());
+        await localStorage.setItem(
+          "userData",
+          JSON.stringify(userData.payload.data)
+        );
+        await Axios.post("/api/users/getUserData", {
+          userId: userData.payload.data.userId,
+        }).then((res) => {
+          setDataUser(res.data.UserData);
+          setIsLoading(false);
+        });
+      } catch (error) {
+        return console.log(error);
+      }
+    }
+  };
+  useEffect(() => {
+    checkUserLogged();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <Box>
+        <LinearProgress>IsLoading...</LinearProgress>{" "}
+      </Box>
+    );
+  }
   return (
     <>
       <Typography
@@ -37,11 +81,13 @@ const StudentCv = () => {
         Add your Cv here
       </Typography>
       <br></br>
-      <FileUploadCv></FileUploadCv>
+      <FileUploadCv StudentId={dataUser._id}></FileUploadCv>
       <Divider></Divider>
-      <Box sx={{
-        marginTop:'20px'
-      }}>
+      <Box
+        sx={{
+          marginTop: "20px",
+        }}
+      >
         <Grid
           container
           sx={{
@@ -49,7 +95,7 @@ const StudentCv = () => {
             width: "auto",
           }}
         >
-          {Array.from(Array(4)).map((_, index) => (
+          {dataUser.Cv.map((cvData) => (
             <Grid
               sx={{
                 display: "flex",
@@ -59,9 +105,9 @@ const StudentCv = () => {
               xs={12}
               md={6}
               xl={4}
-              key={index}
+              key={cvData._id}
             >
-              <Cvcard></Cvcard>
+              <Cvcard CvData={cvData} StudentId={dataUser._id}></Cvcard>
             </Grid>
           ))}
         </Grid>

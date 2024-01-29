@@ -33,7 +33,7 @@ const StudentSchema = new mongoose.Schema(
       teacherPhone: String,
       teacherEmail: String,
     },
-    report: String,
+    report: { type: String, default: "" },
     grade: {
       Grade: Number,
       Comment: String,
@@ -51,8 +51,7 @@ const StudentSchema = new mongoose.Schema(
       Company: String,
       TypeofCompany: String,
     },
-    mainCV: { type: String },
-    Cv: [{ type: mongoose.Types.ObjectId, ref: "Cv" }],
+    Cv: [CvSchema],
     JobsApplied: [jobsSchema],
   },
   { timestamps: true }

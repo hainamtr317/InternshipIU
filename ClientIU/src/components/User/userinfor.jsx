@@ -50,7 +50,7 @@ function Userinfor() {
   useEffect(() => {
     checkUserLogged();
   }, []);
-  console.log(dataUser);
+
   const stylebox = {
     display: "flex",
     flexDirection: "column",

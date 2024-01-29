@@ -17,11 +17,13 @@ import { checkLogged } from "../../redux/userSlice";
 import { useDispatch } from "react-redux";
 import "react-quill/dist/quill.snow.css";
 import Axios from "../../config/axiosConfig";
-import { useMemo } from "react";
+
 function ApplyJob() {
   const [value, setValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [dataUser, setDataUser] = useState();
+  const [isHaveMainCv, setHaveMainCv] = useState(false);
+  const [dataCv, setDataCv] = useState();
   const Jobid = useParams().job_id;
   const [Job, setJob] = useState([]);
   const dispatch = useDispatch();
@@ -91,6 +93,22 @@ function ApplyJob() {
       }
     };
     checkUserLogged();
+  }, []);
+  useEffect(() => {
+    const checkHaveCv = () => {
+      if (dataUser) {
+        if (dataUser.Cv.length > 0) {
+          dataUser.Cv.map(async (e) => {
+            console.log(e);
+            if (e.MainCv) {
+              await setDataCv(e);
+              await setHaveMainCv(true);
+            }
+          });
+        }
+      }
+    };
+    checkHaveCv();
   }, []);
   if (isLoading) {
     return (
@@ -180,17 +198,30 @@ function ApplyJob() {
                 }}
               >
                 <Typography> Your CV:</Typography>
-                <Cvcard></Cvcard>
+                {isHaveMainCv ? (
+                  <Box
+                    sx={{
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignContent: "center",
+                    }}
+                  >
+                    <Typography>Don't have Main Cv</Typography>
+                    <Typography>
+                      please upload your Cv and check Main Cv
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Cvcard
+                    CvData={dataUser.Cv.find((element) => element.MainCv)}
+                    StudentId={dataUser._id}
+                  ></Cvcard>
+                )}
               </Box>
             </Box>
             <Box sx={{ marginTop: "40px", marginLeft: "70px" }}>
               <Typography variant="h6">Short Introduction:</Typography>
-              {/* <TextareaAutosize
-                aria-label="minimum height"
-                minRows={7}
-                placeholder="write your short introduction here"
-                style={{ marginLeft: "-40px", width: "100%" }}
-              /> */}
+
               <Box sx={{ ml: "-50px", height: "100%" }}>
                 <ReactQuill value={value} onChange={setValue} />
               </Box>

@@ -63,16 +63,20 @@ app.post("/uploadImage", uploadImage.single("image"), (req, res) => {
   }
 });
 app.post("/uploadCv", uploadCv.single("userCv"), (req, res) => {
+  var extension = path.extname(req.file.filename);
+  var NameFile = path.basename(req.file.filename, extension);
   return res.status(200).json({
     Cv: `https://localhost:4443/display/UsersCv/${req.file.filename}`,
-    NameCV: req.file.filename,
+    NameCV: NameFile,
   });
 });
 
 app.post("/uploadReport", uploadReport.single("Report"), (req, res) => {
+  var extension = path.extname(req.file.filename);
+  var NameFile = path.basename(req.file.filename, extension);
   return res.status(200).json({
     Cv: `https://localhost:4443/display/UsersReport/${req.file.filename}`,
-    NameRP: req.file.filename,
+    NameRP: NameFile,
   });
 });
 
