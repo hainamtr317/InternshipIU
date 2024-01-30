@@ -109,7 +109,7 @@ function ApplyJob() {
       }
     };
     checkHaveCv();
-  }, []);
+  }, [dataUser]);
   if (isLoading) {
     return (
       <Box>
@@ -199,6 +199,11 @@ function ApplyJob() {
               >
                 <Typography> Your CV:</Typography>
                 {isHaveMainCv ? (
+                  <Cvcard
+                    CvData={dataUser.Cv.find((element) => element.MainCv)}
+                    StudentId={dataUser._id}
+                  ></Cvcard>
+                ) : (
                   <Box
                     sx={{
                       flexDirection: "column",
@@ -211,11 +216,6 @@ function ApplyJob() {
                       please upload your Cv and check Main Cv
                     </Typography>
                   </Box>
-                ) : (
-                  <Cvcard
-                    CvData={dataUser.Cv.find((element) => element.MainCv)}
-                    StudentId={dataUser._id}
-                  ></Cvcard>
                 )}
               </Box>
             </Box>

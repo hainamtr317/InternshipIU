@@ -20,8 +20,8 @@ import { styled, alpha } from "@mui/material/styles";
 import ShowAnnounceList from "../announment/ShowAnnouList";
 import HeaderStudent from "../Student/HeaderStudent";
 import HeaderTeacher from "../Teacher/HeaderTeacher";
-import { useSelector, useDispatch } from 'react-redux'
-import { Selector,reset } from "../../redux/userSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { Selector, reset } from "../../redux/userSlice";
 import Axios from "../../config/axiosConfig";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -74,18 +74,16 @@ export default function Header() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const isAnnounceMenuOpen = Boolean(AnnounceAnchorEl);
-  
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   //set role display
-  const role = useSelector(Selector)
+  const role = useSelector(Selector);
   const [storeState, SetStoreState] = React.useState();
-   const [isStudent, SetIsStudent] = React.useState(true);
+  const [isStudent, SetIsStudent] = React.useState(true);
   const [isTeacher, SetIsTeacher] = React.useState(false);
   const [isAdmin, SetIsAdmin] = React.useState(false);
   // const [isLoading, setIsLoading] = useState(true);
-  const [announceData,SetAnnounceData]= React.useState([])
-
+  const [announceData, SetAnnounceData] = React.useState([]);
 
   const CheckRoleUser = (role) => {
     if (role === "student") {
@@ -98,22 +96,22 @@ export default function Header() {
       SetIsTeacher(true);
       SetIsAdmin(false);
       console.log("display Teacher");
-    }
-    else if (role === "admin") {
+    } else if (role === "admin") {
       SetIsStudent(false);
       SetIsTeacher(false);
       SetIsAdmin(true);
       console.log("display Admin");
     }
   };
-  const getRole =async()=>{
-    const data =await JSON.parse(localStorage.getItem("userData"))
-    CheckRoleUser(data.userRole) 
-    await Axios.post("/api/users/Announce",{userId:data.userId}).then((res)=>{
-      SetAnnounceData(res.data.data)
-      })
-  }
-  
+  const getRole = async () => {
+    const data = await JSON.parse(localStorage.getItem("userData"));
+    CheckRoleUser(data.userRole);
+    await Axios.post("/api/users/Announce", { userId: data.userId }).then(
+      (res) => {
+        SetAnnounceData(res.data.data);
+      }
+    );
+  };
 
   React.useEffect(() => {
     getRole();
@@ -145,9 +143,17 @@ export default function Header() {
     handleMobileMenuClose();
   };
   const handleLogout = async () => {
-    await dispatch(reset())
-    localStorage.clear()
-    navigation("/");
+    await dispatch(reset());
+    await Axios.post("/api/users/logout", {
+      userId: JSON.parse(localStorage.getItem("userData")).userId,
+    }).then((res) => {
+      if (res.data.success) {
+        localStorage.clear();
+        navigation("/");
+      } else {
+        alert("have error");
+      }
+    });
   };
 
   const handleMobileMenuOpen = (event) => {
@@ -256,11 +262,14 @@ export default function Header() {
   return (
     <AppBar sx={{}}>
       <Toolbar>
-        <Box className="icon" sx={{
-          display:'flex',
-          flexDirection: 'row',
-          alignItems: 'center'
-        }}>
+        <Box
+          className="icon"
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
           <img src="/logo-favicon-50x50.png" alt="" />
           <Typography
             marginLeft={"10px"}

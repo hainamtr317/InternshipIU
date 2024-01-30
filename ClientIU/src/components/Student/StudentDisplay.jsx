@@ -9,6 +9,8 @@ import {
   StepLabel,
   Button,
   CardActionArea,
+  CardMedia,
+  Card,
 } from "@mui/material";
 import Cvcard from "../Cv/Cvcard";
 import GradingStudent from "../Teacher/GradingStudent";
@@ -18,16 +20,21 @@ import ModalAnnouncementToStudent from "../Teacher/ModalAnnounment";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Axios from "../../config/axiosConfig";
-
+import CvModal from "../Cv/Cvmodal";
 function StudentDisplay() {
   const steps = ["Apply", "register", "working", "report", "grading"];
   const styleText = { marginLeft: "20px", color: "#1976d2", marginTop: "20px" };
   const [verified, setVerified] = useState(false);
+  const [isHaveMainCv, setHaveMainCv] = useState(false);
   const ismodalOpen = useSelector(Modal);
   const { StudentId } = useParams();
   const [student, setStudent] = useState();
   const [IsLoading, setIsLoading] = useState(true);
-
+  const [open, setOpen] = React.useState(false);
+  const handleOpenReport = () => {
+    setOpen(true);
+  };
+  const handleCloseReport = () => setOpen(false);
   const handleVerified = () => {
     setVerified((prev) => !prev);
   };
@@ -54,6 +61,22 @@ function StudentDisplay() {
 
     getStudentData();
   }, []);
+
+  useEffect(() => {
+    const checkHaveCv = () => {
+      if (student) {
+        if (student.Cv.length > 0) {
+          student.Cv.map(async (e) => {
+            console.log(e);
+            if (e.MainCv) {
+              await setHaveMainCv(true);
+            }
+          });
+        }
+      }
+    };
+    checkHaveCv();
+  }, [student]);
   if (IsLoading) {
     return <h1>Loading...</h1>;
   }
@@ -65,6 +88,7 @@ function StudentDisplay() {
         Close={HandleModalClose}
       />
       <ModalAnnouncementToStudent
+        Student={student}
         Open={ismodalOpen.Announce}
         Close={HandleModalClose}
       />
@@ -220,7 +244,22 @@ function StudentDisplay() {
               width: "90%",
             }}
           >
-            <Cvcard></Cvcard>
+            {isHaveMainCv ? (
+              <Cvcard
+                CvData={student.Cv.find((element) => element.MainCv)}
+                StudentId={student._id}
+              ></Cvcard>
+            ) : (
+              <Box
+                sx={{
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignContent: "center",
+                }}
+              >
+                <Typography> Student Don't have Main Cv</Typography>
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>
@@ -254,7 +293,35 @@ function StudentDisplay() {
                 marginTop: "30px",
               }}
             >
-              NO Report{" "}
+              {student.report == "" ? (
+                <>
+                  <Typography> Don't have report</Typography>
+                </>
+              ) : (
+                <>
+                  <Card
+                    sx={{
+                      height: 250,
+                      width: 400,
+                      borderStyle: "groove",
+                      border: "2px whitesmoke solid",
+                      boxShadow: "8",
+                      overflow: "hidden",
+                      margin: "5px 5px 5px 0px",
+                    }}
+                  >
+                    <CardActionArea onClick={handleOpenReport}>
+                      <CardMedia
+                        component="object"
+                        class="mt-8 mb-5 ml-5 overflow-hidden"
+                        data={student.report}
+                        height="90%"
+                        width="90%"
+                      ></CardMedia>
+                    </CardActionArea>
+                  </Card>
+                </>
+              )}
             </Typography>
           </Box>
         </Box>
@@ -277,6 +344,17 @@ function StudentDisplay() {
           ))}
         </Stepper>
       </Box>
+      {isHaveMainCv ? (
+        <></>
+      ) : (
+        <>
+          <CvModal
+            Open={open}
+            Close={handleCloseReport}
+            dataFiles={student.report}
+          ></CvModal>
+        </>
+      )}
     </>
   );
 }

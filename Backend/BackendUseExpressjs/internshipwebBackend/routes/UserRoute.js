@@ -11,6 +11,7 @@ const {
   CheckLogged,
   getAnnounce,
   updateUserData,
+  UserLogout,
 } = require("../controllers/UserController");
 
 routers.route("/users").get(getUsers);
@@ -22,5 +23,6 @@ routers.route("/users/checkLogged").get(CheckLogged);
 routers.route("/users/getUserData").post(getUserData);
 routers.route("/users/forgotPassword").post(forgotPassword);
 routers.route("/users/Announce").post(getAnnounce);
+routers.route("/users/logout").post(UserLogout);
 
 module.exports = routers;

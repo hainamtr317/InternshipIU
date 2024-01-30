@@ -73,6 +73,33 @@ const getStudent = async (req, res) => {
     });
   }
 };
+const addReportForStudent = async (req, res) => {
+  const { Report, StudentId } = req.body;
+  const dataStudent = await StudentFindById(StudentId);
+  try {
+    if (dataStudent) {
+      await StudentFindandUpdate(StudentId, {
+        report: Report,
+      }).then(() => {
+        return res.status(200).json({
+          success: true,
+          msg: "success add report to Student data",
+        });
+      });
+    } else {
+      return res.status(500).json({
+        success: false,
+        error: "can't find student",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: error.toString(),
+    });
+  }
+};
+
 const CvCreateAndSave = async (req, res) => {
   const { Cv, NameCv, StudentId } = req.body;
   const dataStudent = await StudentFindById(StudentId);
@@ -246,4 +273,5 @@ module.exports = {
   setMainCv,
   CvCreateAndSave,
   DeleteCv,
+  addReportForStudent,
 };

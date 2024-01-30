@@ -31,6 +31,23 @@ const getUsers = async (req, res) => {
   }
 };
 
+const UserLogout = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(400).json({ success: false, error: "User not found" });
+    } else {
+      user.isLogin = false;
+      await user.save();
+      console.l;
+      return res.status(200).json({ success: true });
+    }
+  } catch (err) {
+    return res.status(400).json({ success: false, error: err });
+  }
+};
+
 const UserUpdate = async (req, res) => {
   try {
     const { userId, data } = req.body;
@@ -268,4 +285,5 @@ module.exports = {
   CheckLogged,
   UserUpdate,
   updateUserData,
+  UserLogout,
 };

@@ -8,6 +8,7 @@ const {
   setMainCv,
   CvCreateAndSave,
   DeleteCv,
+  addReportForStudent,
 } = require("../controllers/StudentController");
 
 // routers.route("/student/saveStudent").post(saveStudentToUser)
@@ -18,5 +19,6 @@ routers.route("/student").delete();
 routers.route("/student/AddCv").post(CvCreateAndSave);
 routers.route("/student/SetMainCv").post(setMainCv);
 routers.route("/student/DeleteStudentCv").post(DeleteCv);
+routers.route("/student/report").post(addReportForStudent);
 
 module.exports = routers;

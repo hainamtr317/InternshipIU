@@ -24,16 +24,13 @@ function CvModal(props) {
       >
         <Box sx={style}>
           <object
-            data="https://localhost:4443/display/UsersCv/1706508227865MyCv1.pdf"
+            data={props.dataFiles}
             type="application/pdf"
             width="100%"
             height="800px"
           >
             <p>
-              Unable to display PDF file.{" "}
-              <a href="https://localhost:4000/display/UsersCv/1706367947808MyCv1.pdf">
-                Download
-              </a>{" "}
+              Unable to display PDF file. <a href={props.dataFiles}>Download</a>{" "}
               instead.
             </p>
           </object>

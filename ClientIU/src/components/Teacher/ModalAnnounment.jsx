@@ -9,7 +9,7 @@ import {
   Container,
   Modal,
 } from "@mui/material";
-import { TextareaAutosize } from '@mui/base/TextareaAutosize';
+import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
 import React from "react";
 function ModalAnnouncementToStudent(props) {
@@ -42,7 +42,10 @@ function ModalAnnouncementToStudent(props) {
           </Typography>
           <Divider></Divider>
           <Container>
-            <Typography variant="h5"> To Student id : </Typography>
+            <Typography variant="h5">
+              {" "}
+              To Student id : {props.Student.StudentId}{" "}
+            </Typography>
           </Container>
 
           <Box
@@ -52,14 +55,6 @@ function ModalAnnouncementToStudent(props) {
             }}
             className="gradingForm "
           >
-            {/* <FormGroup>
-              <FormControlLabel
-                control={<Checkbox defaultChecked />}
-                label="Good"
-              />
-              <FormControlLabel required control={<Checkbox />} label="Ok" />
-              <FormControlLabel disabled control={<Checkbox />} label="Bad" />
-            </FormGroup> */}
             <Typography>Comment:</Typography>
             <TextareaAutosize
               aria-label="minimum height"
