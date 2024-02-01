@@ -16,7 +16,7 @@ import React, { useState } from "react";
 import CvModal from "./Cvmodal";
 import Axios from "../../config/axiosConfig";
 
-function Cvcard({ CvData, StudentId }) {
+function Cvcard({ CvData, StudentId, isStudent }) {
   const [isMain] = useState(false);
   const isCheck = CvData.MainCv;
   const [open, setOpen] = React.useState(false);
@@ -88,7 +88,7 @@ function Cvcard({ CvData, StudentId }) {
             }}
           >
             <object
-              class="mt-5 mb-5 overflow-hidden"
+              class="mt-5 mb-5 overflow-hidden pointer-events-none"
               data={CvData.LinkCv}
               align="middle"
               width="80%"
@@ -112,40 +112,42 @@ function Cvcard({ CvData, StudentId }) {
           >
             {CvData.NameCV}
           </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              marginLeft: "170px",
-              marginTop: "-45px",
-            }}
-          >
-            <Button
-              variant="outlined"
-              startIcon={<DeleteIcon />}
-              onClick={handleDelete}
+          {isStudent && (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                marginLeft: "170px",
+                marginTop: "-45px",
+              }}
             >
-              Delete
-            </Button>
-            {isCheck && (
               <Button
-                sx={{ marginLeft: "10px" }}
-                variant="contained"
-                onClick={handleClickMain}
-              >
-                MainCv
-              </Button>
-            )}
-            {!isCheck && (
-              <Button
-                sx={{ marginLeft: "10px" }}
                 variant="outlined"
-                onClick={handleClickMain}
+                startIcon={<DeleteIcon />}
+                onClick={handleDelete}
               >
-                MainCv
+                Delete
               </Button>
-            )}
-          </Box>
+              {isCheck && (
+                <Button
+                  sx={{ marginLeft: "10px" }}
+                  variant="contained"
+                  onClick={handleClickMain}
+                >
+                  MainCv
+                </Button>
+              )}
+              {!isCheck && (
+                <Button
+                  sx={{ marginLeft: "10px" }}
+                  variant="outlined"
+                  onClick={handleClickMain}
+                >
+                  MainCv
+                </Button>
+              )}
+            </Box>
+          )}
         </CardContent>
       </Card>
       <CvModal

@@ -24,7 +24,7 @@ import CvModal from "../Cv/Cvmodal";
 function StudentDisplay() {
   const steps = ["Apply", "register", "working", "report", "grading"];
   const styleText = { marginLeft: "20px", color: "#1976d2", marginTop: "20px" };
-  const [verified, setVerified] = useState(false);
+
   const [isHaveMainCv, setHaveMainCv] = useState(false);
   const ismodalOpen = useSelector(Modal);
   const { StudentId } = useParams();
@@ -32,29 +32,47 @@ function StudentDisplay() {
   const [IsLoading, setIsLoading] = useState(true);
   const [open, setOpen] = React.useState(false);
   const handleOpenReport = () => {
+    console.log("hello student display");
     setOpen(true);
   };
   const handleCloseReport = () => setOpen(false);
-  const handleVerified = () => {
-    setVerified((prev) => !prev);
-  };
+  // const handleVerified = () => {
+  //   setVerified((prev) => !prev);
+  // };
   const dispatch = useDispatch();
   const HandleModalClose = () => {
     dispatch(CloseModal(false));
   };
-
+  const handleVerifyJob = async () => {
+    if (confirm("do you want verify Job")) {
+      const data = {
+        job: {
+          ...student.job,
+          JobVerified: true,
+        },
+        progressionStatus: 2,
+      };
+      console.log(data);
+      await Axios.post("/api/teacher/JobVerify", {
+        IdStudent: student._id,
+        userId: JSON.parse(localStorage.getItem("userData")).userId,
+        data: data,
+      }).then((res) => {
+        if (res.data.success) {
+          alert("verify Job for student success");
+        } else {
+          alert(res.data.error.toString());
+        }
+      });
+    }
+  };
   useEffect(() => {
-    const checkVerifiedBtn = (studentData) => {
-      if (studentData.progressionStatus > 2) {
-        setVerified(true);
-      }
-    };
     const getStudentData = async () => {
       const data = await Axios.post("/api/student/getStudent", {
         StudentId: StudentId,
       }).then(async (res) => {
         await setStudent(res.data.data);
-        await checkVerifiedBtn(res.data.data);
+
         setIsLoading(false);
       });
     };
@@ -65,9 +83,9 @@ function StudentDisplay() {
   useEffect(() => {
     const checkHaveCv = () => {
       if (student) {
+        console.log(student.hasOwnProperty("job"));
         if (student.Cv.length > 0) {
           student.Cv.map(async (e) => {
-            console.log(e);
             if (e.MainCv) {
               await setHaveMainCv(true);
             }
@@ -139,23 +157,13 @@ function StudentDisplay() {
           <Typography>Department: {student.Department}</Typography>
           <Typography>
             {" "}
-            Job:{!student.job
+            Job:
+            {!student.job.hasOwnProperty("JobName")
               ? "Don't have Job"
               : `${student.job.JobName}`}{" "}
           </Typography>
           <Box>
-            {!verified && (
-              <Button variant="outlined" onClick={handleVerified} size="small">
-                verified
-              </Button>
-            )}
-            {verified && (
-              <Button variant="contained" onClick={handleVerified} size="small">
-                verified
-              </Button>
-            )}
-
-            {!student.job ? (
+            {!student.job.hasOwnProperty("Company") ? (
               <Box />
             ) : (
               <Box
@@ -175,6 +183,22 @@ function StudentDisplay() {
                   <Typography>
                     Type of Company: {student.job.TypeofCompany}
                   </Typography>
+                  {student.job.JobVerified ? (
+                    <Button variant="contained" size="small">
+                      verified
+                    </Button>
+                  ) : (
+                    <Box>
+                      <Typography>Click to verified Job of student</Typography>
+                      <Button
+                        variant="outlined"
+                        onClick={handleVerifyJob}
+                        size="small"
+                      >
+                        verify
+                      </Button>
+                    </Box>
+                  )}
                 </Box>
               </Box>
             )}
@@ -187,7 +211,7 @@ function StudentDisplay() {
             >
               <Typography>Instructor:</Typography>
 
-              {!student.instructor ? (
+              {!student.hasOwnProperty("instructor") ? (
                 <Box>
                   <Typography>Do not have Instructor</Typography>
                 </Box>
@@ -248,6 +272,7 @@ function StudentDisplay() {
               <Cvcard
                 CvData={student.Cv.find((element) => element.MainCv)}
                 StudentId={student._id}
+                isStudent={false}
               ></Cvcard>
             ) : (
               <Box
@@ -313,12 +338,17 @@ function StudentDisplay() {
                     <CardActionArea onClick={handleOpenReport}>
                       <CardMedia
                         component="object"
-                        class="mt-8 mb-5 ml-5 overflow-hidden"
+                        class="mt-8 mb-5 ml-5 overflow-hidden pointer-events-none"
                         data={student.report}
                         height="90%"
                         width="90%"
                       ></CardMedia>
                     </CardActionArea>
+                    <CvModal
+                      Open={open}
+                      Close={handleCloseReport}
+                      dataFiles={student.report}
+                    ></CvModal>
                   </Card>
                 </>
               )}
@@ -344,17 +374,6 @@ function StudentDisplay() {
           ))}
         </Stepper>
       </Box>
-      {isHaveMainCv ? (
-        <></>
-      ) : (
-        <>
-          <CvModal
-            Open={open}
-            Close={handleCloseReport}
-            dataFiles={student.report}
-          ></CvModal>
-        </>
-      )}
     </>
   );
 }

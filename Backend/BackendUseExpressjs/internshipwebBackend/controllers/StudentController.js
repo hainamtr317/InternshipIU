@@ -9,7 +9,58 @@ const {
   StudentCreateData,
   StudentFindById,
 } = require("../models/studentModel");
+const { TeacherFindbyID } = require("../models/Teachermodel");
 
+const StudentRegister = async (req, res) => {
+  try {
+    const data = req.body.data;
+    const { userId } = req.body;
+    const user = await User.findById(userId);
+
+    if (user) {
+      try {
+        const OjectStudent = user.userData;
+        data.progressionStatus = 1;
+        const updateStudent = await StudentFindandUpdate(
+          OjectStudent.toString(),
+          data
+        );
+        const updateTeacherData = await TeacherFindbyID(
+          updateStudent.teacher.teacherID.toString()
+        );
+        await Promise.all(
+          updateTeacherData.ListStudent.map(async (e, index) => {
+            if (e.StudentId == updateStudent.StudentId) {
+              updateTeacherData.ListStudent[index] = updateStudent;
+              await updateTeacherData.save();
+            }
+          })
+        ).then(async () => {
+          return res.status(200).json({
+            success: true,
+            data: updateStudent,
+          });
+        });
+      } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: false,
+          error: err,
+        });
+      }
+    } else {
+      return res.status(500).json({
+        success: false,
+        error: "can not fin user in database",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: error,
+    });
+  }
+};
 const updateStudent = async (req, res) => {
   try {
     const data = req.body.data;
@@ -78,9 +129,22 @@ const addReportForStudent = async (req, res) => {
   const dataStudent = await StudentFindById(StudentId);
   try {
     if (dataStudent) {
-      await StudentFindandUpdate(StudentId, {
+      const updateStudent = await StudentFindandUpdate(StudentId, {
         report: Report,
-      }).then(() => {
+        progressionStatus: 3,
+      });
+      const updateTeacherData = await TeacherFindbyID(
+        updateStudent.teacher.teacherID.toString()
+      );
+      await Promise.all(
+        updateTeacherData.ListStudent.map(async (e, index) => {
+          if (e.StudentId == updateStudent.StudentId) {
+            updateTeacherData.ListStudent[index] = updateStudent;
+            await updateTeacherData.save();
+            console.log("update success");
+          }
+        })
+      ).then(async () => {
         return res.status(200).json({
           success: true,
           msg: "success add report to Student data",
@@ -274,4 +338,5 @@ module.exports = {
   CvCreateAndSave,
   DeleteCv,
   addReportForStudent,
+  StudentRegister,
 };

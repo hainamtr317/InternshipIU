@@ -107,7 +107,11 @@ const StudentCv = () => {
               xl={4}
               key={cvData._id}
             >
-              <Cvcard CvData={cvData} StudentId={dataUser._id}></Cvcard>
+              <Cvcard
+                CvData={cvData}
+                StudentId={dataUser._id}
+                isStudent={true}
+              ></Cvcard>
             </Grid>
           ))}
         </Grid>

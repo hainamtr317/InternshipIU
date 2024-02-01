@@ -16,6 +16,50 @@ const {
   StudentCreateData,
 } = require("../models/studentModel");
 
+const VerifyJobOfStudent = async (req, res) => {
+  try {
+    const { IdStudent, userId, data } = req.body;
+    const user = await User.findById(userId);
+    if (user) {
+      try {
+        const dataUser = user.teacherData;
+        console.log(dataUser);
+        const updateStudent = await StudentFindandUpdate(IdStudent, data);
+        const updateTeacherData = await TeacherFindbyID(dataUser.toString());
+        await Promise.all(
+          updateTeacherData.ListStudent.map(async (e, index) => {
+            if (e.StudentId == updateStudent.StudentId) {
+              updateTeacherData.ListStudent[index] = updateStudent;
+              await updateTeacherData.save();
+            }
+          })
+        ).then(async () => {
+          return res.status(200).json({
+            success: true,
+            data: updateStudent,
+          });
+        });
+      } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: false,
+          error: err,
+        });
+      }
+    } else {
+      return res.status(500).json({
+        success: false,
+        error: "can not find user in database",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: error,
+    });
+  }
+};
+
 const UpdateStudentDataTeacher = async (req, res) => {
   const { userId } = req.body;
   try {
@@ -70,7 +114,7 @@ const GradingStudent = async (req, res) => {
     if (userStudent) {
       try {
         console.log(userStudent._id);
-        console.log(data);
+        data.progressionStatus = 4;
         const updateStudent = await StudentFindandUpdate(
           userStudent._id.toString(),
           data
@@ -263,6 +307,9 @@ const addStudentToList = async (req, res) => {
     });
   }
 };
+
+//Verified Job for student
+
 // updateTeacher,saveTeacherToUser
 module.exports = {
   CreateTeacher,
@@ -271,4 +318,5 @@ module.exports = {
   saveTeacherToUser,
   addStudentToList,
   GradingStudent,
+  VerifyJobOfStudent,
 };

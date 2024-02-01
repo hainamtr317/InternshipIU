@@ -56,6 +56,7 @@ function StudentReport() {
   };
   useEffect(() => {
     checkUserLogged();
+    console.log(dataUser);
   }, []);
 
   if (isLoading) {

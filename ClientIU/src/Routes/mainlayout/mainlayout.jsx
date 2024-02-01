@@ -7,7 +7,7 @@ import JobsDisplay from "../../components/Job/JobsDisplay";
 import Jobpage from "../../pages/Job/JobPage";
 import StudentCv from "../../pages/Student/StudentCv";
 import StudentInfoDisplay from "../../pages/Student/StudentInfordisplay";
-import TeachInfoDisplay from "../../pages/Teacher/TeacherInfordisplay"
+import TeachInfoDisplay from "../../pages/Teacher/TeacherInfordisplay";
 import StudentAppliedJob from "../../pages/Student/StudentAppliedJob";
 import StudentReport from "../../pages/Student/StudentReport";
 import TeacherListStudents from "../../pages/Teacher/TeacherViewStudentList";
@@ -39,21 +39,19 @@ function MainLayout() {
       SetIsTeacher(true);
       SetIsAdmin(false);
       console.log("display Teacher");
-    }
-    else if (role === "admin") {
+    } else if (role === "admin") {
       SetIsStudent(false);
       SetIsTeacher(false);
       SetIsAdmin(true);
       console.log("display Admin");
     }
   };
-  const getRole =async()=>{
-    const data =await JSON.parse(localStorage.getItem("userData"))
-    CheckRoleUser(data.userRole) 
-
-  }
+  const getRole = async () => {
+    const data = await JSON.parse(localStorage.getItem("userData"));
+    CheckRoleUser(data.userRole);
+  };
   React.useEffect(() => {
-    getRole()
+    getRole();
   }, []);
   return (
     <Box
@@ -70,21 +68,31 @@ function MainLayout() {
         {isStudent && <Route index element={<JobsDisplay />} />}
         {/* Route for Teacher */}
         {isTeacher && <Route index element={<TeacherListStudents />} />}
-        {isAdmin && <Route index element={<UserManger/> }/>}
+        {isAdmin && (
+          <>
+            <Route index element={<UserManger />} />{" "}
+            <Route path="/JobsManager" element={<JobsManager />} />
+            <Route path="/CompanyManager" element={<CompanyManger />} />
+          </>
+        )}
         <Route path="/job/:job_id" element={<Jobpage />} />
-        {isStudent && <Route path="/UserInformation" element={<StudentInfoDisplay />} />}
-        {isTeacher && <Route path="/UserInformation" element={<TeachInfoDisplay />} />}
+        {isStudent && (
+          <Route path="/UserInformation" element={<StudentInfoDisplay />} />
+        )}
+        {isTeacher && (
+          <Route path="/UserInformation" element={<TeachInfoDisplay />} />
+        )}
         <Route path="/ListJobApplied/*" element={<StudentAppliedJob />} />
         <Route path="/ListJobApplied/job/:job_id" element={<Jobpage />} />
         <Route path="/job/:job_id/Apply" element={<ApplyJob />} />
         <Route path="/Report" element={<StudentReport />} />
         <Route path="/MyCv" element={<StudentCv />} />
-        <Route path="/:StudentId" element={<StudentDisplay />} />
+        {isTeacher && <Route path="/:StudentId" element={<StudentDisplay />} />}
         {/* <Route path="/StudentId/Grading" element={<GradingStudent />} /> */}
-        <Route path="/GradeList" element={<TeacherGradeView />} />
+        {isTeacher && (
+          <Route path="/GradeList" element={<TeacherGradeView />} />
+        )}
         <Route path="/Company/:companyName" element={<CompanyPage />} />
-        <Route path="/JobsManager" element={<JobsManager/>} />
-        <Route path="/CompanyManager" element={<CompanyManger/>} />
       </Routes>
     </Box>
   );

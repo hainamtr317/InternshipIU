@@ -7,7 +7,8 @@ import {
   Container,
   Modal,
   InputLabel,
-} from "@mui/material";import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
+} from "@mui/material";
+import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
 import React from "react";
 import Axios from "../../../config/axiosConfig";
 function ModalRegisterJob(props) {
@@ -24,40 +25,42 @@ function ModalRegisterJob(props) {
     boxShadow: 24,
     p: 4,
   };
-  const registerHandle= async (e)=>{
+  const registerHandle = async (e) => {
     e.preventDefault();
-    var nameJob = e.target.elements.JobName.value
-    var nameCompany = e.target.elements.CompanyName.value
-    var Address = e.target.elements.Address.value
-    var TypeOfCompany = e.target.elements.TypeCompany.value
-    const dataRegister = ({
-        job:{
-        JobName:nameJob,
-        Address:Address,
-        Company:nameCompany,
-        TypeofCompany:TypeOfCompany
-      }
-    })
-      console.log({userId:JSON.parse(localStorage.getItem("userData")).userId,data:dataRegister})
-      try {
-        const user =await JSON.parse(localStorage.getItem("userData"))
-        await Axios.put("/api/student",{userId:user.userId,data:dataRegister}).then(async(res)=>{
-          if(res.data.success){
-            alert("Success resister Job for",props.userData.name)
-            navigate('/student/ListJobApplied');
-            
-          }
-          else{
-            alert("have error for resister Job that error:",res.data.error)
-          }
-          })
-      } catch (error) {
-        console.log(error)
-        alert("have error for resister Job that error:",error)
-      }
-
-
-  }
+    var nameJob = e.target.elements.JobName.value;
+    var nameCompany = e.target.elements.CompanyName.value;
+    var Address = e.target.elements.Address.value;
+    var TypeOfCompany = e.target.elements.TypeCompany.value;
+    const dataRegister = {
+      job: {
+        JobName: nameJob,
+        Address: Address,
+        Company: nameCompany,
+        TypeofCompany: TypeOfCompany,
+      },
+    };
+    // console.log({userId:JSON.parse(localStorage.getItem("userData")).userId,data:dataRegister})
+    try {
+      const user = await JSON.parse(localStorage.getItem("userData"));
+      await Axios.put("/api/student/StudentRegister", {
+        userId: user.userId,
+        data: dataRegister,
+      }).then(async (res) => {
+        if (res.data.success) {
+          alert("Success resister Job for", props.userData.name);
+          location.reload();
+        } else {
+          alert(
+            "have error for resister Job that error:",
+            res.data.error.toString()
+          );
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      alert("have error for resister Job that error:", error);
+    }
+  };
   return (
     <>
       <Modal open={props.Open} onClose={props.Close}>
@@ -74,12 +77,17 @@ function ModalRegisterJob(props) {
           </Typography>
           <Divider></Divider>
           <Container>
-            <Typography variant="h5"> Student id : {props.userData.StudentId} </Typography>
+            <Typography variant="h5">
+              {" "}
+              Student id : {props.userData.StudentId}{" "}
+            </Typography>
           </Container>
 
           <Box
             component="form"
-            onSubmit={(e)=>{registerHandle(e)}}
+            onSubmit={(e) => {
+              registerHandle(e);
+            }}
             sx={{
               marginLeft: "20px",
               marginTop: "20px",
@@ -185,8 +193,7 @@ function ModalRegisterJob(props) {
                   alignItems: "center",
                   mt: "10px",
                 }}
-              >
-              </Box>
+              ></Box>
             </Container>
             <Box
               sx={{
@@ -198,7 +205,6 @@ function ModalRegisterJob(props) {
                 variant="contained"
                 size="large"
                 type="reset"
-                
                 endIcon={<RestartAltOutlinedIcon></RestartAltOutlinedIcon>}
               >
                 Reset

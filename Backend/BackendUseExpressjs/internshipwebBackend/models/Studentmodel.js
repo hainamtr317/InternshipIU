@@ -38,7 +38,7 @@ const StudentSchema = new mongoose.Schema(
       Grade: Number,
       Comment: String,
     },
-    progressionStatus: Number,
+    progressionStatus: { type: Number, default: 0 },
     instructor: {
       name: String,
       phone: String,
@@ -50,6 +50,7 @@ const StudentSchema = new mongoose.Schema(
       Address: String,
       Company: String,
       TypeofCompany: String,
+      JobVerified: { type: Boolean, default: false },
     },
     Cv: [CvSchema],
     JobsApplied: [jobsSchema],

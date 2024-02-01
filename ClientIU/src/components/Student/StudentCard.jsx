@@ -12,8 +12,8 @@ import {
 import { Link } from "react-router-dom";
 
 function StudentCard(props) {
-  const StudentData = props.data
-  const steps = ["Apply", "register", "working", "report", "grading"];
+  const StudentData = props.data;
+  const steps = ["Apply", "register", "Internship", "report", "grading"];
   const handleStudentcards = () => {
     // <Link to="StudentId:"></Link>;
   };
@@ -35,7 +35,7 @@ function StudentCard(props) {
       >
         <Link to={StudentData.StudentId}>
           <CardActionArea onClick={handleStudentcards}>
-            <Box sx={{ marginLeft: "5px", marginTop: "5px" }}>        
+            <Box sx={{ marginLeft: "5px", marginTop: "5px" }}>
               <img src="/logo-favicon-50x50.png" alt="" />
             </Box>
             <Container
@@ -50,7 +50,7 @@ function StudentCard(props) {
                     height: "100px",
                     width: "100px",
                   }}
-                  src= {StudentData.AvatarImage}
+                  src={StudentData.AvatarImage}
                 ></Avatar>
               </center>
               <Box
@@ -63,35 +63,37 @@ function StudentCard(props) {
                     color: "white",
                   }}
                 >
-                Name:{" "}{" "}{StudentData.name}
+                  <b>Name:</b> {StudentData.name}
                 </Typography>
                 <Typography
                   sx={{
                     color: "white",
-                    ml:"12px"
+                    ml: "12px",
                   }}
-                >
-                
-                </Typography>
-                <Typography
-                  sx={{
-                    color: "white"
-                  }}
-                >
-                  ID: {StudentData.StudentId}
-                </Typography>
+                ></Typography>
                 <Typography
                   sx={{
                     color: "white",
                   }}
                 >
-                  Job:{(!StudentData.job) ? "Don't have Job":`${StudentData.job.JobName}` }
+                  <b>ID:</b>
+                  {StudentData.StudentId}
+                </Typography>
+                <Typography
+                  sx={{
+                    color: "white",
+                  }}
+                >
+                  <b>Job:</b>
+                  {!StudentData.job.hasOwnProperty("JobName")
+                    ? "Don't have Job"
+                    : `${StudentData.job.JobName}`}
                 </Typography>
               </Box>
             </Container>
 
-          {/*process of student */}
-            <Box sx={{ width: "auto", marginTop: "20px" }}>
+            {/*process of student */}
+            <Box sx={{ width: "auto", marginTop: "40px" }}>
               <Stepper
                 sx={{ width: "auto", zoom: "0.8" }}
                 activeStep={StudentData.progressionStatus}

@@ -29,39 +29,45 @@ function ModalRegisterInstructor(props) {
     boxShadow: 24,
     p: 4,
   };
-  const registerHandle= async (e)=>{
+  const registerHandle = async (e) => {
     e.preventDefault();
-    var insName = e.target.elements.NameIns.value
-    var phoneIns = e.target.elements.phone.value
-    var emailIns = e.target.elements.Email.value
-    var positionIns = e.target.elements.Position.value
-    const dataRegister = ({
-        instructor:{
-        name:insName,
-        phone:phoneIns,
-        email:emailIns,
-        Position:positionIns
-      }
-    })
-      console.log({userId:JSON.parse(localStorage.getItem("userData")).userId,data:dataRegister})
-      try {
-        const user =await JSON.parse(localStorage.getItem("userData"))
-        await Axios.put("/api/student",{userId:user.userId,data:dataRegister}).then(async(res)=>{
-          if(res.data.success){
-            alert("Success resister instructor for",props.userData.name)
-            navigate('/student/ListJobApplied');
-          }
-          else{
-            alert("have error for resister instructor that error:",res.data.error)
-          }
-          })
-      } catch (error) {
-        console.log(error)
-        alert("have error for resister instructor that error:",error)
-      }
-
-
-  }
+    var insName = e.target.elements.NameIns.value;
+    var phoneIns = e.target.elements.phone.value;
+    var emailIns = e.target.elements.Email.value;
+    var positionIns = e.target.elements.Position.value;
+    const dataRegister = {
+      instructor: {
+        name: insName,
+        phone: phoneIns,
+        email: emailIns,
+        Position: positionIns,
+      },
+    };
+    console.log({
+      userId: JSON.parse(localStorage.getItem("userData")).userId,
+      data: dataRegister,
+    });
+    try {
+      const user = await JSON.parse(localStorage.getItem("userData"));
+      await Axios.put("/api/student/StudentRegister", {
+        userId: user.userId,
+        data: dataRegister,
+      }).then(async (res) => {
+        if (res.data.success) {
+          alert("Success resister instructor for", props.userData.name);
+          navigate("/student/ListJobApplied");
+        } else {
+          alert(
+            "have error for resister instructor that error:",
+            res.data.error.toString()
+          );
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      alert("have error for resister instructor that error:", error);
+    }
+  };
 
   return (
     <>
@@ -79,17 +85,21 @@ function ModalRegisterInstructor(props) {
           </Typography>
           <Divider></Divider>
           <Container>
-            <Typography variant="h5"> Student id : {props.userData.StudentId}</Typography>
+            <Typography variant="h5">
+              {" "}
+              Student id : {props.userData.StudentId}
+            </Typography>
           </Container>
 
           <Box
-          component="form"
-          onSubmit={(e)=>{registerHandle(e)}}
-          sx={{
-            marginLeft: "20px",
-            marginTop: "20px",
-          }}
-
+            component="form"
+            onSubmit={(e) => {
+              registerHandle(e);
+            }}
+            sx={{
+              marginLeft: "20px",
+              marginTop: "20px",
+            }}
             className="registerForm "
           >
             <Container>
@@ -193,9 +203,7 @@ function ModalRegisterInstructor(props) {
               >
                 Reset
               </Button>
-              <Button variant="contained" size="large"
-              type="submit"
-              >
+              <Button variant="contained" size="large" type="submit">
                 Register Now
               </Button>
             </Box>

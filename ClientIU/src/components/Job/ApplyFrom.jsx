@@ -202,6 +202,7 @@ function ApplyJob() {
                   <Cvcard
                     CvData={dataUser.Cv.find((element) => element.MainCv)}
                     StudentId={dataUser._id}
+                    isStudent={true}
                   ></Cvcard>
                 ) : (
                   <Box
