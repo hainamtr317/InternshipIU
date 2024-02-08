@@ -225,7 +225,6 @@ const getAnnounce = async (req, res) => {
             }
           })
         ).then(async (value) => {
-          console.log(value);
           return res.status(200).json({
             success: true,
             data: value,

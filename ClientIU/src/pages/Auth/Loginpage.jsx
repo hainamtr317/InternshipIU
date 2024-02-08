@@ -25,10 +25,10 @@ import {
   register,
   checkLogged,
 } from "../../redux/userSlice";
-import { getJobsList } from "../../redux/jobsSlice";
-import Axios from "../../config/axiosConfig";
+// import { getJobsList } from "../../redux/jobsSlice";
+// import Axios from "../../config/axiosConfig";
 
-function Loginpage() {
+function LoginPage() {
   const navigate = useNavigate();
   //set role display
   const dispatch = useDispatch();
@@ -78,6 +78,7 @@ function Loginpage() {
         "userData",
         JSON.stringify(userData.payload.data)
       );
+
       CheckRoleUser(userLogin.payload.userRole);
     } catch (error) {
       alert(error.toString());
@@ -87,6 +88,7 @@ function Loginpage() {
   React.useEffect(() => {
     checkUserLogged();
   }, []);
+
   return (
     <div className="main-login">
       <div className="logo-header">
@@ -187,4 +189,4 @@ function Loginpage() {
     </div>
   );
 }
-export default Loginpage;
+export default LoginPage;

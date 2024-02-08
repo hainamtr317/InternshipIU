@@ -1,18 +1,25 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import Home from "./pages/Home/Home";
 import StudentPage from "./pages/Student/StudentPage";
-import Loginpage from "./pages/Auth/Loginpage";
+import LoginPage from "./pages/Auth/LoginPage";
 import TeacherPage from "./pages/Teacher/TeacherPage";
 import AdminPage from "./pages/Admin/AdminPage";
+import socketIOClient from "socket.io-client";
+const host = "http://localhost:7789";
 
 function App() {
+  const socketRef = useRef();
+  useEffect(() => {
+    socketRef.current = socketIOClient.connect(host);
+  }, []);
+
   return (
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/*" element={<Loginpage />} />
+          <Route path="/*" element={<LoginPage />} />
           <Route path="Student/*" element={<StudentPage />} />
           <Route path="Teacher/*" element={<TeacherPage />} />
           <Route path="Admin/*" element={<AdminPage />} />
