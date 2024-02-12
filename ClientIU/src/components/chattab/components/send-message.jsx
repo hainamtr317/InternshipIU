@@ -2,6 +2,7 @@ import React from "react";
 // import { makeStyles } from "@mui/styles";
 import { Avatar, Box, Typography } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
+import { miniSerializeError } from "@reduxjs/toolkit";
 
 const useStyles = {
   messageRow: {
@@ -52,6 +53,7 @@ const useStyles = {
     padding: "10px",
     backgroundColor: "#f8e896",
     width: "90%",
+
     textAlign: "left",
     font: "400 .9em 'Open Sans', sans-serif",
     border: "1px solid #dfd087",
@@ -83,6 +85,7 @@ const useStyles = {
   messageContent: {
     padding: 0,
     margin: 0,
+    minWidth: "60px",
   },
   messageTimeStampRight: {
     position: "absolute",
@@ -113,13 +116,11 @@ const useStyles = {
 export const MessageLeft = (props) => {
   const message = props.message ? props.message : "no message";
   const timestamp = props.timestamp ? props.timestamp : "";
-  const photoURL = props.photoURL ? props.photoURL : "dummy.js";
   const displayName = props.displayName ? props.displayName : "No Name";
 
   return (
     <>
       <Box sx={useStyles.messageRow}>
-        <Avatar alt={displayName} sx={useStyles.orange} src={photoURL}></Avatar>
         <Box>
           <Box sx={useStyles.displayName}>{displayName}</Box>
           <Box sx={useStyles.messageBlue}>

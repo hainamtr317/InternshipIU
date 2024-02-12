@@ -11,9 +11,9 @@ connectDB();
 const port = process.env.PORT || 6001;
 app.use(express.json());
 app.use(cors());
-app.use("/api", require("./Routes/userRouters"));
 const server = http.createServer(app);
 mongoose.connection.once("open", () => {
+  app.use("/api", require("./Routes/userRouters"));
   const io = new Server(server, {
     cors: {
       origin: "*",
@@ -29,31 +29,24 @@ mongoose.connection.once("open", () => {
       getMessage(room)
         .then((last100Messages) => {
           // console.log('latest messages', last100Messages);
-          socket.emit(" ", last100Messages);
+          socket.emit("last_100_messages", last100Messages);
         })
         .catch((err) => console.log(err));
     });
 
     socket.on("send_message", (data) => {
-      //   const { message, username, room } = data;
-      console.log(data);
-      //   io.in(room).emit("receive_message", data);
-      //   sendMessage(room, username, message) // Save message in db
-      //     .then((response) => console.log(response))
-      //     .catch((err) => console.log(err));
+      const { message, sender, room } = data;
+      sendMessage(room, sender, message) // Save message in db
+        .then(async (response) => {
+          await io.in(room).emit("receive_message", response);
+        })
+        .catch((err) => console.log(err));
     });
 
     socket.on("leave_room", (data) => {
-      const { username, room } = data;
+      const { room } = data;
+      console.log("userLeaveRoom");
       socket.leave(room);
-
-      // Remove user from memory
-      allUsers = leaveRoom(socket.id, allUsers);
-      socket.to(room).emit("receive_message", {
-        username: CHAT_BOT,
-        message: `${username} has left the chat`,
-      });
-      console.log(`${username} has left the chat`);
     });
 
     socket.on("disconnect", () => {

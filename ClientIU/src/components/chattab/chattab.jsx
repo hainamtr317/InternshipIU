@@ -11,27 +11,27 @@ import {
 
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import MapsUgcIcon from "@mui/icons-material/MapsUgc";
-import { MessageLeft, MessageRight } from "./components/send-message";
-import { TextInput } from "./components/Textinput";
 import React, { useState, useRef, useEffect } from "react";
 import "./chattab.scss";
 import ConnectCard from "./connectcard";
-
+import { useDispatch } from "react-redux";
+import { SetChatOpen } from "../../redux/chatSlice";
 import ChatApp from "./components/chatAppDisplay";
 
 function ChatTab() {
+  const dispatch = useDispatch();
   const [isOpen, SetIsOpen] = useState(false);
-  const [roomName, setRoomName] = useState("");
+  const ChatList = JSON.parse(localStorage.getItem("userData")).ChatTab;
   const handleClick = async () => {
-    await setRoomName("Teacher Room");
-    SetIsOpen((pre) => !pre);
+    await dispatch(SetChatOpen(!isOpen));
+    await SetIsOpen((pre) => !pre);
   };
   return (
     <>
       <Box sx={{}}>
         {isOpen && (
           <>
-            <ChatApp NameRoom={roomName}></ChatApp>
+            <ChatApp></ChatApp>
           </>
         )}
         <Accordion
@@ -56,12 +56,7 @@ function ChatTab() {
             sx={{ height: "40px" }}
           >
             <div className="logo-msg">
-              <Avatar
-                sx={{
-                  margin: "0px 10px 0px -10px",
-                }}
-              ></Avatar>
-              <p className="msg">Messaging</p>
+              <Typography variant="h5">Messages</Typography>
             </div>
             <div className="list-btn">
               <IconButton
@@ -83,8 +78,12 @@ function ChatTab() {
               flexDirection: "Column",
             }}
           >
-            {Array.from(Array(2)).map((index) => (
-              <ConnectCard key={index} openAndClose={handleClick} />
+            {ChatList.map((element) => (
+              <ConnectCard
+                key={element.ChatId}
+                Data={element}
+                openAndClose={handleClick}
+              />
             ))}
           </AccordionDetails>
         </Accordion>

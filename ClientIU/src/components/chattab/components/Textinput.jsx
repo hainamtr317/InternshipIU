@@ -21,7 +21,7 @@ export const TextInput = ({ socket, room, sender }) => {
   const sendMessage = async () => {
     if (message !== "") {
       // Send message to server. We can't specify who we send the message to from the frontend. We can only send to server. Server can then send message to rest of users in room
-      await socket.emit("send_message", { message });
+      await socket.emit("send_message", { message, sender, room });
       setMessage("");
     }
   };

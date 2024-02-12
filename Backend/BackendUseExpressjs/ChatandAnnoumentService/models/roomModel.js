@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 const Message = require("./messageModel").schema;
 const roomChatSchema = new mongoose.Schema(
   {
-    UsersList: [{ type: mongoose.Types.ObjectId }],
+    RoomName: { type: String, require: true },
+    UsersList: [{ UserId: { ype: mongoose.Types.ObjectId }, UserName: String }],
     MessageList: [Message],
   },
   { timestamps: true }

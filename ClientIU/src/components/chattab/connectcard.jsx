@@ -12,7 +12,15 @@ import {
 import "./chattab.scss";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import React, { useState } from "react";
-function ConnectCard({ openAndClose }) {
+import { useSelector, useDispatch } from "react-redux";
+import { SetChatName, SetChatId } from "../../redux/chatSlice";
+function ConnectCard({ Data, openAndClose }) {
+  const dispatch = useDispatch();
+  const handleClick = async () => {
+    await dispatch(SetChatName(Data.RoomName));
+    await dispatch(SetChatId(Data.ChatId));
+    openAndClose();
+  };
   return (
     <Card
       sx={{
@@ -31,10 +39,10 @@ function ConnectCard({ openAndClose }) {
           boxShadow: "8",
           justifyContent: "flex-start",
         }}
-        onClick={openAndClose}
+        onClick={handleClick}
       >
         <Avatar sx={{ marginLeft: "10px", marginRight: "10px" }}></Avatar>
-        <Typography sx={{}}>Name</Typography>
+        <Typography sx={{}}>{Data.RoomName}</Typography>
       </CardActionArea>
     </Card>
   );

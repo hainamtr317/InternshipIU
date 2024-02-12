@@ -15,17 +15,37 @@ import socketIOClient from "socket.io-client";
 import { MessageLeft, MessageRight } from "./send-message";
 import { TextInput } from "./Textinput";
 import React, { useState, useRef, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { ChatData } from "../../../redux/chatSlice";
 import { io } from "socket.io-client";
+import MessageShow from "./messagesShow";
 
 const host = "http://localhost:7789";
 
-function ChatApp({ NameRoom }) {
-  const [socketRef, setSocketRef] = useState();
+function ChatApp() {
+  let DataOfChat = useSelector(ChatData);
+  const Sender = JSON.parse(localStorage.getItem("userData")).userId;
+  const [socketRef, setSocketRef] = useState(io.connect(host));
+  const [isLoading, setLoading] = useState(true);
   useEffect(() => {
-    // setSocketRef(socketIOClient.connect(host));
-    setSocketRef(io.connect(host));
+    const LeaveChat = async () => {
+      if (!DataOfChat.openChat) {
+        socketRef.emit("leave_room", { room: DataOfChat.ChatId });
+      }
+    };
+    LeaveChat();
+  }, [DataOfChat]);
+  useEffect(() => {
+    const initChat = async () => {
+      socketRef.emit("join_room", { room: DataOfChat.ChatId });
+      await setLoading(false);
+    };
+    initChat();
   }, []);
-
+  if (isLoading) {
+    return <Box>IsLoading</Box>;
+  }
+  console.log(DataOfChat);
   return (
     <Accordion
       disableGutters="true"
@@ -45,7 +65,7 @@ function ChatApp({ NameRoom }) {
       }}
     >
       <AccordionSummary expandIcon={<ExpandLessIcon />} sx={{ height: "40px" }}>
-        <Typography variant="h6">{NameRoom}</Typography>
+        <Typography variant="h6">{DataOfChat.ChatName}</Typography>
       </AccordionSummary>
       <AccordionDetails
         sx={{
@@ -60,33 +80,11 @@ function ChatApp({ NameRoom }) {
           position: "relative",
         }}
       >
-        <Paper
-          sx={{
-            overflowY: "scroll",
-          }}
-        >
-          <MessageLeft
-            message="あめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName=""
-            avatarDisp={true}
-          />
-          <MessageLeft
-            message="xxxxxhttps://yahoo.co.jp xxxxxxxxxあめんぼあかいなあいうえおあいうえおかきくけこさぼあかいなあいうえおあいうえおかきくけこさぼあかいなあいうえおあいうえおかきくけこさいすせそ"
-            timestamp="MM/DD 00:00"
-            photoURL=""
-            displayName="テスト"
-            avatarDisp={false}
-          />
-          <MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={true}
-          />
-        </Paper>
+        <MessageShow
+          socket={socketRef}
+          room={DataOfChat.ChatId}
+          sender={Sender}
+        ></MessageShow>
         <Box
           sx={{
             mt: "5px",
@@ -97,7 +95,11 @@ function ChatApp({ NameRoom }) {
             boxShadow: "8",
           }}
         >
-          <TextInput socket={socketRef} />
+          <TextInput
+            socket={socketRef}
+            sender={Sender}
+            room={DataOfChat.ChatId}
+          />
         </Box>
       </AccordionDetails>
     </Accordion>

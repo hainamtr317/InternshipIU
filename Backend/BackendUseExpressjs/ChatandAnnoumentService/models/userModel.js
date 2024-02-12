@@ -23,7 +23,12 @@ const userSchema = new mongoose.Schema(
     announcement: [{ type: mongoose.Types.ObjectId, ref: "announcement" }],
     userData: { type: mongoose.Types.ObjectId, ref: "student" },
     teacherData: { type: mongoose.Types.ObjectId, ref: "teacher" },
-    ChatRoom: [{ type: mongoose.Types.ObjectId, ref: "roomChat" }],
+    ChatRoom: [
+      {
+        ChatId: { type: mongoose.Types.ObjectId, ref: "roomChat" },
+        RoomName: String,
+      },
+    ],
     resetPasswordToken: String,
     session_token: String,
     confirmRegistrationExpire: Date,

@@ -4,29 +4,43 @@ const User = require("../models/userModel");
 
 const AddUserIntoRoom = async (req, res) => {
   try {
-    const { UserList } = req.body;
+    const { UserList, RoomName } = req.body;
     await Promise.all(
       UserList.map(async (e) => {
         const checkUser = await User.findById(e);
         if (e) {
-          return checkUser._id;
+          return { UserId: checkUser._id, UserName: checkUser.userId };
         } else {
           return false;
         }
       })
     ).then(async (value) => {
       if (value.includes(false)) {
-        res.status(400).json({
+        return res.status(400).json({
           success: false,
           msg: "not find user in Userlist",
         });
       } else {
-        const CreateRoom = await Room.create({ UsersList: value });
+        const valueCheckExit = await Room.find({ RoomName: RoomName });
+        console.log(valueCheckExit);
+        if (valueCheckExit.length > 0) {
+          return res.status(400).json({
+            success: false,
+            msg: valueCheckExit,
+          });
+        }
+        const CreateRoom = await Room.create({
+          RoomName: RoomName,
+          UsersList: value,
+        });
         await Promise.all(
           UserList.map(async (e) => {
             const addChat = await User.findById(e);
             if (e) {
-              await addChat.ChatRoom.push(CreateRoom._id);
+              await addChat.ChatRoom.push({
+                ChatId: CreateRoom._id,
+                RoomName: CreateRoom.RoomName,
+              });
               await addChat.save();
               return addChat._id;
             } else {
@@ -60,7 +74,7 @@ const sendMessage = async (room, sender, mgs) => {
     const MgsRoom = await Room.findById(room);
     await MgsRoom.MessageList.push(newMsg);
     await MgsRoom.save();
-    return MgsRoom.MessageList.slice(-100);
+    return newMsg;
   } catch (error) {
     return error;
   }
