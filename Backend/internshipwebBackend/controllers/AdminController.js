@@ -194,13 +194,18 @@ const SetTeacherandStudent = async (req, res) => {
 };
 
 const CreateAnnounce = async (req, res) => {
-  const { From, To, data } = req.body;
+  const { From, To, contentAnnounce } = req.body;
   try {
-    const userSend = await User.findOne({ userId: From });
+    const userSend = await User.findById(From);
     const userReceive = await User.findOne({ userId: To });
     if (userSend) {
       if (userReceive) {
-        const mess = await addAnnounce(data);
+        const mess = await addAnnounce({
+          whoSend: userSend.userId,
+          announcementContent: contentAnnounce,
+          ReadStatus: false,
+          announcementLink: "",
+        });
         await userReceive.announcement.push(mess._id);
         await userReceive.save();
         return res.status(200).json({
@@ -226,7 +231,48 @@ const CreateAnnounce = async (req, res) => {
     });
   }
 };
-
+const CreateAnnounceForStudent = async (req, res) => {
+  const { From, To, contentAnnounce } = req.body;
+  try {
+    const userSend = await User.findById(From);
+    const teacherReceive = await TeacherFindbyID(To);
+    const userReceive = await User.findOne({
+      userId: teacherReceive.TeacherID,
+    });
+    if (userSend) {
+      if (userReceive) {
+        const mess = await addAnnounce({
+          whoSend: userSend.userId,
+          announcementContent: contentAnnounce,
+          ReadStatus: false,
+          announcementLink: "",
+        });
+        await userReceive.announcement.push(mess._id);
+        await userReceive.save();
+        return res.status(200).json({
+          success: true,
+          data: userReceive,
+        });
+      } else {
+        console.log("userReive not found");
+        return res.status(500).json({
+          success: false,
+          mess: "userReive not found",
+        });
+      }
+    } else {
+      return res.status(500).json({
+        success: false,
+        mess: "userSend not found",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+    });
+  }
+};
 const getStudentList = async (req, res) => {
   try {
     const Student1 = await StudentGetall();
@@ -324,4 +370,5 @@ module.exports = {
   getStudentList,
   adminUpdateStudent,
   autoHandleJobAndCompany,
+  CreateAnnounceForStudent,
 };

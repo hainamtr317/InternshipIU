@@ -47,8 +47,18 @@ function ModalRegisterJob(props) {
         data: dataRegister,
       }).then(async (res) => {
         if (res.data.success) {
-          alert("Success resister Job for", props.userData.name);
-          location.reload();
+          await Axios.post("/api/admin/createAnnounceForStudent", {
+            From: JSON.parse(localStorage.getItem("userData")).userId,
+            To: res.data.data.teacher.teacherID.toString(),
+            contentAnnounce: `student registered Job`,
+          }).then((Response) => {
+            if (Response.data.success) {
+              alert("Success resister Job for", props.userData.name);
+              navigate("/student/ListJobApplied");
+            } else {
+              alert("have error");
+            }
+          });
         } else {
           alert(
             "have error for resister Job that error:",

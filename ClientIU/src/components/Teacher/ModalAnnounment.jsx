@@ -11,7 +11,8 @@ import {
 } from "@mui/material";
 import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
-import React from "react";
+import React, { useState } from "react";
+import Axios from "../../config/axiosConfig";
 function ModalAnnouncementToStudent(props) {
   const style = {
     position: "absolute",
@@ -25,6 +26,32 @@ function ModalAnnouncementToStudent(props) {
     borderRadius: "10px",
     boxShadow: 24,
     p: 4,
+  };
+  const [announceContent, SetAnnounceContent] = useState("");
+  const handleCreateAnnounce = async () => {
+    if (announceContent == "") {
+      alert("input your content");
+    } else {
+      if (confirm("want send announce is:" + " " + announceContent)) {
+        const SenderId = await JSON.parse(localStorage.getItem("userData"))
+          .userId;
+        try {
+          await Axios.post("/api/admin/createAnnounce", {
+            From: SenderId,
+            To: props.Student.StudentId,
+            contentAnnounce: announceContent,
+          }).then((res) => {
+            if (res.data.success) {
+              alert("send success");
+            } else {
+              alert("send have error");
+            }
+          });
+        } catch (error) {
+          console.log(error.toString());
+        }
+      }
+    }
   };
   return (
     <>
@@ -60,6 +87,7 @@ function ModalAnnouncementToStudent(props) {
               aria-label="minimum height"
               minRows={3}
               placeholder="Minimum 3 rows"
+              onChange={(e) => SetAnnounceContent(e.target.value)}
               style={{ width: 200 }}
             />
             <Box
@@ -75,7 +103,11 @@ function ModalAnnouncementToStudent(props) {
               >
                 Reset
               </Button>
-              <Button variant="contained" size="large">
+              <Button
+                variant="contained"
+                size="large"
+                onClick={handleCreateAnnounce}
+              >
                 announce
               </Button>
             </Box>

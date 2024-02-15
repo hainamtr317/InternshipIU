@@ -43,10 +43,7 @@ function ModalRegisterInstructor(props) {
         Position: positionIns,
       },
     };
-    console.log({
-      userId: JSON.parse(localStorage.getItem("userData")).userId,
-      data: dataRegister,
-    });
+
     try {
       const user = await JSON.parse(localStorage.getItem("userData"));
       await Axios.put("/api/student/StudentRegister", {
@@ -54,8 +51,18 @@ function ModalRegisterInstructor(props) {
         data: dataRegister,
       }).then(async (res) => {
         if (res.data.success) {
-          alert("Success resister instructor for", props.userData.name);
-          navigate("/student/ListJobApplied");
+          await Axios.post("/api/admin/createAnnounceForStudent", {
+            From: JSON.parse(localStorage.getItem("userData")).userId,
+            To: res.data.data.teacher.teacherID.toString(),
+            contentAnnounce: `student registered instructor`,
+          }).then((Response) => {
+            if (Response.data.success) {
+              alert("Success resister instructor for", props.userData.name);
+              navigate("/student/ListJobApplied");
+            } else {
+              alert("have error");
+            }
+          });
         } else {
           alert(
             "have error for resister instructor that error:",
@@ -64,8 +71,7 @@ function ModalRegisterInstructor(props) {
         }
       });
     } catch (error) {
-      console.log(error);
-      alert("have error for resister instructor that error:", error);
+      alert("have error for resister instructor that error:", error.toString());
     }
   };
 

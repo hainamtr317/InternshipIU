@@ -8,10 +8,12 @@ const {
   getStudentList,
   adminUpdateStudent,
   autoHandleJobAndCompany,
+  CreateAnnounceForStudent,
 } = require("../controllers/AdminController");
 
 routers.route("/admin/setTeacherAndStudent").post(SetTeacherandStudent);
 routers.route("/admin/createAnnounce").post(CreateAnnounce);
+routers.route("/admin/createAnnounceForStudent").post(CreateAnnounceForStudent);
 routers.route("/admin/getUserData").post(getUserDataToManager);
 routers.route("/admin/getStudentListID").get(getStudentList);
 routers.route("/admin/CompaniesAndJobs").get(autoHandleJobAndCompany);
