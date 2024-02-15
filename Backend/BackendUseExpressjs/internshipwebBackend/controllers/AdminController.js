@@ -26,7 +26,14 @@ const {
 } = require("../models/Teachermodel");
 
 const { updateCompany } = require("./CompanyController");
+const axios = require("axios");
 
+const Axios = axios.create({
+  baseURL: "http://localhost:7789",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 const TestStudentExit = async (teacher, student) => {
   const findstudent = await teacher.find((e) => e.StudentId == student);
   if (findstudent == undefined) {
@@ -66,6 +73,40 @@ const getUserDataToManager = async (req, res) => {
 //       teacherEmail: teacher1.email,
 //     },
 //   });
+const CreateNewChat = async (TeacherId, StudentId) => {
+  try {
+    const userTeacher = await User.findOne({ userId: TeacherId });
+    const userStudent = await User.findOne({ userId: StudentId });
+    const roomName = TeacherId + StudentId;
+
+    await Axios.post("/api/users/addRoom", {
+      UserList: [userTeacher._id.toString(), userStudent._id.toString()],
+      RoomName: roomName,
+    });
+    console.log("create success");
+    return true;
+  } catch (error) {
+    console.log(error);
+    return error.toString();
+  }
+};
+const DeleteChat = async (TeacherId, StudentId) => {
+  try {
+    const userTeacher = await User.findOne({ userId: TeacherId });
+    const userStudent = await User.findOne({ userId: StudentId });
+    const roomName = TeacherId + StudentId;
+    await Axios.post("/api/users/deleteRoom", {
+      UserList: [userTeacher._id.toString(), userStudent._id.toString()],
+      RoomName: roomName,
+    });
+    console.log("delete success");
+    return true;
+  } catch (error) {
+    console.log(error);
+    return error.toString();
+  }
+};
+
 const SetTeacherandStudent = async (req, res) => {
   const { TeacherId, StudentListID } = req.body;
   try {
@@ -80,14 +121,9 @@ const SetTeacherandStudent = async (req, res) => {
               );
               if (FindStudent == undefined) {
                 await StudentFindandUpdate(studentValue._id, {
-                  teacher: {
-                    teacherID: teacher1._id,
-                    teacherName: "Do not have Teacher",
-                    teacherPhone: "0000000",
-                    teacherEmail: "Do not have Teacher",
-                  },
-                }).then((data) => {
-                  console.log(data.teacher);
+                  teacher: {},
+                }).then(async (data) => {
+                  await DeleteChat(TeacherId, data.StudentId);
                   return true;
                 });
               }
@@ -104,6 +140,7 @@ const SetTeacherandStudent = async (req, res) => {
                     teacherEmail: teacher1.email,
                   },
                 });
+                await CreateNewChat(TeacherId, e);
                 return Student1;
               })
             ).then(async (value) => {

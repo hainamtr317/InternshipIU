@@ -84,7 +84,7 @@ export default function Header() {
   const [isAdmin, SetIsAdmin] = React.useState(false);
   // const [isLoading, setIsLoading] = useState(true);
   const [announceData, SetAnnounceData] = React.useState([]);
-
+  const [announceNotRead, SetAnnounceNotRead] = React.useState([]);
   const CheckRoleUser = (role) => {
     if (role === "student") {
       SetIsStudent(true);
@@ -107,8 +107,11 @@ export default function Header() {
     const data = await JSON.parse(localStorage.getItem("userData"));
     CheckRoleUser(data.userRole);
     await Axios.post("/api/users/Announce", { userId: data.userId }).then(
-      (res) => {
-        SetAnnounceData(res.data.data);
+      async (res) => {
+        await SetAnnounceData(res.data.data);
+        await SetAnnounceNotRead(
+          res.data.data.filter((e) => e.ReadStatus == false)
+        );
       }
     );
   };
@@ -224,7 +227,7 @@ export default function Header() {
           aria-haspopup="true"
           color="inherit"
         >
-          <Badge badgeContent={announceData.length} color="error">
+          <Badge badgeContent={announceNotRead.length} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -302,7 +305,7 @@ export default function Header() {
             color="inherit"
             onClick={handleAnnounceMenuOpen}
           >
-            <Badge badgeContent={announceData.length} color="error">
+            <Badge badgeContent={announceNotRead.length} color="error">
               <NotificationsIcon />
             </Badge>
           </IconButton>

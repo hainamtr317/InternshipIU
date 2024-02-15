@@ -14,9 +14,7 @@ import { Link } from "react-router-dom";
 function StudentCard(props) {
   const StudentData = props.data;
   const steps = ["Apply", "register", "Internship", "report", "grading"];
-  const handleStudentcards = () => {
-    // <Link to="StudentId:"></Link>;
-  };
+  const handleStudentcards = () => {};
   return (
     <>
       <Card

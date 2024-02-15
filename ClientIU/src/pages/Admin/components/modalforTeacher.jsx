@@ -86,24 +86,22 @@ function TeacherModal({ User }) {
 
   useEffect(() => {
     const getNames = async () => {
-      const StudentList = await Axios.get("/api/admin/getStudentListID").then(
-        async (res) => {
-          if (res.data.success) {
-            if (User.ListStudent.length > 0) {
-              await Promise.all(
-                User.ListStudent.map((e) => {
-                  return e.StudentId;
-                })
-              ).then((value) => {
-                setListStudent(value);
-                setNames(res.data.data);
-              });
-            } else {
+      await Axios.get("/api/admin/getStudentListID").then(async (res) => {
+        if (res.data.success) {
+          if (User.ListStudent.length > 0) {
+            await Promise.all(
+              User.ListStudent.map((e) => {
+                return e.StudentId;
+              })
+            ).then((value) => {
+              setListStudent(value);
               setNames(res.data.data);
-            }
+            });
+          } else {
+            setNames(res.data.data);
           }
         }
-      );
+      });
     };
     getNames();
   }, []);

@@ -12,6 +12,7 @@ const {
   getAnnounce,
   updateUserData,
   UserLogout,
+  UserReadAnnounce,
 } = require("../controllers/UserController");
 
 routers.route("/users").get(getUsers);
@@ -24,5 +25,6 @@ routers.route("/users/getUserData").post(getUserData);
 routers.route("/users/forgotPassword").post(forgotPassword);
 routers.route("/users/Announce").post(getAnnounce);
 routers.route("/users/logout").post(UserLogout);
+routers.route("/users/readAnnounces").post(UserReadAnnounce);
 
 module.exports = routers;

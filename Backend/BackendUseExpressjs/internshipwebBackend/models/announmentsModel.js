@@ -37,6 +37,19 @@ const annouceFindbyId = async (data) => {
     return error;
   }
 };
+const annouceFindAndUpdate = async (ID, data) => {
+  try {
+    const annouce = await announcement.findByIdAndUpdate(ID, data);
+    return annouce;
+  } catch (error) {
+    return error;
+  }
+};
 announcement = mongoose.model("announcement", announcementSchema);
 module.exports = announcement;
-module.exports = { announcementSchema, addAnnounce, annouceFindbyId };
+module.exports = {
+  announcementSchema,
+  addAnnounce,
+  annouceFindbyId,
+  annouceFindAndUpdate,
+};

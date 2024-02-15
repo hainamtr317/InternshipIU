@@ -29,15 +29,21 @@ function ReportCard() {
         }}
       >
         <CardActionArea height="90%">
-          <CardMedia
-            sx={{
-              marginTop: "20px",
-            }}
-            component="object"
-            data="https://localhost:4443/display/UsersCv/1707445682000testdoc.docx"
-            height="80%"
-            width="100%"
-          ></CardMedia>
+          <a
+            href="https://docs.google.com/document/d/1PvPXeMQp3OWhRx_sOxfR1gIZZYCXGZIlD06IeLhZgMc/edit"
+            target="_blank"
+          >
+            <CardMedia
+              sx={{
+                marginTop: "20px",
+              }}
+              class=" overflow-hidden pointer-events-none"
+              component="object"
+              data="https://docs.google.com/document/d/1PvPXeMQp3OWhRx_sOxfR1gIZZYCXGZIlD06IeLhZgMc/edit"
+              height="80%"
+              width="100%"
+            ></CardMedia>
+          </a>
         </CardActionArea>
         <CardContent>
           <Typography
@@ -46,7 +52,7 @@ function ReportCard() {
               marginTop: "10px",
             }}
           >
-            Name of file
+            Report form
           </Typography>
         </CardContent>
       </Card>

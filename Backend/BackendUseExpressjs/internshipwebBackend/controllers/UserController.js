@@ -1,5 +1,6 @@
 const User = require("../models/Usermodel");
 const jwt = require("jsonwebtoken");
+const { annouceFindAndUpdate } = require("../models/announmentsModel");
 const {
   StudentFindById,
   StudentFindandUpdate,
@@ -14,6 +15,17 @@ const sendToken = async (user, statusCode, res) => {
   res.status(statusCode).json({ success: true, userRole: user.roles, token });
 };
 
+const UserReadAnnounce = async (req, res) => {
+  try {
+    const { ID } = req.body;
+    const updateAnnouncement = await annouceFindAndUpdate(ID, {
+      ReadStatus: true,
+    });
+    return res.status(200).json({ success: true, msg: "update success" });
+  } catch (error) {
+    return res.status(400).json({ success: false, msg: error.toString() });
+  }
+};
 //@desc Get all users
 //@route GET /api/contacts
 //@access public
@@ -285,4 +297,5 @@ module.exports = {
   UserUpdate,
   updateUserData,
   UserLogout,
+  UserReadAnnounce,
 };

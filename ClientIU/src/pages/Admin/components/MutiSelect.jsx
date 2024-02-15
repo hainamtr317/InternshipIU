@@ -29,24 +29,26 @@ import Axios from "../../../config/axiosConfig";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 
 const MultiSelect = ({ names, Students, teacherId }) => {
+  console.log(names);
   const handleClickSetting = async () => {
-    alert(" set students into teacher ?");
-    try {
-      await Axios.post("/api/admin/setTeacherAndStudent", {
-        TeacherId: teacherId,
-        StudentListID: selectedNames,
-      }).then((res) => {
-        if (res.data.success) {
-          alert("set success");
-        } else {
-          alert("set error");
-        }
-      });
-    } catch (error) {
-      console.log(error);
-      alert("have error");
+    if (confirm("Do you want change StudentList of Teacher?")) {
+      try {
+        await Axios.post("/api/admin/setTeacherAndStudent", {
+          TeacherId: teacherId,
+          StudentListID: selectedNames,
+        }).then((res) => {
+          if (res.data.success) {
+            alert("set success");
+          } else {
+            alert("set error");
+          }
+        });
+      } catch (error) {
+        console.log(error);
+        alert("have error");
+      }
+      // console.log(selectedNames);
     }
-    // console.log(selectedNames);
   };
   const [selectedNames, setSelectedNames] = useState(Students);
   return (
@@ -86,7 +88,9 @@ const MultiSelect = ({ names, Students, teacherId }) => {
               sx={{ justifyContent: "space-between" }}
             >
               ID:{name.ID}
-              {/* Teacher:{name.teacherName} */}
+              {name.hasOwnProperty("teacherName") && (
+                <p>Teacher:{name.teacherName}</p>
+              )}
               {selectedNames.includes(name.ID) ? (
                 <CheckIcon color="info" />
               ) : null}

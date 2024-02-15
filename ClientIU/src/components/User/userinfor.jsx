@@ -160,23 +160,34 @@ function Userinfor() {
                 marginTop: "50px",
               }}
             >
-              <Box sx={stylebox}>
-                <Typography sx={{ fontWeight: "bold" }}>
-                  Your Teacher:
-                </Typography>
-                <Typography sx={{ ml: "20px" }}>
-                  {" "}
-                  Name: {dataUser.teacher.teacherName}
-                </Typography>
-                <Typography sx={{ ml: "20px" }}>
-                  {" "}
-                  Phone {dataUser.teacher.teacherPhone}
-                </Typography>
-                <Typography sx={{ ml: "20px" }}>
-                  {" "}
-                  Email:{dataUser.teacher.teacherEmail}
-                </Typography>
-              </Box>
+              {!dataUser.teacher ? (
+                <Box sx={stylebox}>
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    Your Teacher:
+                  </Typography>
+                  <Typography sx={{ ml: "20px" }}>
+                    There are no teachers
+                  </Typography>
+                </Box>
+              ) : (
+                <Box sx={stylebox}>
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    Your Teacher:
+                  </Typography>
+                  <Typography sx={{ ml: "20px" }}>
+                    {" "}
+                    Name: {dataUser.teacher.teacherName}
+                  </Typography>
+                  <Typography sx={{ ml: "20px" }}>
+                    {" "}
+                    Phone {dataUser.teacher.teacherPhone}
+                  </Typography>
+                  <Typography sx={{ ml: "20px" }}>
+                    {" "}
+                    Email:{dataUser.teacher.teacherEmail}
+                  </Typography>
+                </Box>
+              )}
 
               {!dataUser.instructor ? (
                 <Box sx={stylebox}>
@@ -184,7 +195,7 @@ function Userinfor() {
                     Your Instructor:
                   </Typography>
                   <Typography sx={{ ml: "20px" }}>
-                    Do not register your Instructor
+                    There are no Instructor
                   </Typography>
                 </Box>
               ) : (

@@ -225,9 +225,9 @@ function StudentDisplay() {
                     Name of Instructor:{student.instructor.name}
                   </Typography>
                   <Typography>Phone:{student.instructor.phone}</Typography>
-                  <Typography>Email:{student.instructor.email}e</Typography>
+                  <Typography>Email:{student.instructor.email}</Typography>
                   <Typography>
-                    Position:{student.instructor.Position}e
+                    Position:{student.instructor.Position}
                   </Typography>
                 </Box>
               )}
