@@ -13,7 +13,6 @@ import "./login.scss";
 
 import * as React from "react";
 
-import logo from "../../assets/logo-small_logo.png";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -93,7 +92,11 @@ function LoginPage() {
     <div className="main-login">
       <div className="logo-header">
         <a className="logo" href="/login">
-          <img className="logo-img" src={logo} alt="" />
+          <img
+            className="logo-img"
+            src="https://localhost:4443/display/images/logo-small_logo.png"
+            alt=""
+          />
           <div className="logo-text">
             <span className="logo-text-top">
               <b>Vietnam National University HCMC</b>

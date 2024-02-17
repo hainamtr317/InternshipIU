@@ -29,7 +29,7 @@ const { updateCompany } = require("./CompanyController");
 const axios = require("axios");
 
 const Axios = axios.create({
-  baseURL: "http://localhost:7789",
+  baseURL: "http://127.0.0.1:7789",
   headers: {
     "Content-Type": "application/json",
   },

@@ -1,44 +1,41 @@
-.main-login
-{
-	padding: 0;
-	background-image: url("../../assets/bluesky.gif");
-	background-size: cover;
-	background-repeat: no-repeat;
-	height: 99vh;
-	margin: -8px -4px -15px -15px;
-	overflow: hidden;
-
+.main-login {
+  padding: 0;
+  background-image: url("https://localhost:4443/display/images/bluesky.gif");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 99vh;
+  margin: -8px -4px -15px -15px;
+  overflow: hidden;
 }
 
-.logo{
-	margin-left: 30px;
-	display: flex;
-	margin-top: 30px;
-    align-items: center;
-    justify-content:start;
-    text-decoration: none;
-    .logo-text{
-        color:#2977c9;
-        font-size: 20px;
-		display: flex;
-		flex-direction: column;
-        text-transform: uppercase;
-        text-shadow: #2977c9;
-    }
-    .logo-img{
-        margin-right: 10px;
-		
-		height: 90px;
-		width: 90px;
-        float:left;
-		-webkit-filter: drop-shadow(2px 2px 2px #2965c0);
-  		filter: drop-shadow(2px 2px 2px #4569b6);
-    }
+.logo {
+  margin-left: 30px;
+  display: flex;
+  margin-top: 30px;
+  align-items: center;
+  justify-content: start;
+  text-decoration: none;
+  .logo-text {
+    color: #2977c9;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    text-transform: uppercase;
+    text-shadow: #2977c9;
+  }
+  .logo-img {
+    margin-right: 10px;
+
+    height: 90px;
+    width: 90px;
+    float: left;
+    -webkit-filter: drop-shadow(2px 2px 2px #2965c0);
+    filter: drop-shadow(2px 2px 2px #4569b6);
+  }
 }
 
-.box-contain
-{		
-	display: flex;
-	justify-content:center;
-	align-self: center;
+.box-contain {
+  display: flex;
+  justify-content: center;
+  align-self: center;
 }

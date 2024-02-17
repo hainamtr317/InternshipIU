@@ -55,7 +55,7 @@ const uploadReport = multer({ storage: storageReport });
 app.post("/uploadImage", uploadImage.single("image"), (req, res) => {
   try {
     return res.status(200).json({
-      img: `http://localhost:4000/display/images/${req.file.filename}`,
+      img: `https://localhost:4443/display/images/${req.file.filename}`,
     });
   } catch (error) {
     console.log(error);

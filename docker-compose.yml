@@ -1,5 +1,4 @@
-version: "3.1"
-
+version: "3.8"
 services:
   serverfiles:
     restart: always
@@ -9,3 +8,69 @@ services:
     ports:
       - 4000:4000
       - 4443:4443
+  apiserver:
+    restart: always
+    container_name: Apiservices
+    build:
+      context: ./Backend/internshipwebBackend
+    ports:
+      - 5000:5000
+    environment:
+      PORT: 5000
+      DATABASE_URL: mongodb://root:rootps@mongo:27017
+      JWT_SECRET: thisissecretpass
+      JWT_EXPIRE: 24h
+  chatservices:
+    restart: always
+    container_name: ChatService
+    build:
+      context: ./Backend/ChatandAnnoumentService
+    ports:
+      - 7789:7789
+    environment:
+      PORT: 7789
+      DATABASE_URL: mongodb://root:rootps@mongo:27017
+      JWT_SECRET: thisissecretpass
+      JWT_EXPIRE: 24h
+  webapp:
+    restart: always
+    container_name: WebUI
+    build:
+      context: ./ClientIU
+    ports:
+      - 3000:3000
+  nginxapp:
+    image: "jc21/nginx-proxy-manager:latest"
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "81:81"
+      - "443:443"
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+  mongo:
+    image: mongo
+    restart: always
+    container_name: mongodb_container
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootps
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./databaseData:/data/db
+      - mongodb_data_container:/data/db
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: rootps
+      ME_CONFIG_MONGODB_URL: mongodb://root:rootps@mongo:27017/
+
+volumes:
+  mongodb_data_container:
