@@ -54,7 +54,7 @@ function RegisterTeacher({ Role }) {
   const handleClickUpdate = async (e) => {
     e.preventDefault();
     var userIdT = e.target.elements.userId.value;
-    var passT = e.target.elements.email.value;
+    var passT = e.target.elements.password.value;
     var nameT = e.target.elements.name.value;
     var emailT = e.target.elements.email.value;
     var phoneT = e.target.elements.phone.value;

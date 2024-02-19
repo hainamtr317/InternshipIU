@@ -9,6 +9,7 @@ const {
   StudentCreateData,
   StudentFindById,
 } = require("../models/studentModel");
+const sendEmail = require("../config/mailconfig");
 const { TeacherFindbyID } = require("../models/Teachermodel");
 
 const StudentRegister = async (req, res) => {
@@ -61,6 +62,57 @@ const StudentRegister = async (req, res) => {
     });
   }
 };
+
+const ApplyJob = async (req, res) => {
+  try {
+    const data = req.body.data;
+    const { userId, Cv, toEmail, Message, NameJob } = req.body;
+    const user = await User.findById(userId);
+    if (user) {
+      try {
+        const OjectStudent = user.userData;
+        try {
+          await sendEmail({
+            to: toEmail,
+            subject: `Apply Job for ${NameJob}`,
+            text: Message,
+            NameCv: Cv.NameCV,
+            LinkCv: Cv.LinkCv,
+          });
+        } catch (error) {
+          return res
+            .status(500)
+            .json({ success: false, error: "can not send email" });
+        }
+        const updateStudent = await StudentFindandUpdate(
+          OjectStudent.toString(),
+          data
+        );
+        return res.status(200).json({
+          success: true,
+          data: updateStudent,
+        });
+      } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: false,
+          error: err,
+        });
+      }
+    } else {
+      return res.status(500).json({
+        success: false,
+        error: "can not fin user in database",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: error,
+    });
+  }
+};
+
 const updateStudent = async (req, res) => {
   try {
     const data = req.body.data;
@@ -339,4 +391,5 @@ module.exports = {
   DeleteCv,
   addReportForStudent,
   StudentRegister,
+  ApplyJob,
 };

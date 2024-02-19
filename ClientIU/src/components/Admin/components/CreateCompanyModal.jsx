@@ -12,6 +12,7 @@ import { Link, redirect, useNavigate } from "react-router-dom";
 import Axios from "../../../config/axiosConfig";
 import { Modal, Box, Typography, Button, TextField } from "@mui/material";
 import ImageUploadFile from "../../Fileupload/imageUpload";
+import { auto } from "@popperjs/core";
 
 function ModalCreateCompany({ Open, Close }) {
   const [Role, setRole] = useState("student");
@@ -23,21 +24,17 @@ function ModalCreateCompany({ Open, Close }) {
   const teacherInfoDisplay = {
     display: "flex",
     flexDirection: "column",
-    width: 700,
+    width: auto,
     borderRadius: "10px",
     boxShadow: 24,
   };
-  const styleBox = {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "start",
-  };
+
   const style = {
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 700,
+    width: auto,
     bgcolor: "background.paper",
     border: "2px solid whitesmoke",
     borderRadius: "10px",

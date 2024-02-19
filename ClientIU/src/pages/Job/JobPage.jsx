@@ -20,6 +20,7 @@ import {
   Link,
   CardMedia,
   Container,
+  LinearProgress,
 } from "@mui/material";
 import UpdateIcon from "@mui/icons-material/Update";
 import Axios from "../../config/axiosConfig";
@@ -28,7 +29,8 @@ function Jobpage() {
   const listSkill = ["reactjs", "nodejs", "cloud"];
   const { job_id } = useParams();
   const [Job, setJob] = useState([]);
-
+  const [companyData, setCompanyData] = useState([]);
+  const [isLoading, setLoading] = useState(true);
   const styles = {
     bgcolor: "white",
     maxWidth: "1000px",
@@ -36,11 +38,25 @@ function Jobpage() {
     marginRight: "auto",
   };
 
+  const getCompanyData = async (CompanyName) => {
+    try {
+      await Axios.post("/api/Company/getCompany", {
+        company: CompanyName,
+      }).then(async (res) => {
+        await setCompanyData(res.data.companyData);
+        setLoading(false);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     const getJobData = async () => {
       const data = await Axios.post("/api/jobs/getJob", { id: job_id }).then(
-        (res) => {
-          setJob(res.data.job);
+        async (res) => {
+          await setJob(res.data.job);
+          await getCompanyData(res.data.job.company);
         }
       );
     };
@@ -52,6 +68,12 @@ function Jobpage() {
   const handleApplybtn = () => {
     navigate(direction);
   };
+  if (isLoading) return;
+  {
+    <Box sx={styles}>
+      <LinearProgress>Loading</LinearProgress>
+    </Box>;
+  }
   return (
     <Box sx={styles}>
       <Box
@@ -310,7 +332,7 @@ function Jobpage() {
           </ul>
         </div>
       </CardContent>
-      <CompanyCard CompanyName={Job.company} />
+      <CompanyCard companyData={companyData} />
     </Box>
   );
 }

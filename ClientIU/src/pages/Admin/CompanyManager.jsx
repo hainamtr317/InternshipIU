@@ -19,13 +19,6 @@ function CompanyManger() {
     await Axios.get("/api/Company/getListCompany").then(async (res) => {
       await Promise.all(
         res.data.ListCompany.map(async (element) => {
-          // await Promise.all(
-          //   element.JobList.map((data) => {
-          //     return data.JobName;
-          //   })
-          // ).then((jobListName) => {
-
-          // });
           return {
             id: element._id,
             company: element.company,

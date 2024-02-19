@@ -128,7 +128,7 @@ const userRegister = async (req, res) => {
         isLogin: false,
       });
       // const confirmedToken = user.getConfirmedToken();
-      await user.save();
+
       console.log("register new user", user.userId);
       res.status(200).json({
         success: true,

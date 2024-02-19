@@ -29,7 +29,7 @@ import {
 } from "@mui/material";
 import RegisterStudent from "./register/registerStudent";
 import RegisterTeacher from "./register/registerTeacher";
-
+import { auto } from "@popperjs/core";
 function RegisterModal({ Open, Close }) {
   const [Role, setRole] = useState("student");
   const handleChange = (event) => {
@@ -40,17 +40,12 @@ function RegisterModal({ Open, Close }) {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 700,
+    width: auto,
     bgcolor: "background.paper",
     border: "2px solid whitesmoke",
     borderRadius: "10px",
     boxShadow: 24,
     p: 4,
-  };
-  const textHolder = {
-    display: "flex",
-    flexDirection: "row",
-    ml: "20px",
   };
 
   return (

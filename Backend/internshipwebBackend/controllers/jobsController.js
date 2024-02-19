@@ -88,6 +88,7 @@ const createJob = async (req, res) => {
         createSuccess: true,
       });
     } else {
+      console.log("exitJob", checkExit);
       return res.status(404).json({
         createSuccess: false,
         error: "job exit in database",

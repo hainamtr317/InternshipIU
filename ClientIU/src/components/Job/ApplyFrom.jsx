@@ -33,15 +33,21 @@ function ApplyJob() {
     dataUser.JobsApplied.push(Job);
     const newData = { ...dataUser };
     const data = await JSON.parse(localStorage.getItem("userData"));
-    await Axios.put("/api/student", {
+    const dataApply = {
       userId: data.userId,
       data: newData,
-    }).then(async (res) => {
+      NameJob: Job.nameJob,
+      toEmail: "naruto3172001@gmail.com",
+      Cv: dataCv,
+      Message: `<h1>Apply for ${Job.nameJob}</h1><p>${dataUser.StudentId}</p><p>${dataUser.name}</p><p>Contract:</p><p>${dataUser.email}</p><p>${dataUser.phone}</p><p>Short Introduction:</p> ${value}`,
+    };
+    console.log(dataApply);
+    await Axios.put("/api/student/ApplyJob", dataApply).then(async (res) => {
       if (res.data.success) {
         alert("Success apply Jobs for", dataUser.name);
         navigate("/student/ListJobApplied");
       } else {
-        alert("error apply Jobs for", dataUser.name);
+        alert(res.data.error.toString());
       }
     });
   };

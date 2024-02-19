@@ -318,12 +318,11 @@ const autoHandleJobAndCompany = async (req, res) => {
         JobList.map(async (e) => {
           const company1 = await Company.findOne({ company: e.company });
           if (company1) {
-            const updateJob = await JobFindAndUpdate(e._id, {
-              companyRef: [company1._id],
-            });
-            const companyUpdate = await Company.findByIdAndUpdate(
-              company1._id,
-              {
+            if (e.companyRef.length == 0) {
+              const updateJob = await JobFindAndUpdate(e._id, {
+                companyRef: [company1._id],
+              });
+              await Company.findByIdAndUpdate(company1._id, {
                 JobList: [
                   ...company1.JobList,
                   {
@@ -331,15 +330,17 @@ const autoHandleJobAndCompany = async (req, res) => {
                     JobName: e.nameJob,
                   },
                 ],
-              }
-            );
+              });
 
-            console.log(
-              "update success",
-              updateJob.nameJob,
-              updateCompany.company
-            );
-            return true;
+              console.log(
+                "update success",
+                updateJob.nameJob,
+                updateCompany.company
+              );
+              return true;
+            } else {
+              return false;
+            }
           } else {
             return false;
           }

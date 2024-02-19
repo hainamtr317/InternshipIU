@@ -37,7 +37,7 @@ function EditToolbar(props) {
   );
 }
 
-function GridDataJobs({ rowData }) {
+function GridDataJobs({ rowData, companyList }) {
   const [rows, setRows] = React.useState(rowData);
   const [rowModesModel, setRowModesModel] = React.useState({});
 

@@ -12,37 +12,10 @@ import LaunchIcon from "@mui/icons-material/Launch";
 import { useState } from "react";
 import Axios from "../../config/axiosConfig";
 import { useNavigate } from "react-router-dom";
-function CompanyCard({ CompanyName }) {
-  const [companyData, setCompanyData] = useState([]);
-  const [isLoading, setLoading] = useState(true);
+function CompanyCard({ companyData }) {
   const handleCompanyRedirect = () => {
     navigate("/Student/Company");
   };
-  useEffect(() => {
-    const getCompanyData = async () => {
-      try {
-        await Axios.post("/api/Company/getCompany", {
-          company: CompanyName,
-        }).then(async (res) => {
-          await setCompanyData(res.data.companyData);
-          setLoading(false);
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getCompanyData();
-  }, []);
-
-  if (isLoading) {
-    return (
-      <>
-        <div>
-          <Card>isLoading</Card>
-        </div>
-      </>
-    );
-  }
 
   return (
     <>

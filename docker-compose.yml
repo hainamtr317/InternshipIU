@@ -20,6 +20,8 @@ services:
       DATABASE_URL: mongodb://root:rootps@mongo:27017
       JWT_SECRET: thisissecretpass
       JWT_EXPIRE: 24h
+      EMAIL_FROM: hainamtr317@gmail.com
+      EMAIL_PASSWORD: ahsvlbjrafpfazop
   chatservices:
     restart: always
     container_name: ChatService
