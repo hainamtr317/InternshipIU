@@ -4,22 +4,30 @@ import JobCard from "./Jobcard";
 import { JobData } from "./Data/jobData";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getJobsList, Jobs } from "../../redux/jobsSlice";
+import { GetCompany, getJobsList, Jobs } from "../../redux/jobsSlice";
+
 import Axios from "../../config/axiosConfig";
+import FillerJobs from "../fillter/fillterbarJob";
 function JobsDisplay() {
-  const [jobsList, setJobList] = useState([]);
+  // const [jobsList, setJobList] = useState([]);
+  const jobsList = useSelector(Jobs);
+
+  const dispatch = useDispatch();
   const userData = JSON.parse(localStorage.getItem("userData"));
   console.log(userData);
   useEffect(() => {
     const sendRequestGetJob = async () => {
-      await Axios.get("/api/jobs/getListJobs").then((res) => {
-        setJobList(res.data.ListJobs);
-      });
+      // await Axios.get("/api/jobs/getListJobs").then((res) => {
+      //   setJobList(res.data.ListJobs);
+      // });
+      await dispatch(getJobsList());
+      await dispatch(GetCompany());
     };
     sendRequestGetJob();
   }, []);
   return (
     <>
+      <FillerJobs></FillerJobs>
       <Grid container>
         {jobsList.length > 0 &&
           jobsList.map((job) => (

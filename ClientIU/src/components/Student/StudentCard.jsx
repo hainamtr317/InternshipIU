@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 
 function StudentCard(props) {
   const StudentData = props.data;
-  const steps = ["Apply", "register", "Internship", "report", "grading"];
+  const steps = ["Apply", "Register", "Internship", "Report", "Grading"];
   const handleStudentcards = () => {};
   return (
     <>
@@ -21,7 +21,7 @@ function StudentCard(props) {
         className="studentCard"
         sx={{
           height: 350,
-          width: 250,
+          width: 260,
           borderStyle: "groove",
           border: "2px whitesmoke solid",
           borderRadius: "20px",
@@ -86,6 +86,16 @@ function StudentCard(props) {
                   {!StudentData.job.hasOwnProperty("JobName")
                     ? "Don't have Job"
                     : `${StudentData.job.JobName}`}
+                </Typography>
+                <Typography
+                  sx={{
+                    color: "white",
+                  }}
+                >
+                  <b>Company:</b>
+                  {!StudentData.job.hasOwnProperty("JobName")
+                    ? "Don't have Job"
+                    : `${StudentData.job.Company}`}
                 </Typography>
               </Box>
             </Container>

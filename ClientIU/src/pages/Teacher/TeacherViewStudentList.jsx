@@ -4,42 +4,22 @@ import { Grid, Typography, Divider, LinearProgress, Box } from "@mui/material";
 import Axios from "../../config/axiosConfig";
 import { checkLogged } from "../../redux/userSlice";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { GetStudentsList, student } from "../../redux/StudentSlice";
+import FilterStudents from "../../components/fillter/filterbarStudents";
 function TeacherListStudents() {
   const dispatch = useDispatch();
-  const [dataUser, setDataUser] = useState();
+  const dataUser = useSelector(student);
   const [isLoading, setIsLoading] = useState(true);
+
   const checkUserLogged = async () => {
-    if (localStorage.getItem("userData")) {
-      const data = await JSON.parse(localStorage.getItem("userData"));
-      await Axios.post("/api/users/getUserData", { userId: data.userId }).then(
-        (res) => {
-          setDataUser(res.data.UserData.ListStudent);
-          setIsLoading(false);
-        }
-      );
-    } else {
-      try {
-        const userData = await dispatch(checkLogged());
-        await localStorage.setItem(
-          "userData",
-          JSON.stringify(userData.payload.data)
-        );
-        await Axios.post("/api/users/getUserData", {
-          userId: userData.payload.data.userId,
-        }).then((res) => {
-          setDataUser(res.data.UserData.ListStudent);
-          setIsLoading(false);
-        });
-      } catch (error) {
-        return console.log(error);
-      }
-    }
+    await dispatch(GetStudentsList());
+    await setIsLoading(false);
   };
   useEffect(() => {
     checkUserLogged();
   }, []);
-  console.log(dataUser);
+
   if (isLoading) {
     return (
       <Box>
@@ -57,8 +37,9 @@ function TeacherListStudents() {
         }}
         variant="h3"
       >
-        <b>Students List:</b>
+        <b>Students List: </b>
       </Typography>
+      <FilterStudents></FilterStudents>
       <Divider></Divider>
       <Grid
         container

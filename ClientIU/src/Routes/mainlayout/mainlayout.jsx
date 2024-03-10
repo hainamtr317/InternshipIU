@@ -77,22 +77,25 @@ function MainLayout() {
         )}
         <Route path="/job/:job_id" element={<Jobpage />} />
         {isStudent && (
-          <Route path="/UserInformation" element={<StudentInfoDisplay />} />
+          <>
+            <Route path="/UserInformation" element={<StudentInfoDisplay />} />
+            <Route path="/Company/:companyName" element={<CompanyPage />} />
+            <Route path="/ListJobApplied/*" element={<StudentAppliedJob />} />
+            <Route path="/ListJobApplied/job/:job_id" element={<Jobpage />} />
+            <Route path="/job/:job_id/Apply" element={<ApplyJob />} />
+            <Route path="/Report" element={<StudentReport />} />
+            <Route path="/MyCv" element={<StudentCv />} />
+          </>
         )}
         {isTeacher && (
           <Route path="/UserInformation" element={<TeachInfoDisplay />} />
         )}
-        <Route path="/ListJobApplied/*" element={<StudentAppliedJob />} />
-        <Route path="/ListJobApplied/job/:job_id" element={<Jobpage />} />
-        <Route path="/job/:job_id/Apply" element={<ApplyJob />} />
-        <Route path="/Report" element={<StudentReport />} />
-        <Route path="/MyCv" element={<StudentCv />} />
+
         {isTeacher && <Route path="/:StudentId" element={<StudentDisplay />} />}
         {/* <Route path="/StudentId/Grading" element={<GradingStudent />} /> */}
         {isTeacher && (
           <Route path="/GradeList" element={<TeacherGradeView />} />
         )}
-        <Route path="/Company/:companyName" element={<CompanyPage />} />
       </Routes>
     </Box>
   );
