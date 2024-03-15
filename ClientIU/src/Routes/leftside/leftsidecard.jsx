@@ -21,6 +21,7 @@ import { useSelector } from "react-redux";
 import { Selector } from "../../redux/userSlice";
 import MenuLeftAdmin from "../../components/Admin/MenuLeft";
 import AvatarChangeModal from "./components/modalChangeImage";
+import MenuLeftCompany from "../../pages/Companies/MenuLeftCompany";
 function Leftsidecard(props) {
   let dataUser;
   if (props.userData) {
@@ -43,6 +44,8 @@ function Leftsidecard(props) {
   const [isTeacher, SetIsTeacher] = React.useState(false);
   const [isAdmin, SetIsAdmin] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isCompanyLogin, SetIsCompanyLogin] = React.useState(false);
+
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
   const CheckRoleUser = (role) => {
@@ -61,6 +64,11 @@ function Leftsidecard(props) {
       SetIsTeacher(false);
       SetIsAdmin(true);
       console.log("display Admin");
+    } else if (role === "company") {
+      SetIsStudent(false);
+      SetIsTeacher(false);
+      SetIsAdmin(false);
+      SetIsCompanyLogin(true);
     }
   };
   const getRole = async () => {
@@ -170,12 +178,15 @@ function Leftsidecard(props) {
               {isStudent && <MenuLeftStudent />}
               {isTeacher && <MenuLeftTeacher />}
               {isAdmin && <MenuLeftAdmin />}
+              {isCompanyLogin && <MenuLeftCompany />}
             </Container>
-            <AvatarChangeModal
-              Open={isOpen}
-              Close={handleClose}
-              UserId={useId.userId}
-            ></AvatarChangeModal>
+            {!isCompanyLogin && (
+              <AvatarChangeModal
+                Open={isOpen}
+                Close={handleClose}
+                UserId={useId.userId}
+              ></AvatarChangeModal>
+            )}
           </Container>
         </Box>
       </Collapse>

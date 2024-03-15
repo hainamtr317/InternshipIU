@@ -24,6 +24,7 @@ import {
   register,
   checkLogged,
 } from "../../redux/userSlice";
+import Axios from "../../config/axiosConfig";
 // import { getJobsList } from "../../redux/jobsSlice";
 // import Axios from "../../config/axiosConfig";
 
@@ -60,7 +61,25 @@ function LoginPage() {
       navigate("Admin");
     }
   };
-
+  const HandleCompanyLogin = async () => {
+    const emailCompany = await document.getElementById("email").value;
+    const password = await document.getElementById("password").value;
+    const dataLogin = {
+      emailCompany: emailCompany,
+      password: password,
+    };
+    await Axios.post("/api/Company/login", dataLogin).then(async (value) => {
+      await localStorage.setItem(
+        "userData",
+        JSON.stringify({
+          userRole: "company",
+          CompanyID: value.data.CompanyID,
+          Company: value.data.CompanyName,
+        })
+      );
+      navigate("Company");
+    });
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -180,9 +199,9 @@ function LoginPage() {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
+                  <Button onClick={HandleCompanyLogin} variant="contained">
+                    Company sign In
+                  </Button>
                 </Grid>
               </Grid>
             </Box>

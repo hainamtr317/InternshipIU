@@ -5,6 +5,7 @@ const {
   JobFindAndUpdate,
   JobFindOne,
   JobCreate,
+  JobFindAndDelete,
 } = require("../models/jobsmodel");
 const getJobsList = async (req, res) => {
   try {
@@ -43,7 +44,20 @@ const updateJob = async (req, res) => {
   }
 };
 
-const DeleteJob = () => {};
+const DeleteJob = async (req, res) => {
+  try {
+    const { id } = req.body;
+    if (await Jobs.JobFindAndDelete(id)) {
+      console.log("delete job success");
+      return res.status(200).json({ success: true });
+    } else {
+      return res.status(500).json({ err: error });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ err: error });
+  }
+};
 const createListJob = async (req, res) => {
   const data = req.body;
   const arrayData = data.jobs;

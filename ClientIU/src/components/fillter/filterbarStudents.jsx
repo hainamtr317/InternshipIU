@@ -19,17 +19,14 @@ function FilterStudents() {
       const newListStudents = await dataUser.filter(
         (student) => Status[student.progressionStatus] == choseStatus
       );
-      await dispatch(filterStudents(newListStudents));
-    } else {
-      await dispatch(GetStudentsList());
-    }
-    if (choseCompany != "") {
+      dispatch(filterStudents(newListStudents));
+    } else if (choseCompany != "") {
       const newListStudent = await dataUser.filter(
         (student) => student.job.Company == choseCompany
       );
-      await dispatch(filterStudents(newListStudent));
+      dispatch(filterStudents(newListStudent));
     } else {
-      await dispatch(GetStudentsList());
+      dispatch(GetStudentsList());
     }
   };
   useEffect(() => {

@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const { jobsSchema } = require("./jobsmodel");
+const bcrypt = require("bcrypt");
+
 const companySchema = new mongoose.Schema(
   {
     company: {
@@ -9,6 +11,9 @@ const companySchema = new mongoose.Schema(
     image: {
       type: String,
       required: true,
+    },
+    password: {
+      type: String,
     },
     email: {
       type: String,
@@ -42,4 +47,5 @@ const companySchema = new mongoose.Schema(
   },
   { timestamps: { createdAt: "created_at", updated: "updated_at" } }
 );
+
 module.exports = mongoose.model("company", companySchema);

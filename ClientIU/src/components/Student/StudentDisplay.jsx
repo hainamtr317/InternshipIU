@@ -36,9 +36,7 @@ function StudentDisplay() {
     setOpen(true);
   };
   const handleCloseReport = () => setOpen(false);
-  // const handleVerified = () => {
-  //   setVerified((prev) => !prev);
-  // };
+
   const dispatch = useDispatch();
   const HandleModalClose = () => {
     dispatch(CloseModal(false));

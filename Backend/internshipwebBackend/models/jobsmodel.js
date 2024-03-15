@@ -58,6 +58,15 @@ const JobFindAndUpdate = async (id, updateData) => {
     console.log(error);
   }
 };
+const JobFindAndDelete = async (id) => {
+  try {
+    await Jobs.findByIdAndDelete({ _id: id });
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
 const JobFindOne = async (data) => {
   try {
     const checkExit = await Jobs.findOne(data);
@@ -82,4 +91,5 @@ module.exports = {
   JobFindAndUpdate,
   JobFindOne,
   JobCreate,
+  JobFindAndDelete,
 };

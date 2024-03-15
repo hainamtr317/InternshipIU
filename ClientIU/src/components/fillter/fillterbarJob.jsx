@@ -32,26 +32,17 @@ function FillerJobs() {
         ListCname.includes(job.company)
       );
       await dispatch(fillerJobs(newListJobs));
-    } else {
-      await dispatch(getJobsList());
-    }
-    if (choseCompany != "") {
+    } else if (choseCompany != "") {
       const newListJobs = await jobsList.filter(
         (job) => job.company == choseCompany
       );
       await dispatch(fillerJobs(newListJobs));
-    } else {
-      await dispatch(getJobsList());
-    }
-    if (choseSalary != "") {
+    } else if (choseSalary != "") {
       const newListJobs = await jobsList.filter(
         (job) => job.salary == choseSalary
       );
       await dispatch(fillerJobs(newListJobs));
-    } else {
-      await dispatch(getJobsList());
-    }
-    if (choseSkill != "") {
+    } else if (choseSkill != "") {
       const newListJobs = await jobsList.filter((job) =>
         job.SkillRequire.includes(choseSkill)
       );

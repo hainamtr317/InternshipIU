@@ -24,6 +24,7 @@ function CompanyManger() {
             company: element.company,
             image: element.image,
             email: element.email,
+            password: element.password,
             Address: element.Address,
             Website: element.Website,
             CompanySize: element.CompanySize,

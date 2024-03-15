@@ -52,6 +52,7 @@ function ModalCreateCompany({ Open, Close }) {
     var image = e.target.elements.image.value;
     var Address = e.target.elements.Address.value;
     var email = e.target.elements.email.value;
+    var password = e.target.elements.password.value;
     var Website = e.target.elements.Website.value;
     var CompanySize = e.target.elements.CompanySize.value;
     var BussinessAreas = e.target.elements.BussinessAreas.value;
@@ -62,6 +63,7 @@ function ModalCreateCompany({ Open, Close }) {
       company: company,
       image: image,
       email: email,
+      password: password,
       Address: Address,
       Website: Website,
       CompanySize: CompanySize,
@@ -186,6 +188,28 @@ function ModalCreateCompany({ Open, Close }) {
                       id="email"
                       name="email"
                       label="email"
+                      sx={{ ml: "10px" }}
+                      variant="filled"
+                    ></TextField>
+                  </Box>
+                </Box>
+
+                <Box sx={textHolder}>
+                  <Box>
+                    <Typography
+                      sx={{
+                        mt: "12px",
+                      }}
+                    >
+                      Password:
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <TextField
+                      required
+                      id="password"
+                      name="password"
+                      label="password"
                       sx={{ ml: "10px" }}
                       variant="filled"
                     ></TextField>

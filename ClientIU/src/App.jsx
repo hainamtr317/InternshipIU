@@ -7,6 +7,7 @@ import LoginPage from "./pages/Auth/LoginPage";
 import TeacherPage from "./pages/Teacher/TeacherPage";
 import AdminPage from "./pages/Admin/AdminPage";
 import socketIOClient from "socket.io-client";
+import CompanyManagerPage from "./pages/Companies/CompanyManagerPage";
 const host = "http://localhost:7789";
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/*" element={<LoginPage />} />
+          <Route path="Company/*" element={<CompanyManagerPage />} />
           <Route path="Student/*" element={<StudentPage />} />
           <Route path="Teacher/*" element={<TeacherPage />} />
           <Route path="Admin/*" element={<AdminPage />} />

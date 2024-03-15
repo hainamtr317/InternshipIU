@@ -23,6 +23,12 @@ import HeaderTeacher from "../Teacher/HeaderTeacher";
 import { useSelector, useDispatch } from "react-redux";
 import { Selector, reset } from "../../redux/userSlice";
 import Axios from "../../config/axiosConfig";
+import {
+  GetStudentsList,
+  student,
+  filterStudents,
+} from "../../redux/StudentSlice";
+import { Jobs, Company, fillerJobs, getJobsList } from "../../redux/jobsSlice";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -59,7 +65,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
-
     [theme.breakpoints.up("md")]: {
       width: "20ch",
     },
@@ -78,10 +83,14 @@ export default function Header() {
   const dispatch = useDispatch();
   //set role display
   const role = useSelector(Selector);
+  const StudentList = useSelector(student);
+  const jobsList = useSelector(Jobs);
   const [storeState, SetStoreState] = React.useState();
   const [isStudent, SetIsStudent] = React.useState(true);
   const [isTeacher, SetIsTeacher] = React.useState(false);
   const [isAdmin, SetIsAdmin] = React.useState(false);
+  const [isCompanyLogin, SetIsCompanyLogin] = React.useState(false);
+
   // const [isLoading, setIsLoading] = useState(true);
   const [announceData, SetAnnounceData] = React.useState([]);
   const [announceNotRead, SetAnnounceNotRead] = React.useState([]);
@@ -89,18 +98,26 @@ export default function Header() {
     if (role === "student") {
       SetIsStudent(true);
       SetIsTeacher(false);
+      SetIsCompanyLogin(false);
       SetIsAdmin(false);
       console.log("displayStudent");
     } else if (role === "teacher") {
       SetIsStudent(false);
       SetIsTeacher(true);
+      SetIsCompanyLogin(false);
       SetIsAdmin(false);
       console.log("display Teacher");
     } else if (role === "admin") {
       SetIsStudent(false);
       SetIsTeacher(false);
+      SetIsCompanyLogin(false);
       SetIsAdmin(true);
       console.log("display Admin");
+    } else if (role === "company") {
+      SetIsStudent(false);
+      SetIsTeacher(false);
+      SetIsAdmin(false);
+      SetIsCompanyLogin(true);
     }
   };
   const getRole = async () => {
@@ -115,7 +132,33 @@ export default function Header() {
       }
     );
   };
-
+  const [inputValue, setInputValue] = React.useState("");
+  React.useEffect(() => {
+    const delayInputTimeoutId = setTimeout(async () => {
+      if (isStudent) {
+        if (!inputValue) return dispatch(getJobsList());
+        const searchAction = await jobsList.filter(
+          (job) =>
+            job.nameJob.toLowerCase().includes(inputValue.toLowerCase()) ||
+            job.company.toLowerCase().includes(inputValue.toLowerCase())
+        );
+        dispatch(fillerJobs(searchAction));
+      } else if (isTeacher) {
+        if (!inputValue) return dispatch(GetStudentsList());
+        const searchAction = await StudentList.filter(
+          (student) =>
+            student.StudentId.toLowerCase().includes(
+              inputValue.toLowerCase()
+            ) || student.name.toLowerCase().includes(inputValue.toLowerCase())
+        );
+        dispatch(filterStudents(searchAction));
+      }
+    }, 600);
+    return () => clearTimeout(delayInputTimeoutId);
+  }, [inputValue, 600]);
+  const HandleSearch = async (e) => {
+    setInputValue(e.target.value);
+  };
   React.useEffect(() => {
     getRole();
   }, []);
@@ -146,6 +189,22 @@ export default function Header() {
     handleMobileMenuClose();
   };
   const handleLogout = async () => {
+    if (isCompanyLogin) {
+      await localStorage.clear();
+      navigation("/");
+    } else {
+      await dispatch(reset());
+      await Axios.post("/api/users/logout", {
+        userId: JSON.parse(localStorage.getItem("userData")).userId,
+      }).then((res) => {
+        if (res.data.success) {
+          localStorage.clear();
+          navigation("/");
+        } else {
+          alert("have error");
+        }
+      });
+    }
     await dispatch(reset());
     await Axios.post("/api/users/logout", {
       userId: JSON.parse(localStorage.getItem("userData")).userId,
@@ -295,6 +354,7 @@ export default function Header() {
           <StyledInputBase
             placeholder="Search…"
             inputProps={{ "aria-label": "search" }}
+            onChange={HandleSearch}
           />
         </Search>
         <Box sx={{ flexGrow: 1 }} />

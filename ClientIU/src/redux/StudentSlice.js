@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Axios from "../config/axiosConfig";
 
 export const GetStudentsList = createAsyncThunk(
-  "jobs/getJobsList",
+  "student/getStudentList",
   async (_, { rejecWithValue }) => {
     try {
       const data = await JSON.parse(localStorage.getItem("userData"));

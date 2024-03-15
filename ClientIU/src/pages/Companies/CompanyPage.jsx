@@ -160,6 +160,7 @@ function CompanyPage() {
             <br></br>
             <Box>
               <CardContent>
+                {companyData.Decripsion}
                 Tập Đoàn Đầu Tư Miền Nam_Miền Nam Group là một doanh nghiệp tư
                 nhân kinh doanh đa lĩnh vực với các hoạt động đa ngành nghề tạo
                 nên một hệ sinh thái toàn diện từ ô tô, xe máy, thương mại, xây
