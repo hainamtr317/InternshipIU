@@ -47,7 +47,6 @@ const MultiSelect = ({ names, Students, teacherId }) => {
         console.log(error);
         alert("have error");
       }
-      // console.log(selectedNames);
     }
   };
   const [selectedNames, setSelectedNames] = useState(Students);
