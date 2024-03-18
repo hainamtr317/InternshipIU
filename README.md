@@ -2,10 +2,12 @@
 
 InternshipIU is a web application using Reactjs. The goal of this application is to assist students with internships, making it easier for Teachers to manage students who register for internships. easily assess and grade students during the internship.
 
-# User interface design
+
 
 ## Some technology was used in this project:
 ![Tenology](https://github.com/hainamtr317/InternshipIU/assets/71883990/00000975-6eaa-4913-8766-e60a61ada998)
+## Server design:
+![image](https://github.com/hainamtr317/InternshipIU/assets/71883990/61e0c39a-2142-4734-bee0-011f728769cb)
 
 ## Student
 
@@ -33,4 +35,6 @@ InternshipIU is a web application using Reactjs. The goal of this application is
 
 - Go to cmd and type: git clone https://github.com/hainamtr317/InternshipIU.git
 - after that type: npm install or npm i
-- Because this Project use vite so to run it type: npm run dev
+- Because this project uses vite so to run it type: npm run dev
+- for the backend: run npm run dev
+- If have docker: docker compose up -d 
